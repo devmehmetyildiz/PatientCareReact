@@ -1,0 +1,25 @@
+$bg-color : rgb(255, 255, 255);
+$text-color : black;
+
+
+
+.loginpage{
+    background-color: $bg-color;
+    background-image: url("../../images/Custom/Login/Login.jpg");
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+.loginpage > h1,h2,h3,h4,h5,h6,label,span,input{
+color: $text-color !important;
+}
+
+.formscreen{
+    background-color: white !important;
+   width: 25% !important;
+
+   padding: 30px;
+   border-style: groove;
+   border-radius: 15px;
+}
+
