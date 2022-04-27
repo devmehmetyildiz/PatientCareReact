@@ -32,3 +32,5 @@ export class LockScreen extends Component {
 }
 
 export default LockScreen
+
+

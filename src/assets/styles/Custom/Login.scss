@@ -1,25 +1,37 @@
 $bg-color : rgb(255, 255, 255);
-$text-color : black;
+$text-color : #6c7293;
 
 
 
 .loginpage{
     background-color: $bg-color;
-    background-image: url("../../images/Custom/Login/Login.jpg");
+    background-image: url("../../images/Custom/Login/Login3.jpg");
     background-repeat: no-repeat;
     background-position: bottom;
+    background-size: cover;
 }
 
-.loginpage > h1,h2,h3,h4,h5,h6,label,span,input{
+.loginpage > h1,h2,h3,h4,h5,h6,label,span,input,i{
 color: $text-color !important;
+border-color: black !important;
 }
 
 .formscreen{
-    background-color: white !important;
+   background-color: white !important;
    width: 25% !important;
-
    padding: 30px;
    border-style: groove;
    border-radius: 15px;
 }
 
+.registerformscreen{
+    background-color: white !important;
+}
+
+.brand-logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 5px;
+}

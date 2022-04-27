@@ -7,7 +7,7 @@ import { setUser } from '../Redux/actions/loginActions'
 import { withRouter } from 'react-router-dom';
 import InputItem from "../Components/Common/input"
 import "../../assets/styles/Custom/Login.scss"
-import "../../assets/styles/Custom/input.css"
+import ErrorHandler from '../Utils/ErrorHandler';
 export class Login extends Component {
     constructor(props) {
         super(props)
@@ -27,50 +27,21 @@ export class Login extends Component {
         heading: 'Kullanıcı Girişi'
     }
 
-    Get_User = async () => {
-        const response = await axios({
-            method: 'post',
-            data: this.state.currentitem,
-            url: process.env.REACT_APP_BACKEND_URL + '/User/GetUser',
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        }).catch(error => {
-            if (error.response != undefined) {
-                if (error.response.status == '401') {
-                    cogoToast.error('Veri Alınırken Hata Alındı', this.toastoptions)
-                    this.props.history.push("/Login")
-                }
-            } else {
-                cogoToast.error('Veri Alınırken Hata Alındı', this.toastoptions)
-                this.props.history.push("/Login")
-            }
-        })
-        if (response != undefined) {
-            localStorage.setItem('currentUser', JSON.stringify(response.data))
-            this.props.setUser(response.data);
-            this.props.history.push("/dashboard")
-        }
-
-    };
+    
     handlesubmit = (e) => {
-        e.preventDefault();
-        console.log('this.state.currentitem: ', this.state.currentitem);
-        axios.post(process.env.REACT_APP_BACKEND_URL + '/Login', this.state.currentitem)
+        e.preventDefault();      
+        axios.post(process.env.REACT_APP_BACKEND_URL + '/Auth/Login', this.state.currentitem)
             .then(res => {
-                localStorage.setItem('token', res.data)
-                this.Get_User();
+             //   localStorage.setItem('token', res.data)
+               console.log(res) 
             })
             .catch(err => {
-                console.log('err: ', err);
-                if (err.response != undefined)
-                    cogoToast.error('Giriş Yapılırken Hata oluştu : ' + err.response.data, this.toastoptions)
-                else
-                    cogoToast.error('Giriş Yapılamadı', this.toastoptions)
+                var response = ErrorHandler(err.response)                           
             })
     }
     handleChangeInput = (e) => {
         const newdata = { ...this.state.currentitem }
         newdata[e.target.id] = e.target.value
-        console.log('newdata: ', newdata);
         this.setState({ currentitem: newdata }, () => {
         })
     }
@@ -84,6 +55,7 @@ export class Login extends Component {
                         <div className="col-lg-12 d-flex align-items-center justify-content-center">
                             <div className="auth-form-transparent text-left formscreen">
                                 <div className="brand-logo">
+                                    <img src={require("../../assets/images/Custom/Login/Amblem.png")} alt="logo" />
                                     <h3 className="text-center">HASTA BAKIM VE YARDIM</h3>
                                 </div>
                                 <form className="pt-3" onSubmit={this.handlesubmit}>
@@ -98,7 +70,7 @@ export class Login extends Component {
                                     ></InputItem>
                                     <InputItem
                                         itemclass="mdi mdi-lock-outline text-primary"
-                                        title="Şifre"
+                                        title="Parola"
                                         itemid="password"
                                         itemtype="password"
                                         itemholder="Parola"
@@ -110,16 +82,16 @@ export class Login extends Component {
                                             <label className="form-check-label text-muted">
                                                 <input type="checkbox" className="form-check-input" />
                                                 <i className="input-helper"></i>
-                                                Beni Giriş Yapılı Tut
+                                                Beni Hatırla
                                             </label>
                                         </div>
-                                        <a href="!#" onClick={event => event.preventDefault()} className="auth-link text-muted">Şifreyi Unuttum?</a>
+                                        <a href="!#" onClick={event => event.preventDefault()} className="auth-link text-muted">Şifreyi mi unuttun?</a>
                                     </div>
                                     <div className="my-3">
                                         <button className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" >Giriş Yap</button>
                                     </div>
                                     <div className="text-center mt-4 font-weight-light">
-                                        <span>Hesabın Yok mu?</span> <Link to="/Register" className="text-primary">Kayıt Ol</Link>
+                                        <span>Hesabın Yok mu?</span> <Link to="/User/Register" className="text-primary">Kayıt Ol</Link>
                                     </div>
                                 </form>
                             </div>

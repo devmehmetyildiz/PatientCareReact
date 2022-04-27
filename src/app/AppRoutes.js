@@ -7,8 +7,7 @@ const Dashboard = lazy(() => import('./dashboard/Dashboard'));
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
 const Login = lazy(() => import('./User/Login'));
-const Register1 = lazy(() => import('./User/Register'));
-const Register2 = lazy(() => import('./User/Register2'));
+const Register = lazy(() => import('./User/Register'));
 const Lockscreen = lazy(() => import('./User/Lockscreen'));
 
 class AppRoutes extends Component {
@@ -18,8 +17,7 @@ class AppRoutes extends Component {
         <Switch>
           <Route exact path="/dashboard" component={ Dashboard } />
           <Route path="/User/login" component={ Login } />       
-          <Route path="/User/register-1" component={ Register1 } />
-          <Route path="/User/register-2" component={ Register2 } />
+          <Route path="/User/Register" component={ Register } />
           <Route path="/User/lockscreen" component={ Lockscreen } />
           <Route path="/error-pages/error-404" component={ Error404 } />
           <Route path="/error-pages/error-500" component={ Error500 } />
