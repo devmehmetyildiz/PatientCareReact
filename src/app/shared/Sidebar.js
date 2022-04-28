@@ -84,7 +84,7 @@ class Sidebar extends Component {
                 <ul className="nav flex-column sub-menu">
                   <li className="nav-item"> <Link className={ this.isPathActive('/User/login') ? 'nav-link active' : 'nav-link' } to="/User/login"><Trans>Login</Trans></Link></li>
                   <li className="nav-item"> <Link className={ this.isPathActive('/User/login-2') ? 'nav-link active' : 'nav-link' } to="/User/login-2"><Trans>Login 2</Trans></Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/User/register-1') ? 'nav-link active' : 'nav-link' } to="/User/register-1"><Trans>Register</Trans></Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/User/Register') ? 'nav-link active' : 'nav-link' } to="/User/Register"><Trans>Register</Trans></Link></li>
                   <li className="nav-item"> <Link className={ this.isPathActive('/User/register-2') ? 'nav-link active' : 'nav-link' } to="/User/register-2"><Trans>Register 2</Trans></Link></li>
                   <li className="nav-item"> <Link className={ this.isPathActive('/User/lockscreen') ? 'nav-link active' : 'nav-link' } to="/User/lockscreen"><Trans>Lockscreen</Trans></Link></li>
                 </ul>

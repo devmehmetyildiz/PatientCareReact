@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios'
-import cogoToast from 'cogo-toast';
+import Cookies from 'universal-cookie';
 import { connect } from 'react-redux'
 import { setUser } from '../Redux/actions/loginActions'
 import { withRouter } from 'react-router-dom';
 import InputItem from "../Components/Common/input"
+import TokenDecoder from "../Utils/TokenDecoder"
 import "../../assets/styles/Custom/Login.scss"
 import ErrorHandler from '../Utils/ErrorHandler';
 export class Login extends Component {
     constructor(props) {
         super(props)
-
         const currentitem = {
             username: '',
             password: ''
@@ -21,22 +21,20 @@ export class Login extends Component {
         }
     }
 
-    toastoptions = {
-        hideAfter: 5,
-        position: 'top-right',
-        heading: 'Kullanıcı Girişi'
-    }
-
-    
     handlesubmit = (e) => {
-        e.preventDefault();      
+        e.preventDefault();
         axios.post(process.env.REACT_APP_BACKEND_URL + '/Auth/Login', this.state.currentitem)
             .then(res => {
-             //   localStorage.setItem('token', res.data)
-               console.log(res) 
+                console.log(res)
+                const cookies = new Cookies();
+                cookies.set('X-Access-Token', res.data.token, { path: '/' });
+                cookies.set('X-Username', res.data.user, { path: '/' });
+                TokenDecoder();
+
+                // this.props.history.push("/dashboard")     
             })
             .catch(err => {
-                var response = ErrorHandler(err.response)                           
+                ErrorHandler(err.response)
             })
     }
     handleChangeInput = (e) => {

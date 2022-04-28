@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios'
 import InputItem from "../Components/Common/input"
 import ErrorHandler from '../Utils/ErrorHandler';
+import Popup from '../Utils/Popup';
 import "../../assets/styles/Custom/Login.scss"
 export class Register extends Component {
   constructor(props) {
@@ -15,21 +16,14 @@ export class Register extends Component {
     this.state = { currentitem }
   }
 
-  toastoptions = {
-    hideAfter: 5,
-    position: 'top-right',
-    heading: 'Kullanıcı Girişi'
-  }
-
   handleSubmit = (e) => {
     e.preventDefault();
     axios.post(process.env.REACT_APP_BACKEND_URL + '/Auth/Register', this.state.currentitem)
       .then(res => {
-        //   localStorage.setItem('token', res.data)
-        console.log(res)
+        Popup("Success", "Kullanıcı Oluşturma", res.data.massage)
       })
       .catch(err => {
-        var response = ErrorHandler(err.response)
+        ErrorHandler(err.response,"Kullanıcı Kaydı","Kullanıcı Oluşturuldu.")
       })
   }
 
@@ -52,7 +46,7 @@ export class Register extends Component {
                 </div>
                 <h4 className='text-center'>HASTA BAKIM YARDIM UYGULAMASI</h4>
                 <h6 className="font-weight-light text-center">Sadece Bir Kaç Adımda Kayıt Ol</h6>
-                <form className="pt-3">
+                <form className="pt-3" onSubmit={this.handleSubmit}>
                   <InputItem
                     itemclass="mdi mdi-account-outline text-primary"
                     title="Kullanıcı Adı"
@@ -87,7 +81,7 @@ export class Register extends Component {
                     </div>
                   </div>
                   <div className="mt-3">
-                  <button className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" >Kayıt Ol</button>
+                    <button className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" >Kayıt Ol</button>
                   </div>
                   <div className="text-center mt-4 font-weight-light">
                     <span>Zaten bir hesabınız var mı?</span> <Link to="/User/login" className="text-primary">Giriş Yap</Link>
