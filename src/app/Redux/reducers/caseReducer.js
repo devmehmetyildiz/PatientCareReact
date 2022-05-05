@@ -1,10 +1,6 @@
 import { ActionTypes } from "../constant/action-type"
 
-const initialState = {
-    AllCases: [],
-}
-
-export const caseReducer = (state = initialState, {type,payload}) => {
+export const caseReducer = (state = { Data:[]}, {type,payload}) => {
 
     switch (type) {
         case ActionTypes.SET_CASES:          
@@ -14,7 +10,7 @@ export const caseReducer = (state = initialState, {type,payload}) => {
     }
 }
 
-export const selectedCaseReducer = (state = {}, { type, payload }) => {   
+export const selectedcaseReducer = (state = {}, { type, payload }) => {   
     switch (type) {
       case ActionTypes.SELECTED_CASE:
         return { ...state, ...payload };

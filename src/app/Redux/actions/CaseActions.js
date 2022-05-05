@@ -14,8 +14,8 @@ export const selectedCase = (caseitem) => {
     };
 };
 
-export const removeselectedStock = () => {
+export const removeselectedCase = () => {
     return {
-        type : ActionTypes.REMOVE_SELECTED_STOCKS        
+        type : ActionTypes.REMOVE_SELECTED_CASE        
     };
 };

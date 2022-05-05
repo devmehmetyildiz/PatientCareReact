@@ -4,12 +4,12 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import axios from 'axios';
-import { GetToken } from '../Utils/TokenValidChecker';
-import {setCases} from '../Redux/actions/CaseActions'
+import { GetToken } from '../../Utils/TokenValidChecker';
+import {setCases,selectedCase,removeselectedCase} from '../../Redux/actions/CaseActions'
 import { withRouter } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 
-export class CaseListining extends Component {
+export class Cases extends Component {
 
     constructor(props) {
         super(props)
@@ -18,7 +18,7 @@ export class CaseListining extends Component {
         const defaultSorted = [{
             dataField: 'Id',
             order: 'asc'
-        }];
+        }] 
         const columns = [
             {
                 dataField: 'Id',
@@ -118,7 +118,6 @@ export class CaseListining extends Component {
         ];
         this.state = { currentitem, defaultSorted, columns, SearchBar };
 
-
     }
 
     componentDidMount() {
@@ -133,8 +132,8 @@ export class CaseListining extends Component {
             url: process.env.REACT_APP_BACKEND_URL + '/Case/GetAll',
             headers: { Authorization: `Bearer ${GetToken()}` }
         }).catch(error => {
-            if (error.response != undefined) {
-                if (error.response.status == '401') {
+            if (error.response !== undefined) {
+                if (error.response.status === '401') {
                     this.props.history.push("/User/login")
                 }
             }else{
@@ -142,7 +141,7 @@ export class CaseListining extends Component {
                 this.props.history.push("/Login")
             }
         })
-        if (response != undefined) {
+        if (response !== undefined) {
             console.log('response: ', response);
             this.props.setCases(response.data);
             this.setState({ currentitem: this.props.setCases.cases })
@@ -196,9 +195,10 @@ export class CaseListining extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    cases: state.cases
+    AllCases: state.AllCases,
+    SelectedCase : state.SelectedCase
 })
 
-const mapDispatchToProps = { setCases }
+const mapDispatchToProps = { setCases,selectedCase,removeselectedCase }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CaseListining))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))

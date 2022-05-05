@@ -1,10 +1,11 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import {loginReducer} from "./loginReducer";
-import { caseReducer } from "./caseReducer";
+import { caseReducer,selectedcaseReducer } from "./caseReducer";
 
 const reducers = combineReducers({
-    user : loginReducer,
-    cases : caseReducer,
+    ActiveUser : loginReducer,
+    AllCases : caseReducer,
+    SelectedCase : selectedcaseReducer,
 });
 
 export default reducers;

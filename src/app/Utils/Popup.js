@@ -1,7 +1,7 @@
 import cogoToast from 'cogo-toast';
 
 
-function Popup(type,subject, message) {
+function Popup(type, subject, message) {
     const toastoptions = {
         hideAfter: 5,
         position: 'top-right',
@@ -14,7 +14,9 @@ function Popup(type,subject, message) {
         case "Error":
             cogoToast.error(message, toastoptions)
             break;
-    }    
+        default:
+            break;
+    }
 }
 
 export default Popup

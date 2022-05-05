@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import {TokenValidChecker} from "../../Utils/TokenValidChecker";
 
@@ -9,8 +9,7 @@ const ProtectedRoute = ({ authrole, component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={(props) => {
-        console.log(props.location)
+      render={(props) => {      
         if (isauth) return <Component {...props} />;
         if (!isauth)
           return (
