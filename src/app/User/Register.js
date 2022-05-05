@@ -21,6 +21,7 @@ export class Register extends Component {
     axios.post(process.env.REACT_APP_BACKEND_URL + '/Auth/Register', this.state.currentitem)
       .then(res => {
         Popup("Success", "Kullanıcı Oluşturma", res.data.massage)
+        this.props.history.push("/User/Login")     
       })
       .catch(err => {
         ErrorHandler(err.response,"Kullanıcı Kaydı","Kullanıcı Oluşturuldu.")

@@ -11,7 +11,7 @@ export default class input extends Component {
               <i className={this.props.itemclass}></i>
             </span>
           </div>
-          <input id={this.props.itemid} type={this.props.itemtype} className="form-control form-control-lg border-left-0 form__input" autocomplete="off" placeholder=" "
+          <input id={this.props.itemid} type={this.props.itemtype} className="form-control form-control-lg border-left-0 form__input"  placeholder=" "
           value={this.props.itemvalue} onChange={this.props.itemchangefunc}
           ></input>
             <label className='form__label'>{this.props.title}</label>

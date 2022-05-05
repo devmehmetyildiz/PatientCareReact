@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { setUser } from '../Redux/actions/loginActions'
 import { withRouter } from 'react-router-dom';
 import InputItem from "../Components/Common/input"
-import TokenDecoder from "../Utils/TokenDecoder"
 import "../../assets/styles/Custom/Login.scss"
 import ErrorHandler from '../Utils/ErrorHandler';
 export class Login extends Component {
@@ -22,16 +21,16 @@ export class Login extends Component {
     }
 
     handlesubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault();      
         axios.post(process.env.REACT_APP_BACKEND_URL + '/Auth/Login', this.state.currentitem)
+        
             .then(res => {
+                
                 console.log(res)
                 const cookies = new Cookies();
                 cookies.set('X-Access-Token', res.data.token, { path: '/' });
-                cookies.set('X-Username', res.data.user, { path: '/' });
-                TokenDecoder();
-
-                // this.props.history.push("/dashboard")     
+                cookies.set('X-Username', res.data.user, { path: '/' });                
+                 this.props.history.push("/dashboard")     
             })
             .catch(err => {
                 ErrorHandler(err.response)

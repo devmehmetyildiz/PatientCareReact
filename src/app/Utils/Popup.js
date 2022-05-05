@@ -1,6 +1,5 @@
 import cogoToast from 'cogo-toast';
 
-import React from 'react'
 
 function Popup(type,subject, message) {
     const toastoptions = {
