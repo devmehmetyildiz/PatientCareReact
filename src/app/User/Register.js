@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios'
-import InputItem from "../Components/Common/input"
+import InputItem from "../Components/Common/Authinput"
 import ErrorHandler from '../Utils/ErrorHandler';
 import Popup from '../Utils/Popup';
 import "../../assets/styles/Custom/Login.scss"

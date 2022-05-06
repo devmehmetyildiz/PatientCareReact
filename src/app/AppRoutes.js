@@ -19,7 +19,7 @@ class AppRoutes extends Component {
         <Switch>
           <ProtectedRoute exact path="/dashboard" component={ Dashboard } />
           <ProtectedRoute exact path="/Cases" component={ Cases } />
-          <ProtectedRoute exact path="/Case/Create" component={ CasesCreate } />
+          <ProtectedRoute exact path="/Cases/Create" component={ CasesCreate } />
 
           <Route exact path="/User/login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />

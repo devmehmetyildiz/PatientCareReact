@@ -5,7 +5,7 @@ import Cookies from 'universal-cookie';
 import { connect } from 'react-redux'
 import { setUser } from '../Redux/actions/loginActions'
 import { withRouter } from 'react-router-dom';
-import InputItem from "../Components/Common/input"
+import InputItem from "../Components/Common/Authinput"
 import "../../assets/styles/Custom/Login.scss"
 import ErrorHandler from '../Utils/ErrorHandler';
 export class Login extends Component {

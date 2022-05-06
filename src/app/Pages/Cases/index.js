@@ -5,7 +5,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import axios from 'axios';
 import { GetToken } from '../../Utils/TokenValidChecker';
-import {setCases,selectedCase,removeselectedCase} from '../../Redux/actions/CaseActions'
+import { setCases, selectedCase, removeselectedCase } from '../../Redux/actions/CaseActions'
 import { withRouter } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 
@@ -18,7 +18,7 @@ export class Cases extends Component {
         const defaultSorted = [{
             dataField: 'Id',
             order: 'asc'
-        }] 
+        }]
         const columns = [
             {
                 dataField: 'Id',
@@ -120,6 +120,10 @@ export class Cases extends Component {
 
     }
 
+    handleonaddnew = (e) => {
+        this.props.history.push("/Cases/Create")
+    }
+
     componentDidMount() {
         console.log("didmounttayım")
         this.getData()
@@ -136,7 +140,7 @@ export class Cases extends Component {
                 if (error.response.status === '401') {
                     this.props.history.push("/User/login")
                 }
-            }else{
+            } else {
                 cogoToast.error('Veri Alınırken Hata Alındı', this.toastoptions)
                 this.props.history.push("/Login")
             }
@@ -155,7 +159,14 @@ export class Cases extends Component {
                     <div className="col-12">
                         <div className="card">
                             <div className="card-body">
-                                <h4 className="card-title">Diller</h4>
+                                <div className='row'>
+                                    <div className='col-6 d-flex justify-content-start'>
+                                        <h4 className="card-title">Durumlar</h4>
+                                    </div>
+                                    <div className='col-6 d-flex justify-content-end'>
+                                        <button style={{minWidth:'120px',height:'30px'}} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Durum</button>
+                                    </div>
+                                </div>
                                 <div className="row">
                                     <div className="col-12">
                                         <ToolkitProvider
@@ -196,9 +207,9 @@ export class Cases extends Component {
 
 const mapStateToProps = (state) => ({
     AllCases: state.AllCases,
-    SelectedCase : state.SelectedCase
+    SelectedCase: state.SelectedCase
 })
 
-const mapDispatchToProps = { setCases,selectedCase,removeselectedCase }
+const mapDispatchToProps = { setCases, selectedCase, removeselectedCase }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))

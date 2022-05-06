@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import "../../../assets/styles/Custom/input.scss"
-export default class input extends Component { 
+export default class Authinput extends Component { 
   render() {
     return (
-      <div className="form-group">
-      
+      <div className="form-group">      
         <div className="input-group inputborder">
         <div className="input-group-prepend bg-transparent ">
             <span className="input-group-text bg-transparent border-right-0">
