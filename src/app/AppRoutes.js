@@ -21,7 +21,7 @@ class AppRoutes extends Component {
           <ProtectedRoute exact path="/Cases" component={ Cases } />
           <ProtectedRoute exact path="/Cases/Create" component={ CasesCreate } />
 
-          <Route exact path="/User/login" component={ Login } />       
+          <Route exact path="/Login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />
           <Route exact path="/User/lockscreen" component={ Lockscreen } />
           <Route exact path="/error-pages/error-404" component={ Error404 } />

@@ -138,7 +138,7 @@ export class Cases extends Component {
         }).catch(error => {
             if (error.response !== undefined) {
                 if (error.response.status === '401') {
-                    this.props.history.push("/User/login")
+                    this.props.history.push("/Login")
                 }
             } else {
                 cogoToast.error('Veri Alınırken Hata Alındı', this.toastoptions)

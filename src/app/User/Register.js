@@ -21,7 +21,7 @@ export class Register extends Component {
     axios.post(process.env.REACT_APP_BACKEND_URL + '/Auth/Register', this.state.currentitem)
       .then(res => {
         Popup("Success", "Kullanıcı Oluşturma", res.data.massage)
-        this.props.history.push("/User/Login")     
+        this.props.history.push("/Login")     
       })
       .catch(err => {
         ErrorHandler(err.response,"Kullanıcı Kaydı","Kullanıcı Oluşturuldu.")
@@ -85,7 +85,7 @@ export class Register extends Component {
                     <button className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" >Kayıt Ol</button>
                   </div>
                   <div className="text-center mt-4 font-weight-light">
-                    <span>Zaten bir hesabınız var mı?</span> <Link to="/User/login" className="text-primary">Giriş Yap</Link>
+                    <span>Zaten bir hesabınız var mı?</span> <Link to="/Login" className="text-primary">Giriş Yap</Link>
                   </div>
                 </form>
               </div>

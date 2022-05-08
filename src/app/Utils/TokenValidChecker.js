@@ -24,6 +24,13 @@ export const GetToken = () => {
     return token
 }
 
-
+export const GetUser = () => {
+  const cookies = new Cookies();
+  let token = cookies.get('X-Access-Token')
+  if (token === undefined)
+    return ""
+  let decodedToken = jwtDecode(token);
+  return decodedToken ["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
+}
 
 

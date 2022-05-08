@@ -23,13 +23,12 @@ export class Login extends Component {
     handlesubmit = (e) => {
         e.preventDefault();      
         axios.post(process.env.REACT_APP_BACKEND_URL + '/Auth/Login', this.state.currentitem)
-        
             .then(res => {
-                
                 console.log(res)
                 const cookies = new Cookies();
                 cookies.set('X-Access-Token', res.data.token, { path: '/' });
-                cookies.set('X-Username', res.data.user, { path: '/' });                
+                cookies.set('X-Username', res.data.user, { path: '/' });    
+                this.props.setUser(this.state.currentitem.username)            
                  this.props.history.push("/dashboard")     
             })
             .catch(err => {
@@ -101,7 +100,7 @@ export class Login extends Component {
     }
 }
 const mapStateToProps = (state) => ({
-    user: state.user
+    ActiveUser: state.ActiveUser
 })
 const mapDispatchToProps = { setUser }
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login))

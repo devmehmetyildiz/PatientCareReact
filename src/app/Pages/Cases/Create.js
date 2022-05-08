@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Form } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import axios from 'axios';
 import { GetToken } from '../../Utils/TokenValidChecker';
-import { setCases, selectedCase, removeselectedCase } from '../../Redux/actions/CaseActions'
+import { setUser } from "../../Redux/actions/loginActions"
 import { withRouter, Link } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
@@ -13,14 +12,38 @@ export class Create extends Component {
 
     constructor(props) {
         super(props)
-        const currentitem = []
+        const currentitem = {
+            Id: 0,
+            CaseGroup: "",
+            CaseStatus: 0,
+            Name: "",
+            NormalizedName: null,
+            ConcurrencyStamp: null,
+            CreatedUser: "",
+            UpdatedUser: null,
+            DeleteUser: null,
+            CreateTime: null,
+            UpdateTime: null,
+            DeleteTime: null,
+            IsActive: true
+        }
         this.state = { currentitem };
-
+        this.props.setUser()
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
-        alert("tıkladım")
+        const newdata = { ...this.state.currentitem }
+        newdata["CreatedUser"] = this.props.ActiveUser
+        this.setState({ currentitem: newdata }, () => {
+            if (this.state.currentitem.name != undefined || this.state.currentitem.name != "") {
+                console.log("postladım")
+                this.postData();
+            }else {
+                cogoToast.error('Lütfen Tekrar Deneyiniz', this.toastoptions) 
+            }
+        })
+
     }
 
     goBack = (e) => {
@@ -33,6 +56,7 @@ export class Create extends Component {
         newdata[e.target.id] = e.target.value
         this.setState({ currentitem: newdata }, () => {
         })
+
     }
 
     componentDidMount() {
@@ -40,6 +64,7 @@ export class Create extends Component {
     }
 
     postData = async () => {
+        console.log(this.state.currentitem)
         const response = await axios({
             method: 'post',
             data: this.state.currentitem,
@@ -48,7 +73,7 @@ export class Create extends Component {
         }).catch(error => {
             if (error.response !== undefined) {
                 if (error.response.status === '401') {
-                    this.props.history.push("/User/login")
+                    this.props.history.push("/Login")
                 }
             } else {
                 cogoToast.error('Veri Eklenirken Hata Alındı', this.toastoptions)
@@ -56,7 +81,7 @@ export class Create extends Component {
         })
         if (response !== undefined) {
             if (response.status === '200') {
-                cogoToast.success('Veri Eklenirken Hata Alındı', this.toastoptions)
+                cogoToast.success('Kayıt Eklendi', this.toastoptions)
             }
         }
     };
@@ -83,7 +108,7 @@ export class Create extends Component {
                                         itemname="Durum Değeri"
                                         itemid="CaseStatus"
                                         itemvalue={this.state.currentitem.CaseStatus}
-                                        itemtype="text"
+                                        itemtype="number"
                                         itemplaceholder="Durum Değeri"
                                         itemchange={this.handleonchange}
                                     />
@@ -113,9 +138,9 @@ export class Create extends Component {
 }
 
 const mapStateToProps = (state) => ({
-
+    ActiveUser: state.ActiveUser.user
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = { setUser }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))
