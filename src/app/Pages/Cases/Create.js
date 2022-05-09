@@ -72,7 +72,7 @@ export class Create extends Component {
             headers: { Authorization: `Bearer ${GetToken()}` }
         }).catch(error => {
             if (error.response !== undefined) {
-                if (error.response.status === '401') {
+                if (error.response.status === "401") {
                     this.props.history.push("/Login")
                 }
             } else {
@@ -80,7 +80,9 @@ export class Create extends Component {
             }
         })
         if (response !== undefined) {
-            if (response.status === '200') {
+            console.log('response: ', response);
+            if (response.status === 200) {
+                console.log("200 geldim")
                 cogoToast.success('Kayıt Eklendi', this.toastoptions)
             }
         }

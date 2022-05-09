@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-
+import { withRouter } from 'react-router-dom';
 
 export class Dashboard extends Component {
 
@@ -328,4 +328,4 @@ export class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default withRouter(Dashboard);

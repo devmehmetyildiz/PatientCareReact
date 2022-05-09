@@ -79,7 +79,7 @@ export class Cases extends Component {
             }, {
                 dataField: 'update',
                 text: 'Güncelle',
-                sort: false,
+                sort: true,
                 formatter: () => {
                     return (
                         <div>
@@ -98,7 +98,7 @@ export class Cases extends Component {
             , {
                 dataField: 'delete',
                 text: 'Sil',
-                sort: false,
+                sort: true,
                 formatter: () => {
                     return (
                         <div>
@@ -146,9 +146,9 @@ export class Cases extends Component {
             }
         })
         if (response !== undefined) {
-            console.log('response: ', response);
             this.props.setCases(response.data);
-            this.setState({ currentitem: this.props.setCases.cases })
+            this.setState({ currentitem: response.data })
+            console.log('suan currentitem: ', this.state.currentitem);
         }
     };
 
@@ -169,8 +169,8 @@ export class Cases extends Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                        <ToolkitProvider
-                                            keyField="id"
+                                    <ToolkitProvider
+                                            keyField="Id"
                                             bootstrap4
                                             data={this.state.currentitem}
                                             columns={this.state.columns}
