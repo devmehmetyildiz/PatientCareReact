@@ -13,7 +13,7 @@ export class Cases extends Component {
 
     constructor(props) {
         super(props)
-        const currentitem = []
+        var currentitem = []
         const { SearchBar } = Search;
         const defaultSorted = [{
             dataField: 'Id',
@@ -21,61 +21,74 @@ export class Cases extends Component {
         }]
         const columns = [
             {
-                dataField: 'Id',
-                text: 'Id',
-                sort: true
+                dataField: 'id',
+                text: 'id',
+                sort: true,
+                type : 'number',
+                hidden: true
             }, {
-                dataField: 'CaseGroup',
+                dataField: 'caseGroup',
                 text: 'Durum Grubu',
                 sort: true
             }, {
-                dataField: 'CaseStatus',
+                dataField: 'caseStatus',
                 text: 'Durum Değeri',
                 sort: true
             }, {
-                dataField: 'Name',
+                dataField: 'name',
                 text: 'İsim',
                 sort: true
             }, {
-                dataField: 'NormalizedName',
-                text: 'Norm İsim',
+                dataField: 'normalizedName',
+                text: 'Normalize İsim',
+                sort: true,
+                hidden: true
+            }, {
+                dataField: 'concurrencyStamp',
+                text: 'Unik ID',
                 sort: true
             }, {
-                dataField: 'ConcurrencyStamp',
-                text: 'Guid',
-                sort: true
-            }, {
-                dataField: 'CreatedUser',
+                dataField: 'createdUser',
                 text: 'Oluşturan Kullanıcı',
-                sort: true
+                sort: true,
+                hidden: true
             }, {
-                dataField: 'UpdatedUser',
+                dataField: 'updatedUser',
                 text: 'Güncelleyen Kullanıcı',
-                sort: true
+                sort: true,
+                hidden: true
             }, {
-                dataField: 'DeleteUser',
+                dataField: 'deleteUser',
                 text: 'Silen Kullanıcı',
-                sort: true
+                sort: true,
+                hidden: true
             },
             , {
-                dataField: 'CreateTime',
+                dataField: 'createTime',
                 text: 'Oluşturma Tarihi',
-                sort: true
+                sort: true,
+                type:'date',
+                hidden: true
             },
             , {
-                dataField: 'UpdateTime',
-                text: 'Güncelleyen Kullanıcı',
-                sort: true
+                dataField: 'updateTime',
+                text: 'Güncelleme Tarihi',
+                sort: true,
+                type:'date',
+                hidden: true
             },
             , {
-                dataField: 'Deletetime',
+                dataField: 'deletetime',
                 text: 'Silme Tarihi',
-                sort: true
+                sort: true,
+                type:'date',
+                hidden: true
             },
             , {
-                dataField: 'IsActive',
+                dataField: 'isActive',
                 text: 'Aktiflik Durumu',
-                sort: true
+                sort: true,
+                type:'bool'
             }, {
                 dataField: 'update',
                 text: 'Güncelle',
@@ -116,6 +129,7 @@ export class Cases extends Component {
             }
 
         ];
+        
         this.state = { currentitem, defaultSorted, columns, SearchBar };
 
     }
@@ -147,8 +161,7 @@ export class Cases extends Component {
         })
         if (response !== undefined) {
             this.props.setCases(response.data);
-            this.setState({ currentitem: response.data })
-            console.log('suan currentitem: ', this.state.currentitem);
+            this.setState({ currentitem: this.props.AllCases.AllCases })
         }
     };
 
@@ -170,18 +183,16 @@ export class Cases extends Component {
                                 <div className="row">
                                     <div className="col-12">
                                     <ToolkitProvider
-                                            keyField="Id"
+                                            keyField="id"
                                             bootstrap4
                                             data={this.state.currentitem}
                                             columns={this.state.columns}
-                                            search
                                         >
                                             {
                                                 props => (
                                                     <div>
                                                         <div className="d-flex align-items-center">
                                                             <p className="mb-2 mr-2">Arama Yap:</p>
-                                                            <this.state.SearchBar {...props.searchProps} />
                                                         </div>
                                                         <BootstrapTable
                                                             defaultSorted={this.state.defaultSorted}
