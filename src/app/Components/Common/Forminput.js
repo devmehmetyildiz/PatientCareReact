@@ -17,7 +17,7 @@ export default class Forminput extends Component {
                 <div className='row'>
                 <label style={{fontSize:"12px"}} className="col-form-label">{this.props.itemname}</label>
                 </div>               
-                <Form.Group className="row">
+                <Form.Group className="row" >
                     <Form.Control
                         id={this.props.itemid}
                         value={this.props.itemvalue}

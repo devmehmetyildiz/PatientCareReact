@@ -14,7 +14,7 @@ export class Cases extends Component {
     constructor(props) {
         super(props)
         var currentitem = []
-        const { SearchBar } = Search;
+        const  {SearchBar}  = Search;
         const defaultSorted = [{
             dataField: 'Id',
             order: 'asc'
@@ -104,7 +104,7 @@ export class Cases extends Component {
                 },
                 events: {
                     onClick: (e, column, columnIndex, row, rowIndex) => {
-                        this.props.history.push('/Stock/' + row.id)
+                        this.props.history.push('/Cases/' + row.id)
                     }
                 }
             }
@@ -187,12 +187,14 @@ export class Cases extends Component {
                                             bootstrap4
                                             data={this.state.currentitem}
                                             columns={this.state.columns}
+                                            search
                                         >
                                             {
                                                 props => (
                                                     <div>
                                                         <div className="d-flex align-items-center">
                                                             <p className="mb-2 mr-2">Arama Yap:</p>
+                                                            <this.state.SearchBar { ...props.searchProps } />
                                                         </div>
                                                         <BootstrapTable
                                                             defaultSorted={this.state.defaultSorted}

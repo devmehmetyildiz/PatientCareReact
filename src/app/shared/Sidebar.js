@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Collapse } from 'react-bootstrap';
 import { Trans } from 'react-i18next';
-
 class Sidebar extends Component {
 
   state = {};
@@ -113,13 +112,13 @@ class Sidebar extends Component {
               <span className="menu-icon">
                 <i className="mdi mdi-lock"></i>
               </span>
-              <span className="menu-title"><Trans>Settings</Trans></span>
+              <span className="menu-title"><Trans>Ayarlar</Trans></span>
               <i className="menu-arrow"></i>
             </div>
             <Collapse in={ this.state.SettingsMenuOpen }>
               <div>
                 <ul className="nav flex-column sub-menu">
-                  <li className="nav-item"> <Link className={ this.isPathActive('/Cases') ? 'nav-link active' : 'nav-link' } to="/Cases">Cases</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Cases') ? 'nav-link active' : 'nav-link' } to="/Cases">Durumlar</Link></li>
   
                 </ul>
               </div>

@@ -6,6 +6,7 @@ import ProtectedRoute from './Components/Common/ProtectedRoutes';
 const Dashboard = lazy(() => import('./dashboard/Dashboard'));
 const Cases = lazy(() => import('./Pages/Cases'));
 const CasesCreate = lazy(() => import('./Pages/Cases/Create'));
+const CasesEdit = lazy(() => import('./Pages/Cases/Edit'));
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
 const Login = lazy(() => import('./User/Login'));
@@ -20,7 +21,7 @@ class AppRoutes extends Component {
           <ProtectedRoute exact path="/dashboard" component={ Dashboard } />
           <ProtectedRoute exact path="/Cases" component={ Cases } />
           <ProtectedRoute exact path="/Cases/Create" component={ CasesCreate } />
-
+          <ProtectedRoute exact path="/Cases/:CaseId" component={ CasesEdit } />
           <Route exact path="/Login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />
           <Route exact path="/User/lockscreen" component={ Lockscreen } />

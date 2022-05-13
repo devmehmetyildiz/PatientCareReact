@@ -59,10 +59,6 @@ export class Create extends Component {
 
     }
 
-    componentDidMount() {
-        //    this.getData()
-    }
-
     postData = async () => {
         console.log(this.state.currentitem)
         const response = await axios({
@@ -84,6 +80,7 @@ export class Create extends Component {
             if (response.status === 200) {
                 console.log("200 geldim")
                 cogoToast.success('Kayıt Eklendi', this.toastoptions)
+                this.props.history.push("/Cases")
             }
         }
     };
@@ -96,11 +93,10 @@ export class Create extends Component {
                         <div className="card-body">
                             <h4 className="card-title">Durumlar > Yeni</h4>
                             <form className="form-sample" onSubmit={this.handlesubmit}>
-                                <p className="card-description"> Yeni Durum Değeri </p>
                                 <div className="row">
                                     <InputItem
                                         itemname="Durum Grubu"
-                                        itemid="CaseGroup"
+                                        itemid="caseGroup"
                                         itemvalue={this.state.currentitem.CaseGroup}
                                         itemtype="text"
                                         itemplaceholder="Durum Grubu"
@@ -108,7 +104,7 @@ export class Create extends Component {
                                     />
                                     <InputItem
                                         itemname="Durum Değeri"
-                                        itemid="CaseStatus"
+                                        itemid="caseStatus"
                                         itemvalue={this.state.currentitem.CaseStatus}
                                         itemtype="number"
                                         itemplaceholder="Durum Değeri"
@@ -118,7 +114,7 @@ export class Create extends Component {
                                 <div className="row">
                                     <InputItem
                                         itemrowspan="2"
-                                        itemname="İsim"
+                                        itemname="isim"
                                         itemid="Name"
                                         itemvalue={this.state.currentitem.Name}
                                         itemtype="text"
