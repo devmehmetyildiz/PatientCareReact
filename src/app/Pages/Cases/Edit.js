@@ -35,7 +35,7 @@ export class Edit extends Component {
     handlesubmit = (e) => {
         e.preventDefault()
         const newdata = { ...this.state.currentitem }
-        newdata["updateUser"] = this.props.ActiveUser
+        newdata["updatedUser"] = this.props.ActiveUser
         this.setState({ currentitem: newdata }, () => {
             if (this.state.currentitem.name != undefined || this.state.currentitem.name != "") {
                 console.log("postladım")

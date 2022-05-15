@@ -14,7 +14,8 @@ export class Cases extends Component {
     constructor(props) {
         super(props)
         var currentitem = []
-        const  {SearchBar}  = Search;
+        const columnvisiblebar = true
+        const { SearchBar } = Search;
         const defaultSorted = [{
             dataField: 'Id',
             order: 'asc'
@@ -24,7 +25,7 @@ export class Cases extends Component {
                 dataField: 'id',
                 text: 'id',
                 sort: true,
-                type : 'number',
+                type: 'number',
                 hidden: true
             }, {
                 dataField: 'caseGroup',
@@ -67,28 +68,28 @@ export class Cases extends Component {
                 dataField: 'createTime',
                 text: 'Oluşturma Tarihi',
                 sort: true,
-                type:'date',
+                type: 'date',
                 hidden: true
             },
             , {
                 dataField: 'updateTime',
                 text: 'Güncelleme Tarihi',
                 sort: true,
-                type:'date',
+                type: 'date',
                 hidden: true
             },
             , {
                 dataField: 'deletetime',
                 text: 'Silme Tarihi',
                 sort: true,
-                type:'date',
+                type: 'date',
                 hidden: true
             },
             , {
                 dataField: 'isActive',
                 text: 'Aktiflik Durumu',
                 sort: true,
-                type:'bool'
+                type: 'bool'
             }, {
                 dataField: 'update',
                 text: 'Güncelle',
@@ -129,9 +130,41 @@ export class Cases extends Component {
             }
 
         ];
-        
-        this.state = { currentitem, defaultSorted, columns, SearchBar };
+        this.state = { columnvisiblebar, currentitem, defaultSorted, columns, SearchBar };
+    }
 
+    CustomToggleList = ({
+        columns,
+        onColumnToggle,
+        toggles
+    }) => (
+        console.log(toggles),
+        <div className="btn-group btn-group-toggle btn-group-vertical" data-toggle="buttons">
+            {
+                columns
+                    .map(column => ({
+                        ...column,
+                        toggle: toggles[column.dataField]
+                    }))
+                    .map(column => (
+                        <button
+                            type="button"
+                            key={column.dataField}
+                            className={`m-1 btn btn-warning ${column.toggle ? 'active' : ''}`}
+                            data-toggle="button"
+                            aria-pressed={column.toggle ? 'true' : 'false'}
+                            onClick={() => onColumnToggle(column.dataField)}
+                        >
+                            {column.text}
+                        </button>
+                    ))
+            }
+        </div>
+    );
+
+
+    changecolumnvisiblebar = () => {
+        this.setState({ columnvisiblebar: !this.state.columnvisiblebar })
     }
 
     handleonaddnew = (e) => {
@@ -177,24 +210,32 @@ export class Cases extends Component {
                                         <h4 className="card-title">Durumlar</h4>
                                     </div>
                                     <div className='col-6 d-flex justify-content-end'>
-                                        <button style={{minWidth:'120px',height:'30px'}} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Durum</button>
+                                        <button style={{ minWidth: '30px', height: '30px' }} onClick={this.changecolumnvisiblebar}>Toggle</button>
+                                        <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Durum</button>
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-12">
-                                    <ToolkitProvider
+                                        <ToolkitProvider
                                             keyField="id"
                                             bootstrap4
                                             data={this.state.currentitem}
                                             columns={this.state.columns}
                                             search
+                                            columnToggle
                                         >
                                             {
                                                 props => (
                                                     <div>
+                                                        {this.state.columnvisiblebar ?
+                                                            <div>
+                                                                <this.CustomToggleList {...props.columnToggleProps} />
+                                                                <hr />
+                                                            </div>
+                                                            : <></>}
                                                         <div className="d-flex align-items-center">
                                                             <p className="mb-2 mr-2">Arama Yap:</p>
-                                                            <this.state.SearchBar { ...props.searchProps } />
+                                                            <this.state.SearchBar {...props.searchProps} />
                                                         </div>
                                                         <BootstrapTable
                                                             defaultSorted={this.state.defaultSorted}
