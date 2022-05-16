@@ -8,9 +8,8 @@ import { GetToken } from '../../Utils/TokenValidChecker';
 import { setCases, selectedCase, removeselectedCase } from '../../Redux/actions/CaseActions'
 import { withRouter } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
-import ToggleColumns from "../../Components/Common/ToggleColumns"
 
-export class Cases extends Component {
+export class Authory extends Component {
 
     constructor(props) {
         super(props)
@@ -28,14 +27,6 @@ export class Cases extends Component {
                 sort: true,
                 type: 'number',
                 hidden: true
-            }, {
-                dataField: 'caseGroup',
-                text: 'Durum Grubu',
-                sort: true
-            }, {
-                dataField: 'caseStatus',
-                text: 'Durum Değeri',
-                sort: true
             }, {
                 dataField: 'name',
                 text: 'İsim',
@@ -106,7 +97,7 @@ export class Cases extends Component {
                 },
                 events: {
                     onClick: (e, column, columnIndex, row, rowIndex) => {
-                        this.props.history.push('/Cases/' + row.id)
+                        this.props.history.push('/Roles/' + row.id)
                     }
                 }
             }
@@ -132,8 +123,62 @@ export class Cases extends Component {
 
         ];
 
-        this.state = {columnvisiblebar, currentitem, defaultSorted, columns, SearchBar };
+        const childcolumns = [
+            {
+                dataField: 'id',
+                text: 'id',
+                sort: true,
+                type: 'number',
+                hidden : true
+            }, {
+                dataField: 'name',
+                text: 'İsim',
+                sort: true
+            }, {
+                dataField: 'normalizedName',
+                text: 'Normalize İsim',
+                sort: true
+            }, {
+                dataField: 'concurrencyStamp',
+                text: 'Unik ID',
+                sort: true
+            }
+        ]
 
+        const expandRow = {
+            renderer: row => (
+                <div className='m-1'>
+                    <h5>Yetkiler</h5>
+                    <ToolkitProvider
+                        keyField="id"
+                        bootstrap4
+                        data={this.state.currentitem.filter((e) => {
+                            return e.id = 1
+                        })
+                            .map(function (obj) {
+                                return obj.roles;
+                            })[0]}
+                        columns={this.state.childcolumns}
+                    >
+                        {
+                            props => (
+                                <div>
+                                    <BootstrapTable
+
+                                        defaultSorted={this.state.defaultSorted}
+                                        pagination={paginationFactory()}
+                                        {...props.baseProps}
+                                        wrapperClasses="table-responsive"
+                                    />
+                                </div>
+                            )
+                        }
+                    </ToolkitProvider>
+                </div>
+            )
+        };
+
+        this.state = { columnvisiblebar, currentitem, defaultSorted, columns,childcolumns, expandRow, SearchBar };
     }
 
     CustomToggleList = ({
@@ -165,12 +210,16 @@ export class Cases extends Component {
         </div>
     );
 
+
+    changecolumnvisiblebar = () => {
+        this.setState({ columnvisiblebar: !this.state.columnvisiblebar })
+    }
+
     handleonaddnew = (e) => {
-        this.props.history.push("/Cases/Create")
+        this.props.history.push("/Roles/Create")
     }
 
     componentDidMount() {
-        console.log("didmounttayım")
         this.getData()
     }
 
@@ -178,7 +227,7 @@ export class Cases extends Component {
         const response = await axios({
             method: 'get',
             data: this.state.currentitem,
-            url: process.env.REACT_APP_BACKEND_URL + '/Case/GetAll',
+            url: process.env.REACT_APP_BACKEND_URL + '/Authory/GetAll',
             headers: { Authorization: `Bearer ${GetToken()}` }
         }).catch(error => {
             if (error.response !== undefined) {
@@ -191,8 +240,15 @@ export class Cases extends Component {
             }
         })
         if (response !== undefined) {
-            this.props.setCases(response.data);
-            this.setState({ currentitem: this.props.AllCases.AllCases })
+            this.setState({ currentitem: response.data })
+            console.log('currentitem: ', JSON.stringify(this.state.currentitem));
+            console.log("filtered roles ="+JSON.stringify(this.state.currentitem.filter((e) => {
+                return e.id = 1
+            })
+                .map(function (obj) {
+                    return obj.roles;
+                })[0]))
+                
         }
     };
 
@@ -205,11 +261,11 @@ export class Cases extends Component {
                             <div className="card-body">
                                 <div className='row'>
                                     <div className='col-6 d-flex justify-content-start'>
-                                        <h4 className="card-title">Durumlar</h4>
+                                        <h4 className="card-title">Roller</h4>
                                     </div>
                                     <div className='col-6 d-flex justify-content-end'>
-                                        <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button>
-                                        <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Durum</button>
+                                        <button style={{ minWidth: '30px', height: '30px' }} onClick={()=>{ this.setState({ columnvisiblebar: !this.state.columnvisiblebar })}}>Toggle</button>
+                                        <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Yetki</button>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -221,6 +277,7 @@ export class Cases extends Component {
                                             columns={this.state.columns}
                                             search
                                             columnToggle
+
                                         >
                                             {
                                                 props => (
@@ -236,6 +293,7 @@ export class Cases extends Component {
                                                             <this.state.SearchBar {...props.searchProps} />
                                                         </div>
                                                         <BootstrapTable
+                                                            expandRow={this.state.expandRow}
                                                             defaultSorted={this.state.defaultSorted}
                                                             pagination={paginationFactory()}
                                                             {...props.baseProps}
@@ -258,10 +316,9 @@ export class Cases extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    AllCases: state.AllCases,
-    SelectedCase: state.SelectedCase
+
 })
 
-const mapDispatchToProps = { setCases, selectedCase, removeselectedCase }
+const mapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Authory))
