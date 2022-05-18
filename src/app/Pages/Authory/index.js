@@ -39,7 +39,8 @@ export class Authory extends Component {
             }, {
                 dataField: 'concurrencyStamp',
                 text: 'Unik ID',
-                sort: true
+                sort: true,
+                hidden: true
             }, {
                 dataField: 'createdUser',
                 text: 'Oluşturan Kullanıcı',
@@ -78,10 +79,17 @@ export class Authory extends Component {
                 hidden: true
             },
             , {
+                dataField: 'roles',
+                text: 'Yetkiler',
+                sort: false,
+                type: 'string'
+            }
+            , {
                 dataField: 'isActive',
                 text: 'Aktiflik Durumu',
                 sort: true,
-                type: 'bool'
+                type: 'bool',
+                hidden: true
             }, {
                 dataField: 'update',
                 text: 'Güncelle',
@@ -123,70 +131,7 @@ export class Authory extends Component {
 
         ];
 
-        const childcolumns = [
-            {
-                dataField: 'id',
-                text: 'id',
-                sort: true,
-                type: 'number',
-                hidden : true
-            }, {
-                dataField: 'name',
-                text: 'İsim',
-                sort: true,
-                headerStyle: () => {
-                    return { width: '150px'};
-                  }
-            }, {
-                dataField: 'normalizedName',
-                text: 'Normalize İsim',
-                sort: true
-                ,
-                headerStyle: () => {
-                    return { width: '150px'};
-                  }
-            }, {
-                dataField: 'concurrencyStamp',
-                text: 'Unik ID',
-                sort: true,
-                headerStyle: () => {
-                    return { width: '150px'};
-                  }
-            }
-        ]
-
-        const expandRow = {
-            renderer: row => (
-                <div className='m-1'>
-                    <h5>Yetkiler</h5>
-                    <ToolkitProvider
-                        keyField="id"
-                        bootstrap4
-                        data={this.state.currentitem.filter((e) => {
-                            return e.id = 1
-                        })
-                            .map(function (obj) {
-                                return obj.roles;
-                            })[0]}
-                        columns={this.state.childcolumns}
-                    >
-                        {
-                            props => (
-                                <div>
-                                    <BootstrapTable
-                                        defaultSorted={this.state.defaultSorted}
-                                        {...props.baseProps}
-                                        wrapperClasses="table-responsive"
-                                    />
-                                </div>
-                            )
-                        }
-                    </ToolkitProvider>
-                </div>
-            )
-        };
-
-        this.state = { columnvisiblebar, currentitem, defaultSorted, columns,childcolumns, expandRow, SearchBar };
+        this.state = { columnvisiblebar, currentitem, defaultSorted, columns,   SearchBar };
     }
 
     CustomToggleList = ({
@@ -248,15 +193,15 @@ export class Authory extends Component {
             }
         })
         if (response !== undefined) {
-            this.setState({ currentitem: response.data })
-            console.log('currentitem: ', JSON.stringify(this.state.currentitem));
-            console.log("filtered roles ="+JSON.stringify(this.state.currentitem.filter((e) => {
-                return e.id = 1
+            console.log('response: ', response.data);
+            response.data.forEach((item, index) => {
+                var text = item.roles.map((item) => {
+                    return item.name;
+                }).join(", ")
+                item.roles = text;
             })
-                .map(function (obj) {
-                    return obj.roles;
-                })[0]))
-                
+            this.setState({ currentitem: response.data })
+
         }
     };
 
@@ -272,7 +217,7 @@ export class Authory extends Component {
                                         <h4 className="card-title">Roller</h4>
                                     </div>
                                     <div className='col-6 d-flex justify-content-end'>
-                                        <button style={{ minWidth: '30px', height: '30px' }} onClick={()=>{ this.setState({ columnvisiblebar: !this.state.columnvisiblebar })}}>Toggle</button>
+                                        <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button>
                                         <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Yetki</button>
                                     </div>
                                 </div>
@@ -285,7 +230,6 @@ export class Authory extends Component {
                                             columns={this.state.columns}
                                             search
                                             columnToggle
-
                                         >
                                             {
                                                 props => (

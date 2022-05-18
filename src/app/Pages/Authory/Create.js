@@ -24,10 +24,36 @@ export class Create extends Component {
             UpdateTime: null,
             DeleteTime: null,
             IsActive: true,
-            roles : []
+            roles: []
         }
-        this.state = { currentitem };
+        const roles = []
+        this.state = { currentitem, roles };
         this.props.setUser()
+    }
+
+    componentDidMount() {
+        this.getRoles()
+    }
+
+    getRoles = async () => {
+        const response = await axios({
+            method: 'get',
+            data: this.state.currentitem,
+            url: process.env.REACT_APP_BACKEND_URL + '/Authory/GetAllroles',
+            headers: { Authorization: `Bearer ${GetToken()}` }
+        }).catch(error => {
+            if (error.response !== undefined) {
+                if (error.response.status === '401') {
+                    this.props.history.push("/Login")
+                }
+            } else {
+                cogoToast.error('Veri Alınırken Hata Alındı', this.toastoptions)
+                this.props.history.push("/Login")
+            }
+        })
+        if (response !== undefined) {
+            this.setState({ roles: response.data })
+        }
     }
 
     handlesubmit = (e) => {
@@ -37,8 +63,8 @@ export class Create extends Component {
         this.setState({ currentitem: newdata }, () => {
             if (this.state.currentitem.name != undefined || this.state.currentitem.name != "") {
                 this.postData();
-            }else {
-                cogoToast.error('Lütfen Tekrar Deneyiniz', this.toastoptions) 
+            } else {
+                cogoToast.error('Lütfen Tekrar Deneyiniz', this.toastoptions)
             }
         })
 
@@ -119,6 +145,19 @@ export class Create extends Component {
                                         itemplaceholder="İsim"
                                         itemchange={this.handleonchange}
                                     />
+                                </div>
+                                <div className="row">
+                                    {this.state.roles.map(() => 
+                                        <div className='col-3'>
+                                            <div className="form-check">
+                                                <label className="form-check-label">
+                                                    <input type="radio" className="form-check-input" name="optionsRadios" id="optionsRadios1" value="" />
+                                                    <i className="input-helper"></i>
+                                                    Default
+                                                </label>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className='row d-flex pr-5 justify-content-end align-items-right'>
                                     <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
