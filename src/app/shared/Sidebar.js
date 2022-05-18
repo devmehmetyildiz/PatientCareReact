@@ -33,7 +33,7 @@ class Sidebar extends Component {
 
     const dropdownPaths = [
       {path:'Setting', state: 'SettingsMenuOpen'},
-      {path:'/basic-ui', state: 'basicUiMenuOpen'},
+      {path:'/Authory', state: 'basicUiMenuOpen'},
       {path:'/advanced-ui', state: 'advancedUiMenuOpen'},
       {path:'/form-elements', state: 'formElementsMenuOpen'},
       {path:'/tables', state: 'tablesMenuOpen'},
@@ -119,7 +119,7 @@ class Sidebar extends Component {
               <div>
                 <ul className="nav flex-column sub-menu">
                   <li className="nav-item"> <Link className={ this.isPathActive('/Cases') ? 'nav-link active' : 'nav-link' } to="/Cases">Durumlar</Link></li>
-  
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Authory') ? 'nav-link active' : 'nav-link' } to="/Roles">Roller</Link></li>
                 </ul>
               </div>
             </Collapse>

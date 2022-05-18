@@ -133,15 +133,25 @@ export class Authory extends Component {
             }, {
                 dataField: 'name',
                 text: 'İsim',
-                sort: true
+                sort: true,
+                headerStyle: () => {
+                    return { width: '150px'};
+                  }
             }, {
                 dataField: 'normalizedName',
                 text: 'Normalize İsim',
                 sort: true
+                ,
+                headerStyle: () => {
+                    return { width: '150px'};
+                  }
             }, {
                 dataField: 'concurrencyStamp',
                 text: 'Unik ID',
-                sort: true
+                sort: true,
+                headerStyle: () => {
+                    return { width: '150px'};
+                  }
             }
         ]
 
@@ -164,9 +174,7 @@ export class Authory extends Component {
                             props => (
                                 <div>
                                     <BootstrapTable
-
                                         defaultSorted={this.state.defaultSorted}
-                                        pagination={paginationFactory()}
                                         {...props.baseProps}
                                         wrapperClasses="table-responsive"
                                     />
