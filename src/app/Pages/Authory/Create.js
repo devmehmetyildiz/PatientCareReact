@@ -83,6 +83,15 @@ export class Create extends Component {
 
     }
 
+    handleonRolehange = (e) => {
+        console.log('e: ', e);
+        
+       /*  const newdata = { ...this.state.currentitem }
+          newdata.roles.push = e
+        this.setState({ currentitem: newdata }, () => {
+         }) */
+    }
+
     postData = async () => {
         console.log(this.state.currentitem)
         const response = await axios({
@@ -147,13 +156,13 @@ export class Create extends Component {
                                     />
                                 </div>
                                 <div className="row">
-                                    {this.state.roles.map(() => 
+                                    {this.state.roles.map((item) =>
                                         <div className='col-3'>
                                             <div className="form-check">
                                                 <label className="form-check-label">
-                                                    <input type="radio" className="form-check-input" name="optionsRadios" id="optionsRadios1" value="" />
+                                                    <input onChange={this.handleonRolehange(item)} type="checkbox" key="{item}" className="form-check-input" name={item.name} value={item.name} id={item.name} />
                                                     <i className="input-helper"></i>
-                                                    Default
+                                                    {item.name}
                                                 </label>
                                             </div>
                                         </div>

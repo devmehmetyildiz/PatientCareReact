@@ -8,12 +8,14 @@ import { GetToken } from '../../Utils/TokenValidChecker';
 import { setCases, selectedCase, removeselectedCase } from '../../Redux/actions/CaseActions'
 import { withRouter } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
+import Spinner from "../../shared/Spinner"
 
 export class Authory extends Component {
 
     constructor(props) {
         super(props)
         var currentitem = []
+        const isLoading = true
         const columnvisiblebar = false
         const { SearchBar } = Search;
         const defaultSorted = [{
@@ -131,7 +133,7 @@ export class Authory extends Component {
 
         ];
 
-        this.state = { columnvisiblebar, currentitem, defaultSorted, columns,   SearchBar };
+        this.state = { columnvisiblebar, currentitem, defaultSorted, columns, SearchBar, isLoading };
     }
 
     CustomToggleList = ({
@@ -185,10 +187,12 @@ export class Authory extends Component {
         }).catch(error => {
             if (error.response !== undefined) {
                 if (error.response.status === '401') {
+                    this.setState({ isLoading: false })
                     this.props.history.push("/Login")
                 }
             } else {
                 cogoToast.error('Veri Alınırken Hata Alındı', this.toastoptions)
+                this.setState({ isLoading: false })
                 this.props.history.push("/Login")
             }
         })
@@ -201,6 +205,7 @@ export class Authory extends Component {
                 item.roles = text;
             })
             this.setState({ currentitem: response.data })
+            this.setState({ isLoading: false })
 
         }
     };
@@ -208,6 +213,7 @@ export class Authory extends Component {
     render() {
         return (
             <div>
+                {this.state.isLoading ? <Spinner/> :
                 <div className="row datatable">
                     <div className="col-12">
                         <div className="card">
@@ -261,7 +267,7 @@ export class Authory extends Component {
                         </div>
                     </div>
                 </div>
-
+            }
             </div>
         )
     }
