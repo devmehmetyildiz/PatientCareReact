@@ -9,6 +9,7 @@ import InputItem from "../Components/Common/Authinput"
 import "../../assets/styles/Custom/Login.scss"
 import Spinner from "../shared/Spinner"
 import ErrorHandler from '../Utils/ErrorHandler';
+import Popup from '../Utils/Popup';
 export class Login extends Component {
     constructor(props) {
         super(props)
@@ -50,7 +51,22 @@ export class Login extends Component {
             })
             .catch(err => {
                 this.setState({ isLoading: false })
-                ErrorHandler(err.response)
+                if (err.response !== undefined) {
+                    switch (err.response.status) {
+                        case 404:
+                            Popup("Error", "Giriş Başarısız", "Kullanıcı Adı Yada Şifre Hatalı")
+                            break;
+                        case 500:
+                            Popup("Error", "Server Hatası", err.response.data)
+                            break;
+                        case 401:
+                            Popup("Error", "Yetkisiz İşlem", "Yetkisiz İşlem")
+                            break;
+                        default:
+                            Popup("Error", "Server Hatası", "Server Hatası")
+                            break;
+                    }
+                }
 
             })
     }

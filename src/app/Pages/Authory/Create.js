@@ -26,13 +26,15 @@ export class Create extends Component {
             IsActive: true,
             roles: []
         }
+        const pagestatus = false
         const roles = []
-        this.state = { currentitem, roles };
+        this.state = { currentitem, roles, pagestatus };
         this.props.setUser()
     }
 
     componentDidMount() {
         this.getRoles()
+        this.setState({ pagestatus: true })
     }
 
     getRoles = async () => {
@@ -85,11 +87,27 @@ export class Create extends Component {
 
     handleonRolehange = (e) => {
         console.log('e: ', e);
-        
-       /*  const newdata = { ...this.state.currentitem }
-          newdata.roles.push = e
-        this.setState({ currentitem: newdata }, () => {
-         }) */
+        if (!this.state.currentitem.roles.includes(e.target.name)) {
+            const newdata = { ...this.state.currentitem }
+            newdata.roles.push(e.target.name)
+            this.setState({ currentitem: newdata }, () => {
+                console.log('this.state.currentitem.roles: ', this.state.currentitem);
+                console.log("role eklendi")
+            })
+        }
+        else {
+            const newdata = { ...this.state.currentitem }
+            const index = this.state.currentitem.roles.indexOf(e.target.name);
+            if (index > -1) {
+                this.state.currentitem.roles.splice(index, 1);
+                console.log("role silindi")// 2nd parameter means remove one item only
+            }
+            this.setState({ currentitem: newdata }, () => {
+                console.log('this.state.currentitem.roles: ', this.state.currentitem);
+
+            })
+        }
+
     }
 
     postData = async () => {
@@ -155,18 +173,29 @@ export class Create extends Component {
                                         itemchange={this.handleonchange}
                                     />
                                 </div>
-                                <div className="row">
-                                    {this.state.roles.map((item) =>
-                                        <div className='col-3'>
-                                            <div className="form-check">
-                                                <label className="form-check-label">
-                                                    <input onChange={this.handleonRolehange(item)} type="checkbox" key="{item}" className="form-check-input" name={item.name} value={item.name} id={item.name} />
-                                                    <i className="input-helper"></i>
-                                                    {item.name}
-                                                </label>
+                                <div className="m-2 border border-primary">
+                                    <div className='row  pr-5'>
+                                        {this.state.roles.map((item) =>
+                                            <div className='col-3'>
+                                                <div className="form-check">
+                                                    <label className="form-check-label">
+                                                        <input
+                                                            onChange={(e) => {
+                                                                this.handleonRolehange({
+                                                                    target: {
+                                                                        name: item,
+                                                                        value: e.target.checked,
+                                                                    },
+                                                                });
+                                                            }}
+                                                            type="checkbox" key="{item}" className="form-check-input" name={item.name} value={item.name} id={item.name} />
+                                                        <i className="input-helper"></i>
+                                                        {item.name}
+                                                    </label>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
+                                    </div>
                                 </div>
                                 <div className='row d-flex pr-5 justify-content-end align-items-right'>
                                     <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
