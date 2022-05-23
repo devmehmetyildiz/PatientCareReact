@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import axios from 'axios'
 import Cookies from 'universal-cookie';
 import { connect } from 'react-redux'
-import { setUser } from '../Redux/actions/loginActions'
 import { withRouter } from 'react-router-dom';
 import InputItem from "../Components/Common/Authinput"
 import "../../assets/styles/Custom/Login.scss"
@@ -44,7 +43,6 @@ export class Login extends Component {
                 const cookies = new Cookies();
                 cookies.set('X-Access-Token', res.data.token, { path: '/' });
                 cookies.set('X-Username', res.data.user, { path: '/' });
-                this.props.setUser(this.state.currentitem.username)
                 this.setState({ isLoading: false })
                 console.log("bittim")
                 this.props.history.push("/dashboard")
@@ -141,7 +139,6 @@ export class Login extends Component {
     }
 }
 const mapStateToProps = (state) => ({
-    ActiveUser: state.ActiveUser
 })
-const mapDispatchToProps = { setUser }
+const mapDispatchToProps = {  }
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login))

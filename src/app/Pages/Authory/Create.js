@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios';
 import { GetToken } from '../../Utils/TokenValidChecker';
-import { setUser } from "../../Redux/actions/loginActions"
 import { withRouter, Link } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
@@ -211,9 +210,9 @@ export class Create extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    ActiveUser: state.ActiveUser.user
+   
 })
 
-const mapDispatchToProps = { setUser }
+const mapDispatchToProps = {  }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))

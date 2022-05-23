@@ -4,11 +4,11 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
-import { setUser } from "../Redux/actions/loginActions"
+import { GetCurrentUser } from "../Redux/actions/loginActions"
 class Navbar extends Component {
 
   componentDidMount() {
-
+    this.props.GetCurrentUser()
   }
 
   toggleOffcanvas() {
@@ -79,6 +79,6 @@ const mapStateToProps = (state) => ({
   ActiveUser: state.ActiveUser.user
 })
 
-const mapDispatchToProps = { setUser }
+const mapDispatchToProps = { GetCurrentUser }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));

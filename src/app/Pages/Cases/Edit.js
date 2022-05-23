@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios';
 import { GetToken } from '../../Utils/TokenValidChecker';
-import { setUser } from "../../Redux/actions/loginActions"
 import { withRouter } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
@@ -167,10 +166,9 @@ export class Edit extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    ActiveUser: state.ActiveUser.user,
     SelectedCase: state.SelectedCase
 })
 
-const mapDispatchToProps = { setUser, setCases, selectedCase, removeselectedCase }
+const mapDispatchToProps = {  setCases, selectedCase, removeselectedCase }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Edit))
