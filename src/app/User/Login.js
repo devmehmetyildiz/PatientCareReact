@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios'
 import Cookies from 'universal-cookie';
 import { connect } from 'react-redux'
@@ -8,6 +8,7 @@ import InputItem from "../Components/Common/Authinput"
 import "../../assets/styles/Custom/Login.scss"
 import Spinner from "../shared/Spinner"
 import ErrorHandler from '../Utils/ErrorHandler';
+import { SetLogin } from '../Redux/actions/loginActions';
 import Popup from '../Utils/Popup';
 export class Login extends Component {
     constructor(props) {
@@ -37,7 +38,7 @@ export class Login extends Component {
     }
 
     PostData = async () => {
-        axios.post(process.env.REACT_APP_BACKEND_URL + '/Auth/Login', this.state.currentitem)
+        /* axios.post(process.env.REACT_APP_BACKEND_URL + '/Auth/Login', this.state.currentitem)
             .then(res => {
                 console.log(res)
                 const cookies = new Cookies();
@@ -66,7 +67,9 @@ export class Login extends Component {
                     }
                 }
 
-            })
+            }) */
+             this.props.SetLogin(this.state.currentitem)
+           
     }
 
     componentDidMount() {
@@ -74,7 +77,10 @@ export class Login extends Component {
     }
 
     componentDidUpdate() {
-
+        let {redirect} = this.props.user;
+        if(redirect === true){
+            this.props.history.push("/dashboard");
+        }
     }
 
     render() {
@@ -139,6 +145,7 @@ export class Login extends Component {
     }
 }
 const mapStateToProps = (state) => ({
+    user : state.ActiveUser
 })
-const mapDispatchToProps = {  }
+const mapDispatchToProps = { SetLogin }
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login))
