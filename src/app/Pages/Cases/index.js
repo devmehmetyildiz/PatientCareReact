@@ -5,7 +5,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import axios from 'axios';
 import { GetToken } from '../../Utils/TokenValidChecker';
-import { setCases, selectedCase, removeselectedCase } from '../../Redux/actions/CaseActions'
+import { GetAllCases, GetSelectedCase } from '../../Redux/actions/CaseActions'
 import { withRouter } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import ToggleColumns from "../../Components/Common/ToggleColumns"
@@ -262,6 +262,6 @@ const mapStateToProps = (state) => ({
     SelectedCase: state.SelectedCase
 })
 
-const mapDispatchToProps = { setCases, selectedCase, removeselectedCase }
+const mapDispatchToProps = { GetAllCases, GetSelectedCase }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))

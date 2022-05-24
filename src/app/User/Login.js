@@ -8,7 +8,7 @@ import InputItem from "../Components/Common/Authinput"
 import "../../assets/styles/Custom/Login.scss"
 import Spinner from "../shared/Spinner"
 import ErrorHandler from '../Utils/ErrorHandler';
-import { SetLogin } from '../Redux/actions/loginActions';
+import {  SetLogin } from '../Redux/actions/loginActions';
 import Popup from '../Utils/Popup';
 export class Login extends Component {
     constructor(props) {
@@ -26,7 +26,6 @@ export class Login extends Component {
 
     handlesubmit = (e) => {
         e.preventDefault();
-        this.setState({ isLoading: true })
         this.PostData()
 
     }
@@ -38,56 +37,14 @@ export class Login extends Component {
     }
 
     PostData = async () => {
-        /* axios.post(process.env.REACT_APP_BACKEND_URL + '/Auth/Login', this.state.currentitem)
-            .then(res => {
-                console.log(res)
-                const cookies = new Cookies();
-                cookies.set('X-Access-Token', res.data.token, { path: '/' });
-                cookies.set('X-Username', res.data.user, { path: '/' });
-                this.setState({ isLoading: false })
-                console.log("bittim")
-                this.props.history.push("/dashboard")
-            })
-            .catch(err => {
-                this.setState({ isLoading: false })
-                if (err.response !== undefined) {
-                    switch (err.response.status) {
-                        case 404:
-                            Popup("Error", "Giriş Başarısız", "Kullanıcı Adı Yada Şifre Hatalı")
-                            break;
-                        case 500:
-                            Popup("Error", "Server Hatası", err.response.data)
-                            break;
-                        case 401:
-                            Popup("Error", "Yetkisiz İşlem", "Yetkisiz İşlem")
-                            break;
-                        default:
-                            Popup("Error", "Server Hatası", "Server Hatası")
-                            break;
-                    }
-                }
-
-            }) */
-             this.props.SetLogin(this.state.currentitem)
-           
-    }
-
-    componentDidMount() {
-
-    }
-
-    componentDidUpdate() {
-        let {redirect} = this.props.user;
-        if(redirect === true){
-            this.props.history.push("/dashboard");
-        }
+        this.props.SetLogin(this.state.currentitem,this.props.history)
     }
 
     render() {
         return (
             <>
                 {
-                    this.state.isLoading ? <Spinner /> :
+                    this.props.user.isLoading ? <Spinner /> :
                         <div className='loginpage'>
                             <div className="d-flex align-items-stretch auth auth-img-bg h-100">
                                 <div className="row flex-grow">
@@ -145,7 +102,7 @@ export class Login extends Component {
     }
 }
 const mapStateToProps = (state) => ({
-    user : state.ActiveUser
+    user: state.ActiveUser
 })
-const mapDispatchToProps = { SetLogin }
+const mapDispatchToProps = { SetLogin  }
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login))

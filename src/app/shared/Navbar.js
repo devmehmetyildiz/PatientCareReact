@@ -4,11 +4,16 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { Trans } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
-import { GetCurrentUser } from "../Redux/actions/loginActions"
+import { GetCurrentUser, SetLogout } from "../Redux/actions/loginActions"
 class Navbar extends Component {
 
   componentDidMount() {
     this.props.GetCurrentUser()
+  }
+
+  handleLogout = (e) => {
+    e.preventDefault() 
+    this.props.SetLogout(this.props.history)
   }
 
   toggleOffcanvas() {
@@ -51,7 +56,7 @@ class Navbar extends Component {
                   </div>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item href="!#" onClick={evt => evt.preventDefault()} className="preview-item">
+                <Dropdown.Item href="!#" onClick={this.handleLogout} className="preview-item">
                   <div className="preview-thumbnail">
                     <div className="preview-icon bg-dark rounded-circle">
                       <i className="mdi mdi-logout text-danger"></i>
@@ -79,6 +84,6 @@ const mapStateToProps = (state) => ({
   ActiveUser: state.ActiveUser.user
 })
 
-const mapDispatchToProps = { GetCurrentUser }
+const mapDispatchToProps = { GetCurrentUser, SetLogout }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));

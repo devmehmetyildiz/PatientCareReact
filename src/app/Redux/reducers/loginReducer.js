@@ -5,7 +5,7 @@ const INITIAL_STATE = {
     user: "",
     message: "",
     isloading: false,
-    redirect : false
+    redirect: false
 };
 
 export const loginReducer = (state = INITIAL_STATE, { type, payload }) => {
@@ -20,10 +20,16 @@ export const loginReducer = (state = INITIAL_STATE, { type, payload }) => {
         case ACTION_TYPES.LOGIN_INIT:
             return { ...state, user: payload, isloading: true };
         case ACTION_TYPES.LOGIN_SUCCESS:
-            return { ...state,  isloading: false , redirect : true};
+            return { ...state, isloading: false, redirect: true };
         case ACTION_TYPES.LOGIN_ERROR:
             Popup("Error", "Giriş Başarısız", payload.message)
-            return { ...state, message: payload, isloading: false , redirect : false};
+            return { ...state, message: payload, isloading: false, redirect: false };
+        case ACTION_TYPES.LOGOUT_INIT:
+            return { ...state, user: payload, isloading: true };
+        case ACTION_TYPES.LOGOUT_SUCCESS:
+            return { ...state, state:INITIAL_STATE };
+        case ACTION_TYPES.LOGOUT_ERROR:
+            return { ...state, isloading: false };
         default: return state;
     }
 }

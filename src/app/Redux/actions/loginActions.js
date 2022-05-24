@@ -2,6 +2,7 @@ import axios from "axios";
 import { GetToken } from "../../Utils/TokenValidChecker";
 import Cookies from 'universal-cookie';
 
+
 export const ACTION_TYPES = {
     GET_CURRENTUSER_INIT: 'GET_CURRENTUSER_INIT',
     GET_CURRENTUSER_SUCCESS: 'GET_CURRENTUSER_SUCCESS',
@@ -10,6 +11,10 @@ export const ACTION_TYPES = {
     LOGIN_INIT: 'LOGIN_INIT',
     LOGIN_SUCCESS: 'LOGIN_SUCCESS',
     LOGIN_ERROR: 'LOGIN_ERROR',
+
+    LOGOUT_INIT: 'LOGOUT_INIT',
+    LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
+    LOGOUT_ERROR: 'LOGOUT_ERROR'
 }
 
 
@@ -24,7 +29,7 @@ export const GetCurrentUser = () => dispatch => {
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_CURRENTUSER_ERROR, payload: error }) })
 };
 
-export const SetLogin = (logindata) => dispatch => {
+export const SetLogin = (logindata, historypusher) => dispatch => {
     dispatch({ type: ACTION_TYPES.LOGIN_INIT })
     axios({
         method: 'post',
@@ -32,19 +37,34 @@ export const SetLogin = (logindata) => dispatch => {
         data: logindata
     })
         .then(response => {
-            console.log("1")
-
             dispatch({ type: ACTION_TYPES.LOGIN_SUCCESS, payload: response.data })
-            console.log("2")
-
             const cookies = new Cookies();
-            console.log("4")
-
             cookies.set('X-Access-Token', response.data.token, { path: '/' });
             cookies.set('X-Username', response.data.user, { path: '/' });
-            console.log("5")
+            historypusher.push("/Dashboard")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.LOGIN_ERROR, payload: error })
         })
 }
+
+export const SetLogout = (historypusher) => dispatch => {
+    dispatch({ type: ACTION_TYPES.LOGOUT_INIT })
+    try {
+        console.log("1")
+        const cookies = new Cookies();
+        cookies.remove('X-Access-Token')
+        cookies.remove('X-Username')
+        console.log("2")
+        dispatch({ type: ACTION_TYPES.LOGOUT_SUCCESS})
+        console.log("3")
+        historypusher.push("/Login")
+        console.log("4")
+    } catch (error) {
+        dispatch({ type: ACTION_TYPES.LOGOUT_ERROR })
+    }
+
+
+}
+
+
