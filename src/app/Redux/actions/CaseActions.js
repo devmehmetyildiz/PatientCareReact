@@ -43,3 +43,36 @@ export const GetSelectedCase = (ItemId) => dispatch => {
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDCASE_ERROR, payload: error }) })
 };
 
+export const CreateCase = (Item,historypusher) => dispatch => {
+    dispatch({ type: ACTION_TYPES.CREATE_CASE_INIT })
+    axios({
+        method: 'post',
+        url: process.env.REACT_APP_BACKEND_URL + '/Case/Add',
+        headers: { Authorization: `Bearer ${GetToken()}` },
+        data: Item
+    })
+        .then(() => {
+            dispatch({ type: ACTION_TYPES.CREATE_CASE_SUCCESS})
+            historypusher.push("/Dashboard")
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.CREATE_CASE_ERROR, payload: error })
+        })
+}
+
+export const UpdateCase = (Item,historypusher) => dispatch => {
+    dispatch({ type: ACTION_TYPES.EDIT_CASE_INIT })
+    axios({
+        method: 'post',
+        url: process.env.REACT_APP_BACKEND_URL + '/Case/Add',
+        headers: { Authorization: `Bearer ${GetToken()}` },
+        data: Item
+    })
+        .then(() => {
+            dispatch({ type: ACTION_TYPES.EDIT_CASE_SUCCESS})
+            historypusher.push("/Dashboard")
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.EDIT_CASE_ERROR, payload: error })
+        })
+}
