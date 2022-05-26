@@ -3,18 +3,15 @@ import { connect } from 'react-redux'
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import axios from 'axios';
-import { GetToken } from '../../Utils/TokenValidChecker';
-import { GetAllCases, GetSelectedCase } from '../../Redux/actions/CaseActions'
 import { withRouter } from 'react-router-dom';
-import cogoToast from 'cogo-toast';
 import ToggleColumns from "../../Components/Common/ToggleColumns"
-
+import { GetAllCases } from '../../Redux/actions/CaseActions'
+import Spinner from '../../shared/Spinner'
 export class Cases extends Component {
 
     constructor(props) {
         super(props)
-        var currentitem = []
+      
         const columnvisiblebar = false
         const { SearchBar } = Search;
         const defaultSorted = [{
@@ -132,7 +129,7 @@ export class Cases extends Component {
 
         ];
 
-        this.state = {columnvisiblebar, currentitem, defaultSorted, columns, SearchBar };
+        this.state = { columnvisiblebar,  defaultSorted, columns, SearchBar };
 
     }
 
@@ -170,87 +167,69 @@ export class Cases extends Component {
     }
 
     componentDidMount() {
-        console.log("didmounttayım")
         this.getData()
     }
 
     getData = async () => {
-        const response = await axios({
-            method: 'get',
-            data: this.state.currentitem,
-            url: process.env.REACT_APP_BACKEND_URL + '/Case/GetAll',
-            headers: { Authorization: `Bearer ${GetToken()}` }
-        }).catch(error => {
-            if (error.response !== undefined) {
-                if (error.response.status === '401') {
-                    this.props.history.push("/Login")
-                }
-            } else {
-                cogoToast.error('Veri Alınırken Hata Alındı', this.toastoptions)
-                this.props.history.push("/Login")
-            }
-        })
-        if (response !== undefined) {
-            this.props.setCases(response.data);
-            this.setState({ currentitem: this.props.AllCases.AllCases })
-        }
+        this.props.GetAllCases();
     };
 
     render() {
         return (
             <div>
-                <div className="row datatable">
-                    <div className="col-12">
-                        <div className="card">
-                            <div className="card-body">
-                                <div className='row'>
-                                    <div className='col-6 d-flex justify-content-start'>
-                                        <h4 className="card-title">Durumlar</h4>
+                {this.props.Cases.isLoading ? <Spinner /> :
+                    <div className="row datatable">
+                        <div className="col-12">
+                            <div className="card">
+                                <div className="card-body">
+                                    <div className='row'>
+                                        <div className='col-6 d-flex justify-content-start'>
+                                            <h4 className="card-title">Durumlar</h4>
+                                        </div>
+                                        <div className='col-6 d-flex justify-content-end'>
+                                            <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button>
+                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Durum</button>
+                                        </div>
                                     </div>
-                                    <div className='col-6 d-flex justify-content-end'>
-                                        <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button>
-                                        <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Durum</button>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <ToolkitProvider
-                                            keyField="id"
-                                            bootstrap4
-                                            data={this.state.currentitem}
-                                            columns={this.state.columns}
-                                            search
-                                            columnToggle
-                                        >
-                                            {
-                                                props => (
-                                                    <div>
-                                                        {this.state.columnvisiblebar ?
-                                                            <div>
-                                                                <this.CustomToggleList {...props.columnToggleProps} />
-                                                                <hr />
+                                    <div className="row">
+                                        <div className="col-12">
+                                            <ToolkitProvider
+                                                keyField="id"
+                                                bootstrap4
+                                                data={this.props.Cases.list}
+                                                columns={this.state.columns}
+                                                search
+                                                columnToggle
+                                            >
+                                                {
+                                                    props => (
+                                                        <div>
+                                                            {this.state.columnvisiblebar ?
+                                                                <div>
+                                                                    <this.CustomToggleList {...props.columnToggleProps} />
+                                                                    <hr />
+                                                                </div>
+                                                                : <></>}
+                                                            <div className="d-flex align-items-center">
+                                                                <p className="mb-2 mr-2">Arama Yap:</p>
+                                                                <this.state.SearchBar {...props.searchProps} />
                                                             </div>
-                                                            : <></>}
-                                                        <div className="d-flex align-items-center">
-                                                            <p className="mb-2 mr-2">Arama Yap:</p>
-                                                            <this.state.SearchBar {...props.searchProps} />
+                                                            <BootstrapTable
+                                                                defaultSorted={this.state.defaultSorted}
+                                                                pagination={paginationFactory()}
+                                                                {...props.baseProps}
+                                                                wrapperClasses="table-responsive"
+                                                            />
                                                         </div>
-                                                        <BootstrapTable
-                                                            defaultSorted={this.state.defaultSorted}
-                                                            pagination={paginationFactory()}
-                                                            {...props.baseProps}
-                                                            wrapperClasses="table-responsive"
-                                                        />
-                                                    </div>
-                                                )
-                                            }
-                                        </ToolkitProvider>
+                                                    )
+                                                }
+                                            </ToolkitProvider>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div>}
 
             </div>
         )
@@ -258,10 +237,9 @@ export class Cases extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    AllCases: state.AllCases,
-    SelectedCase: state.SelectedCase
+    Cases: state.Cases,
 })
 
-const mapDispatchToProps = { GetAllCases, GetSelectedCase }
+const mapDispatchToProps = { GetAllCases }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))

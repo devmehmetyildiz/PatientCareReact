@@ -5,7 +5,8 @@ import { GetToken } from '../../Utils/TokenValidChecker';
 import { withRouter } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
-import { setCases, selectedCase, removeselectedCase } from '../../Redux/actions/CaseActions'
+import { GetSelectedCase, UpdateCase, ClearSelectedCase } from '../../Redux/actions/CaseActions';
+import { GetCurrentUser } from '../../Redux/actions/loginActions';
 import "../../../assets/styles/Pages/Create.scss"
 
 export class Edit extends Component {
@@ -13,28 +14,27 @@ export class Edit extends Component {
     constructor(props) {
         super(props)
         const currentitem = {
-            Id: 0,
-            CaseGroup: "",
-            CaseStatus: 0,
-            Name: "",
-            NormalizedName: null,
-            ConcurrencyStamp: null,
-            CreatedUser: "",
-            UpdatedUser: null,
-            DeleteUser: null,
-            CreateTime: null,
-            UpdateTime: null,
-            DeleteTime: null,
-            IsActive: true
+            id: 0,
+            caseGroup: "",
+            caseStatus: 0,
+            name: "",
+            normalizedName: null,
+            concurrencyStamp: null,
+            createdUser: "",
+            updatedUser: null,
+            deleteUser: null,
+            createTime: null,
+            updateTime: null,
+            deleteTime: null,
+            isActive: true
         }
         this.state = { currentitem };
-        this.props.setUser()
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
         const newdata = { ...this.state.currentitem }
-        newdata["updatedUser"] = this.props.ActiveUser
+        newdata["updatedUser"] = this.props.ActiveUser.user
         this.setState({ currentitem: newdata }, () => {
             if (this.state.currentitem.name != undefined || this.state.currentitem.name != "") {
                 console.log("postladım")
@@ -47,29 +47,20 @@ export class Edit extends Component {
     }
 
     componentWillUnmount() {
-        this.props.removeselectedCase(this.state.currentitem)
+        this.props.ClearSelectedCase()
     }
 
     componentDidMount() {
-        this.getData()
+        this.getData().then(
+            this.setState({ currentitem: this.props.Cases.selected_case }),
+            console.log('currentitem: ', this.state.currentitem),
+            console.log('this.props.Cases.selected_case: ', this.props.Cases.selected_case)
+
+        );
     }
 
     getData = async () => {
-        const response = await axios({
-            method: 'get',
-            url: process.env.REACT_APP_BACKEND_URL + '/Case/GetSelectedCase?ID=' + this.props.match.params.CaseId,
-            headers: { Authorization: `Bearer ${GetToken()}` }
-        })
-            .catch(error => {
-                if (error.response.status == '401') {
-                    this.props.history.push("/Login")
-                }
-            })
-        if (response != undefined) {
-            this.props.selectedCase(response.data);
-            this.setState({ currentitem: this.props.SelectedCase })
-            console.log('this.props.SelectedCase: ', this.state.currentitem);
-        }
+        this.props.GetSelectedCase(this.props.match.params.CaseId)
     }
 
 
@@ -90,29 +81,7 @@ export class Edit extends Component {
     }
 
     postData = async () => {
-        console.log(this.state.currentitem)
-        const response = await axios({
-            method: 'post',
-            data: this.state.currentitem,
-            url: process.env.REACT_APP_BACKEND_URL + '/Case/Update',
-            headers: { Authorization: `Bearer ${GetToken()}` }
-        }).catch(error => {
-            if (error.response !== undefined) {
-                if (error.response.status === "401") {
-                    this.props.history.push("/Login")
-                }
-            } else {
-                cogoToast.error('Veri Eklenirken Hata Alındı', this.toastoptions)
-            }
-        })
-        if (response !== undefined) {
-            console.log('response: ', response);
-            if (response.status === 200) {
-                console.log("200 geldim")
-                cogoToast.success('Kayıt Güncellendi', this.toastoptions)
-                this.props.history.push("/Cases")
-            }
-        }
+        this.props.UpdateCase(this.state.currentitem, this.props.history)
     };
 
     render() {
@@ -166,9 +135,10 @@ export class Edit extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    SelectedCase: state.SelectedCase
+    Cases: state.Cases,
+    ActiveUser: state.ActiveUser
 })
 
-const mapDispatchToProps = {  setCases, selectedCase, removeselectedCase }
+const mapDispatchToProps = { GetSelectedCase, UpdateCase, ClearSelectedCase, GetCurrentUser }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Edit))

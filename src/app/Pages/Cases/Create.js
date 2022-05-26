@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import axios from 'axios';
 import { GetToken } from '../../Utils/TokenValidChecker';
 import { withRouter, Link } from 'react-router-dom';
+import { GetCurrentUser } from '../../Redux/actions/loginActions';
 import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
@@ -27,13 +28,12 @@ export class Create extends Component {
             IsActive: true
         }
         this.state = { currentitem };
-        this.props.setUser()
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
         const newdata = { ...this.state.currentitem }
-        newdata["CreatedUser"] = this.props.ActiveUser
+        newdata["CreatedUser"] = this.props.ActiveUser.user
         this.setState({ currentitem: newdata }, () => {
             if (this.state.currentitem.name != undefined || this.state.currentitem.name != "") {
                 console.log("postladım")
@@ -135,8 +135,9 @@ export class Create extends Component {
 }
 
 const mapStateToProps = (state) => ({
+    ActiveUser : state.ActiveUser
 })
 
-const mapDispatchToProps = {  }
+const mapDispatchToProps = { GetCurrentUser }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))

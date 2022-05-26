@@ -36,14 +36,14 @@ export const GetSelectedCase = (ItemId) => dispatch => {
     dispatch({ type: ACTION_TYPES.GET_SELECTEDCASE_INIT })
     axios({
         method: 'get',
-        url: `${process.env.REACT_APP_BACKEND_URL} + /Case/GetSelectedCase?ID=${ItemId}`,
+        url: `${process.env.REACT_APP_BACKEND_URL}/Case/GetSelectedCase?ID=${ItemId}`,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => dispatch({ type: ACTION_TYPES.GET_SELECTEDCASE_SUCCESS, payload: response.data }))
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDCASE_ERROR, payload: error }) })
 };
 
-export const CreateCase = (Item,historypusher) => dispatch => {
+export const CreateCase = (Item, historypusher) => dispatch => {
     dispatch({ type: ACTION_TYPES.CREATE_CASE_INIT })
     axios({
         method: 'post',
@@ -52,15 +52,15 @@ export const CreateCase = (Item,historypusher) => dispatch => {
         data: Item
     })
         .then(() => {
-            dispatch({ type: ACTION_TYPES.CREATE_CASE_SUCCESS})
-            historypusher.push("/Dashboard")
+            dispatch({ type: ACTION_TYPES.CREATE_CASE_SUCCESS })
+            historypusher.push("/Cases")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.CREATE_CASE_ERROR, payload: error })
         })
 }
 
-export const UpdateCase = (Item,historypusher) => dispatch => {
+export const UpdateCase = (Item, historypusher) => dispatch => {
     dispatch({ type: ACTION_TYPES.EDIT_CASE_INIT })
     axios({
         method: 'post',
@@ -69,10 +69,15 @@ export const UpdateCase = (Item,historypusher) => dispatch => {
         data: Item
     })
         .then(() => {
-            dispatch({ type: ACTION_TYPES.EDIT_CASE_SUCCESS})
-            historypusher.push("/Dashboard")
+            dispatch({ type: ACTION_TYPES.EDIT_CASE_SUCCESS })
+            dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDCASE })
+            historypusher.push("/Cases")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.EDIT_CASE_ERROR, payload: error })
         })
+}
+
+export const ClearSelectedCase = () => dispatch => {
+    dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDCASE })
 }
