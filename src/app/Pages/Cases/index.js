@@ -5,15 +5,16 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import { withRouter } from 'react-router-dom';
 import ToggleColumns from "../../Components/Common/ToggleColumns"
-import { GetAllCases } from '../../Redux/actions/CaseActions'
+import { GetAllCases, GetSelectedCase, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/CaseActions'
 import Spinner from '../../shared/Spinner'
+import DeleteCaseModal from "./Delete"
+import { Form } from "react-bootstrap";
 export class Cases extends Component {
 
     constructor(props) {
         super(props)
-      
+        const modalShow = false;
         const columnvisiblebar = false
-        const { SearchBar } = Search;
         const defaultSorted = [{
             dataField: 'Id',
             order: 'asc'
@@ -122,48 +123,53 @@ export class Cases extends Component {
                 },
                 events: {
                     onClick: (e, column, columnIndex, row, rowIndex) => {
-                        this.props.history.push('/Stock/' + row.id)
+                        this.handleDeleteCase(e, row)
                     }
                 }
             }
 
         ];
-
-        this.state = { columnvisiblebar,  defaultSorted, columns, SearchBar };
+        this.state = { columnvisiblebar, defaultSorted, columns, modalShow };
 
     }
+
+
 
     CustomToggleList = ({
         columns,
         onColumnToggle,
         toggles
     }) => (
-        console.log(toggles),
-        <div className="btn-group btn-group-toggle btn-group-vertical" data-toggle="buttons">
-            {
-                columns
-                    .map(column => ({
-                        ...column,
-                        toggle: toggles[column.dataField]
-                    }))
-                    .map(column => (
-                        <button
-                            type="button"
-                            key={column.dataField}
-                            className={`m-1 btn btn-warning ${column.toggle ? 'active' : ''}`}
-                            data-toggle="button"
-                            aria-pressed={column.toggle ? 'true' : 'false'}
-                            onClick={() => onColumnToggle(column.dataField)}
-                        >
-                            {column.text}
-                        </button>
-                    ))
-            }
+        <div className="text-center">
+            {columns
+                .map(column => ({
+                    ...column,
+                    toggle: toggles[column.dataField]
+                }))
+                .map((column, index) => (
+                    <Form.Check
+                        type="checkbox"
+                        key={column.dataField}
+                        inline
+                        label={column.text}
+                        id={column.dataField}
+                        //aria-pressed={(column.toggle) ? "true" : "false"}
+                        checked={column.toggle}
+                        aria-checked={column.toggle ? "true" : "false"}
+                        onChange={() => onColumnToggle(column.dataField)}
+                    //onClick={() => onColumnToggle(column.dataField)}
+                    />
+                ))}
         </div>
     );
 
     handleonaddnew = (e) => {
         this.props.history.push("/Cases/Create")
+    }
+
+    handleDeleteCase = (e, row) => {
+        this.props.GetSelectedCase(row.id)
+        this.props.OpenDeleteModal()
     }
 
     componentDidMount() {
@@ -174,9 +180,17 @@ export class Cases extends Component {
         this.props.GetAllCases();
     };
 
+
     render() {
+        const { SearchBar } = Search;
+        const Data = this.props.Cases.list
+        const Columns = this.state.columns
         return (
             <div>
+                <DeleteCaseModal
+                    show={this.props.Cases.isModalOpen}
+                    onHide={() => this.props.CloseDeleteModal()}
+                />
                 {this.props.Cases.isLoading ? <Spinner /> :
                     <div className="row datatable">
                         <div className="col-12">
@@ -187,7 +201,7 @@ export class Cases extends Component {
                                             <h4 className="card-title">Durumlar</h4>
                                         </div>
                                         <div className='col-6 d-flex justify-content-end'>
-                                            <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button>
+                                           {/*  <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
                                             <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Durum</button>
                                         </div>
                                     </div>
@@ -196,8 +210,8 @@ export class Cases extends Component {
                                             <ToolkitProvider
                                                 keyField="id"
                                                 bootstrap4
-                                                data={this.props.Cases.list}
-                                                columns={this.state.columns}
+                                                data={Data}
+                                                columns={Columns}
                                                 search
                                                 columnToggle
                                             >
@@ -212,7 +226,7 @@ export class Cases extends Component {
                                                                 : <></>}
                                                             <div className="d-flex align-items-center">
                                                                 <p className="mb-2 mr-2">Arama Yap:</p>
-                                                                <this.state.SearchBar {...props.searchProps} />
+                                                                <SearchBar {...props.searchProps} />
                                                             </div>
                                                             <BootstrapTable
                                                                 defaultSorted={this.state.defaultSorted}
@@ -230,7 +244,6 @@ export class Cases extends Component {
                             </div>
                         </div>
                     </div>}
-
             </div>
         )
     }
@@ -240,6 +253,11 @@ const mapStateToProps = (state) => ({
     Cases: state.Cases,
 })
 
-const mapDispatchToProps = { GetAllCases }
+const mapDispatchToProps = { GetAllCases, GetSelectedCase, OpenDeleteModal, CloseDeleteModal }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))
+
+
+
+
+

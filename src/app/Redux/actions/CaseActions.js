@@ -11,6 +11,8 @@ export const ACTION_TYPES = {
     GET_SELECTEDCASE_ERROR: 'GET_SELECTEDCASE_ERROR',
 
     REMOVE_SELECTEDCASE: 'REMOVE_SELECTEDCASE',
+    DELETE_MODAL_OPEN: 'DELETE_MODAL_OPEN',
+    DELETE_MODAL_CLOSE: 'DELETE_MODAL_CLOSE',
 
     CREATE_CASE_INIT: 'CREATE_CASE_INIT',
     CREATE_CASE_SUCCESS: 'CREATE_CASE_SUCCESS',
@@ -19,6 +21,10 @@ export const ACTION_TYPES = {
     EDIT_CASE_INIT: 'EDIT_CASE_INIT',
     EDIT_CASE_SUCCESS: 'EDIT_CASE_SUCCESS',
     EDIT_CASE_ERROR: 'EDIT_CASE_ERROR',
+
+    DELETE_CASE_INIT: 'DELETE_CASE_INIT',
+    DELETE_CASE_SUCCESS: 'DELETE_CASE_SUCCESS',
+    DELETE_CASE_ERROR: 'DELETE_CASE_ERROR',
 }
 
 export const GetAllCases = () => dispatch => {
@@ -64,7 +70,7 @@ export const UpdateCase = (Item, historypusher) => dispatch => {
     dispatch({ type: ACTION_TYPES.EDIT_CASE_INIT })
     axios({
         method: 'post',
-        url: process.env.REACT_APP_BACKEND_URL + '/Case/Add',
+        url: process.env.REACT_APP_BACKEND_URL + '/Case/Update',
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })
@@ -75,9 +81,50 @@ export const UpdateCase = (Item, historypusher) => dispatch => {
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.EDIT_CASE_ERROR, payload: error })
+            switch (error.response.status) {
+                case 400:
+                    alert("Invalid data")
+                    break;
+                case 401:
+                    alert("Unauthorized")
+                    break;
+                case 404:
+                    alert("Not found")
+                    break;
+                case 500:
+                    alert("Internal server error")
+                    break;
+                default:
+                    alert("Unknown error")
+                    break;
+            }
+        })
+}
+
+export const DeleteCase = (Item) => dispatch => {
+    dispatch({ type: ACTION_TYPES.DELETE_CASE_INIT })
+    axios({
+        method: 'delete',
+        url: process.env.REACT_APP_BACKEND_URL + '/Case/Delete',
+        headers: { Authorization: `Bearer ${GetToken()}` },
+        data: Item
+    })
+        .then(() => {
+            dispatch({ type: ACTION_TYPES.DELETE_CASE_SUCCESS })
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.DELETE_CASE_ERROR, payload: error })
         })
 }
 
 export const ClearSelectedCase = () => dispatch => {
     dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDCASE })
+}
+
+export const OpenDeleteModal = () => dispatch => {
+    dispatch({ type: ACTION_TYPES.DELETE_MODAL_OPEN })
+}
+
+export const CloseDeleteModal = () => dispatch => {
+    dispatch({ type: ACTION_TYPES.DELETE_MODAL_CLOSE })
 }

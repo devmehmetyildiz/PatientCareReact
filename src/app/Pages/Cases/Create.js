@@ -1,48 +1,36 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios';
-import { GetToken } from '../../Utils/TokenValidChecker';
 import { withRouter, Link } from 'react-router-dom';
 import { GetCurrentUser } from '../../Redux/actions/loginActions';
 import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-
+import { CreateCase } from "../../Redux/actions/CaseActions"
 export class Create extends Component {
 
     constructor(props) {
         super(props)
         const currentitem = {
-            Id: 0,
-            CaseGroup: "",
-            CaseStatus: 0,
-            Name: "",
-            NormalizedName: null,
-            ConcurrencyStamp: null,
-            CreatedUser: "",
-            UpdatedUser: null,
-            DeleteUser: null,
-            CreateTime: null,
-            UpdateTime: null,
-            DeleteTime: null,
-            IsActive: true
+            id: 0,
+            caseGroup: "",
+            caseStatus: 0,
+            name: "",
+            normalizedName: null,
+            concurrencyStamp: null,
+            createdUser: "",
+            updatedUser: null,
+            deleteUser: null,
+            createTime: null,
+            updateTime: null,
+            deleteTime: null,
+            isActive: true
         }
         this.state = { currentitem };
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
-        const newdata = { ...this.state.currentitem }
-        newdata["CreatedUser"] = this.props.ActiveUser.user
-        this.setState({ currentitem: newdata }, () => {
-            if (this.state.currentitem.name != undefined || this.state.currentitem.name != "") {
-                console.log("postladım")
-                this.postData();
-            }else {
-                cogoToast.error('Lütfen Tekrar Deneyiniz', this.toastoptions) 
-            }
-        })
-
+        this.postData()
     }
 
     goBack = (e) => {
@@ -54,34 +42,13 @@ export class Create extends Component {
         const newdata = { ...this.state.currentitem }
         newdata[e.target.id] = e.target.value
         this.setState({ currentitem: newdata }, () => {
+            console.log('currentitem: ',this.state.currentitem);
         })
 
     }
 
     postData = async () => {
-        console.log(this.state.currentitem)
-        const response = await axios({
-            method: 'post',
-            data: this.state.currentitem,
-            url: process.env.REACT_APP_BACKEND_URL + '/Case/Add',
-            headers: { Authorization: `Bearer ${GetToken()}` }
-        }).catch(error => {
-            if (error.response !== undefined) {
-                if (error.response.status === "401") {
-                    this.props.history.push("/Login")
-                }
-            } else {
-                cogoToast.error('Veri Eklenirken Hata Alındı', this.toastoptions)
-            }
-        })
-        if (response !== undefined) {
-            console.log('response: ', response);
-            if (response.status === 200) {
-                console.log("200 geldim")
-                cogoToast.success('Kayıt Eklendi', this.toastoptions)
-                this.props.history.push("/Cases")
-            }
-        }
+        this.props.CreateCase(this.state.currentitem, this.props.history)
     };
 
     render() {
@@ -96,7 +63,6 @@ export class Create extends Component {
                                     <InputItem
                                         itemname="Durum Grubu"
                                         itemid="caseGroup"
-                                        itemvalue={this.state.currentitem.CaseGroup}
                                         itemtype="text"
                                         itemplaceholder="Durum Grubu"
                                         itemchange={this.handleonchange}
@@ -104,7 +70,7 @@ export class Create extends Component {
                                     <InputItem
                                         itemname="Durum Değeri"
                                         itemid="caseStatus"
-                                        itemvalue={this.state.currentitem.CaseStatus}
+                                        itemvalue={this.state.currentitem.caseStatus}
                                         itemtype="number"
                                         itemplaceholder="Durum Değeri"
                                         itemchange={this.handleonchange}
@@ -114,8 +80,8 @@ export class Create extends Component {
                                     <InputItem
                                         itemrowspan="2"
                                         itemname="isim"
-                                        itemid="Name"
-                                        itemvalue={this.state.currentitem.Name}
+                                        itemid="name"
+                                        itemvalue={this.state.currentitem.name}
                                         itemtype="text"
                                         itemplaceholder="İsim"
                                         itemchange={this.handleonchange}
@@ -135,9 +101,10 @@ export class Create extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    ActiveUser : state.ActiveUser
+    ActiveUser: state.ActiveUser,
+    Cases: state.Cases
 })
 
-const mapDispatchToProps = { GetCurrentUser }
+const mapDispatchToProps = { GetCurrentUser, CreateCase }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))

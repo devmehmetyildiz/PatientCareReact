@@ -8,6 +8,8 @@ import InputItem from '../../Components/Common/Forminput'
 import { GetSelectedCase, UpdateCase, ClearSelectedCase } from '../../Redux/actions/CaseActions';
 import { GetCurrentUser } from '../../Redux/actions/loginActions';
 import "../../../assets/styles/Pages/Create.scss"
+import Spinner from '../../shared/Spinner'
+
 
 export class Edit extends Component {
 
@@ -33,17 +35,7 @@ export class Edit extends Component {
 
     handlesubmit = (e) => {
         e.preventDefault()
-        const newdata = { ...this.state.currentitem }
-        newdata["updatedUser"] = this.props.ActiveUser.user
-        this.setState({ currentitem: newdata }, () => {
-            if (this.state.currentitem.name != undefined || this.state.currentitem.name != "") {
-                console.log("postladım")
-                this.postData();
-            } else {
-                cogoToast.error('Lütfen Tekrar Deneyiniz', this.toastoptions)
-            }
-        })
-
+        this.postData();
     }
 
     componentWillUnmount() {
@@ -51,18 +43,16 @@ export class Edit extends Component {
     }
 
     componentDidMount() {
-        this.getData().then(
-            this.setState({ currentitem: this.props.Cases.selected_case }),
-            console.log('currentitem: ', this.state.currentitem),
-            console.log('this.props.Cases.selected_case: ', this.props.Cases.selected_case)
-
-        );
-    }
-
-    getData = async () => {
         this.props.GetSelectedCase(this.props.match.params.CaseId)
     }
 
+    componentDidUpdate() {
+        const { selected_case, isSelected } = this.props.Cases
+        if (isSelected) {
+            this.setState({ currentitem: selected_case })
+            this.props.ClearSelectedCase()
+        }
+    }
 
     goBack = (e) => {
         e.preventDefault()
@@ -74,8 +64,6 @@ export class Edit extends Component {
         const newdata = { ...this.state.currentitem }
         newdata[e.target.id] = e.target.value
         this.setState({ currentitem: newdata }, () => {
-            console.log('this.state.currentitem: ', this.state.currentitem);
-
         })
 
     }
@@ -85,50 +73,57 @@ export class Edit extends Component {
     };
 
     render() {
+
+
+
         return (
-            <div className='Page'>
-                <div className="col-12 grid-margin">
-                    <div className="card">
-                        <div className="card-body">
-                            <h4 className="card-title">Durumlar > Güncelle</h4>
-                            <form className="form-sample" onSubmit={this.handlesubmit}>
-                                <div className="row">
-                                    <InputItem
-                                        itemname="Durum Grubu"
-                                        itemid="caseGroup"
-                                        itemvalue={this.state.currentitem.caseGroup}
-                                        itemtype="text"
-                                        itemplaceholder="Durum Grubu"
-                                        itemchange={this.handleonchange}
-                                    />
-                                    <InputItem
-                                        itemname="Durum Değeri"
-                                        itemid="caseStatus"
-                                        itemvalue={this.state.currentitem.caseStatus}
-                                        itemtype="number"
-                                        itemplaceholder="Durum Değeri"
-                                        itemchange={this.handleonchange}
-                                    />
+            <div>
+                {this.props.Cases.isLoading ? <Spinner /> :
+                    <div className='Page'>
+                        <div className="col-12 grid-margin">
+                            <div className="card">
+                                <div className="card-body">
+                                    <h4 className="card-title">Durumlar > Güncelle</h4>
+                                    <form className="form-sample" onSubmit={this.handlesubmit}>
+                                        <div className="row">
+                                            <InputItem
+                                                itemname="Durum Grubu"
+                                                itemid="caseGroup"
+                                                itemvalue={this.state.currentitem.caseGroup}
+                                                itemtype="text"
+                                                itemplaceholder="Durum Grubu"
+                                                itemchange={this.handleonchange}
+                                            />
+                                            <InputItem
+                                                itemname="Durum Değeri"
+                                                itemid="caseStatus"
+                                                itemvalue={this.state.currentitem.caseStatus}
+                                                itemtype="number"
+                                                itemplaceholder="Durum Değeri"
+                                                itemchange={this.handleonchange}
+                                            />
+                                        </div>
+                                        <div className="row">
+                                            <InputItem
+                                                itemrowspan="2"
+                                                itemname="İsim"
+                                                itemid="name"
+                                                itemvalue={this.state.currentitem.name}
+                                                itemtype="text"
+                                                itemplaceholder="İsim"
+                                                itemchange={this.handleonchange}
+                                            />
+                                        </div>
+                                        <div className='row d-flex pr-5 justify-content-end align-items-right'>
+                                            <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
+                                            <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Güncelle</button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div className="row">
-                                    <InputItem
-                                        itemrowspan="2"
-                                        itemname="İsim"
-                                        itemid="name"
-                                        itemvalue={this.state.currentitem.name}
-                                        itemtype="text"
-                                        itemplaceholder="İsim"
-                                        itemchange={this.handleonchange}
-                                    />
-                                </div>
-                                <div className='row d-flex pr-5 justify-content-end align-items-right'>
-                                    <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
-                                    <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Güncelle</button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
         )
     }

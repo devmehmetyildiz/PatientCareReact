@@ -5,7 +5,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import axios from 'axios';
 import { GetToken } from '../../Utils/TokenValidChecker';
-import { setCases, selectedCase, removeselectedCase } from '../../Redux/actions/CaseActions'
+import { GetAllAuthories, GetSelectedAuthory, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/AuthoryActions'
 import { withRouter } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import Spinner from "../../shared/Spinner"
@@ -175,108 +175,83 @@ export class Authory extends Component {
     }
 
     componentDidMount() {
-        this.getData()
+        this.props.GetAllAuthories();
+       
     }
 
     getData = async () => {
-        const response = await axios({
-            method: 'get',
-            data: this.state.currentitem,
-            url: process.env.REACT_APP_BACKEND_URL + '/Authory/GetAll',
-            headers: { Authorization: `Bearer ${GetToken()}` }
-        }).catch(error => {
-            if (error.response !== undefined) {
-                if (error.response.status === '401') {
-                    this.setState({ isLoading: false })
-                    this.props.history.push("/Login")
-                }
-            } else {
-                cogoToast.error('Veri Alınırken Hata Alındı', this.toastoptions)
-                this.setState({ isLoading: false })
-                this.props.history.push("/Login")
-            }
-        })
-        if (response !== undefined) {
-            console.log('response: ', response.data);
-            response.data.forEach((item, index) => {
-                var text = item.roles.map((item) => {
-                    return item.name;
-                }).join(", ")
-                item.roles = text;
-            })
-            this.setState({ currentitem: response.data })
-            this.setState({ isLoading: false })
-
-        }
+        this.props.GetAllAuthories();
     };
 
     render() {
+        const {isLoading,list} = this.props.Auth;
+  
         return (
             <div>
-                {this.state.isLoading ? <Spinner/> :
-                <div className="row datatable">
-                    <div className="col-12">
-                        <div className="card">
-                            <div className="card-body">
-                                <div className='row'>
-                                    <div className='col-6 d-flex justify-content-start'>
-                                        <h4 className="card-title">Roller</h4>
+                {isLoading ? <Spinner /> :
+                    <div className="row datatable">
+                        <div className="col-12">
+                            <div className="card">
+                                <div className="card-body">
+                                    <div className='row'>
+                                        <div className='col-6 d-flex justify-content-start'>
+                                            <h4 className="card-title">Roller</h4>
+                                        </div>
+                                        <div className='col-6 d-flex justify-content-end'>
+                                            {/*   <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
+                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Yetki</button>
+                                        </div>
                                     </div>
-                                    <div className='col-6 d-flex justify-content-end'>
-                                        <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button>
-                                        <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Yetki</button>
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <ToolkitProvider
-                                            keyField="id"
-                                            bootstrap4
-                                            data={this.state.currentitem}
-                                            columns={this.state.columns}
-                                            search
-                                            columnToggle
-                                        >
-                                            {
-                                                props => (
-                                                    <div>
-                                                        {this.state.columnvisiblebar ?
-                                                            <div>
-                                                                <this.CustomToggleList {...props.columnToggleProps} />
-                                                                <hr />
+                                    <div className="row">
+                                        <div className="col-12">
+                                            <ToolkitProvider
+                                                keyField="id"
+                                                bootstrap4
+                                                data={list}
+                                                columns={this.state.columns}
+                                                search
+                                                columnToggle
+                                            >
+                                                {
+                                                    props => (
+                                                        <div>
+                                                            {this.state.columnvisiblebar ?
+                                                                <div>
+                                                                    <this.CustomToggleList {...props.columnToggleProps} />
+                                                                    <hr />
+                                                                </div>
+                                                                : <></>}
+                                                            <div className="d-flex align-items-center">
+                                                                <p className="mb-2 mr-2">Arama Yap:</p>
+                                                                <this.state.SearchBar {...props.searchProps} />
                                                             </div>
-                                                            : <></>}
-                                                        <div className="d-flex align-items-center">
-                                                            <p className="mb-2 mr-2">Arama Yap:</p>
-                                                            <this.state.SearchBar {...props.searchProps} />
+                                                            <BootstrapTable
+                                                                expandRow={this.state.expandRow}
+                                                                defaultSorted={this.state.defaultSorted}
+                                                                pagination={paginationFactory()}
+                                                                {...props.baseProps}
+                                                                wrapperClasses="table-responsive"
+                                                            />
                                                         </div>
-                                                        <BootstrapTable
-                                                            expandRow={this.state.expandRow}
-                                                            defaultSorted={this.state.defaultSorted}
-                                                            pagination={paginationFactory()}
-                                                            {...props.baseProps}
-                                                            wrapperClasses="table-responsive"
-                                                        />
-                                                    </div>
-                                                )
-                                            }
-                                        </ToolkitProvider>
+                                                    )
+                                                }
+                                            </ToolkitProvider>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
             </div>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-
+    Auth: state.Authories
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = { GetAllAuthories, GetSelectedAuthory, OpenDeleteModal, CloseDeleteModal }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Authory))

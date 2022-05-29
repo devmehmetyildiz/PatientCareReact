@@ -22,7 +22,6 @@ export const loginReducer = (state = INITIAL_STATE, { type, payload }) => {
         case ACTION_TYPES.LOGIN_SUCCESS:
             return { ...state, isloading: false, redirect: true };
         case ACTION_TYPES.LOGIN_ERROR:
-            Popup("Error", "Giriş Başarısız", payload.message)
             return { ...state, message: payload, isloading: false, redirect: false };
         case ACTION_TYPES.LOGOUT_INIT:
             return { ...state, user: payload, isloading: true };

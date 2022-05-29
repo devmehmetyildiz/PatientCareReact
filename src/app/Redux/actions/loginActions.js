@@ -1,6 +1,7 @@
 import axios from "axios";
 import { GetToken } from "../../Utils/TokenValidChecker";
 import Cookies from 'universal-cookie';
+import Popup from "../../Utils/Popup";
 
 
 export const ACTION_TYPES = {
@@ -45,21 +46,28 @@ export const SetLogin = (logindata, historypusher) => dispatch => {
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.LOGIN_ERROR, payload: error })
+            switch (error.response.status) {
+                case 401:
+                    Popup("Error", "Giriş Başarısız", "Kullanıcı Adı veya Şifre Yanlış")
+                    break;
+                case 404:
+                    Popup("Error", "Giriş Başarısız", "Kullanıcı Adı veya Şifre Yanlış")
+                    break;
+                default:
+                    Popup("Error", "Giriş Başarısız", "Bilinmeyen Hata")
+                    break;
+            }
         })
 }
 
 export const SetLogout = (historypusher) => dispatch => {
     dispatch({ type: ACTION_TYPES.LOGOUT_INIT })
     try {
-        console.log("1")
         const cookies = new Cookies();
         cookies.remove('X-Access-Token')
         cookies.remove('X-Username')
-        console.log("2")
-        dispatch({ type: ACTION_TYPES.LOGOUT_SUCCESS})
-        console.log("3")
+        dispatch({ type: ACTION_TYPES.LOGOUT_SUCCESS })
         historypusher.push("/Login")
-        console.log("4")
     } catch (error) {
         dispatch({ type: ACTION_TYPES.LOGOUT_ERROR })
     }

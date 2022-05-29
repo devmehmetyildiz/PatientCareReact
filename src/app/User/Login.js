@@ -41,10 +41,11 @@ export class Login extends Component {
     }
 
     render() {
+        const isLoading = this.props.user.isloading;
         return (
             <>
                 {
-                    this.props.user.isLoading ? <Spinner /> :
+                    isLoading ? <Spinner /> :
                         <div className='loginpage'>
                             <div className="d-flex align-items-stretch auth auth-img-bg h-100">
                                 <div className="row flex-grow">
