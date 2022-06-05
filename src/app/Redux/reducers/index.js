@@ -1,12 +1,16 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { loginReducer } from "./loginReducer";
 import { caseReducer } from "./caseReducer";
-import { authoryReducer } from "./AuthoryReducer";
+import { roleReducer } from "./RoleReducer";
+import { StationReducer } from "./StationReducer";
+import { DepartmentReducer } from "./DepartmentReducer";
 
 const reducers = combineReducers({
     ActiveUser: loginReducer,
     Cases: caseReducer,
-    Authories: authoryReducer
+    Roles: roleReducer,
+    Stations : StationReducer,
+    Departments : DepartmentReducer
 });
 
 export default reducers;
