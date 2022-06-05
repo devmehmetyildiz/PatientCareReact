@@ -27,20 +27,20 @@ export const ACTION_TYPES = {
     DELETE_CASE_ERROR: 'DELETE_CASE_ERROR',
 }
 
-export const GetAllCases = () => dispatch => {
+export const GetAllCases = () => async dispatch => {
     dispatch({ type: ACTION_TYPES.GET_ALLCASES_INIT })
-    axios({
+    await axios({
         method: 'get',
         url: process.env.REACT_APP_BACKEND_URL + '/Case/GetAll',
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
-        .then(response => dispatch({ type: ACTION_TYPES.GET_ALLCASES_SUCCESS, payload: response.data }))
+        .then(response => { dispatch({ type: ACTION_TYPES.GET_ALLCASES_SUCCESS, payload: response.data }) })
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_ALLCASES_ERROR, payload: error }) })
 }
 
-export const GetSelectedCase = (ItemId) => dispatch => {
+export const GetSelectedCase = (ItemId) => async dispatch => {
     dispatch({ type: ACTION_TYPES.GET_SELECTEDCASE_INIT })
-    axios({
+    await axios({
         method: 'get',
         url: `${process.env.REACT_APP_BACKEND_URL}/Case/GetSelectedCase?ID=${ItemId}`,
         headers: { Authorization: `Bearer ${GetToken()}` }

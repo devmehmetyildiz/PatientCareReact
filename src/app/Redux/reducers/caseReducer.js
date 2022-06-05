@@ -55,7 +55,7 @@ export const caseReducer = (state = INITIAL_STATE, { type, payload }) => {
     case ACTION_TYPES.DELETE_CASE_INIT:
       return { ...state, isLoading: true }
     case ACTION_TYPES.DELETE_CASE_SUCCESS:
-      return { ...state, isLoading: false , isModalOpen: false}
+      return { ...state, isLoading: false, isModalOpen: false }
     case ACTION_TYPES.DELETE_CASE_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
     case ACTION_TYPES.DELETE_MODAL_OPEN:

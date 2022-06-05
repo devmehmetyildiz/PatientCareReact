@@ -5,9 +5,9 @@ import ProtectedRoute from './Components/Common/ProtectedRoutes';
 
 const Dashboard = lazy(() => import('./dashboard/Dashboard'));
 
-const Roles = lazy(() => import('./Pages/Authory'));
-const RolesCreate = lazy(() => import('./Pages/Authory/Create'));
-const RolesEdit = lazy(() => import('./Pages/Authory/Edit'));
+const Roles = lazy(() => import('./Pages/Roles'));
+const RolesCreate = lazy(() => import('./Pages/Roles/Create'));
+const RolesEdit = lazy(() => import('./Pages/Roles/Edit'));
 
 const Cases = lazy(() => import('./Pages/Cases'));
 const CasesCreate = lazy(() => import('./Pages/Cases/Create'));

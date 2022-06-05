@@ -177,7 +177,9 @@ export class Cases extends Component {
     }
 
     getData = async () => {
-        this.props.GetAllCases();
+        console.log("index basladı")
+        await this.props.GetAllCases();
+        console.log("index bitti")
     };
 
 

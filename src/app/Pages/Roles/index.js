@@ -5,12 +5,14 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import axios from 'axios';
 import { GetToken } from '../../Utils/TokenValidChecker';
-import { GetAllAuthories, GetSelectedAuthory, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/AuthoryActions'
+import { GetAllRoles, GetSelectedRole, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/RoleActions'
 import { withRouter } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import Spinner from "../../shared/Spinner"
+import DeleteModal from "./Delete"
 
-export class Authory extends Component {
+
+export class Roles extends Component {
 
     constructor(props) {
         super(props)
@@ -81,7 +83,7 @@ export class Authory extends Component {
                 hidden: true
             },
             , {
-                dataField: 'roles',
+                dataField: 'authories',
                 text: 'Yetkiler',
                 sort: false,
                 type: 'string'
@@ -126,7 +128,7 @@ export class Authory extends Component {
                 },
                 events: {
                     onClick: (e, column, columnIndex, row, rowIndex) => {
-                        this.props.history.push('/Stock/' + row.id)
+                        this.handleDeleteRole(e, row)
                     }
                 }
             }
@@ -166,6 +168,11 @@ export class Authory extends Component {
     );
 
 
+    handleDeleteRole = async (e, row) => {
+        await this.props.GetSelectedRole(row.id)
+        this.props.OpenDeleteModal()
+    }
+
     changecolumnvisiblebar = () => {
         this.setState({ columnvisiblebar: !this.state.columnvisiblebar })
     }
@@ -175,19 +182,22 @@ export class Authory extends Component {
     }
 
     componentDidMount() {
-        this.props.GetAllAuthories();
-       
+        this.props.GetAllRoles();
+
     }
 
     getData = async () => {
-        this.props.GetAllAuthories();
+        this.props.GetAllRoles();
     };
 
     render() {
-        const {isLoading,list} = this.props.Auth;
-  
+        const { isLoading, list } = this.props.Roles;
         return (
             <div>
+                <DeleteModal
+                    show={this.props.Roles.isModalOpen}
+                    onHide={() => this.props.CloseDeleteModal()}
+                />
                 {isLoading ? <Spinner /> :
                     <div className="row datatable">
                         <div className="col-12">
@@ -249,9 +259,9 @@ export class Authory extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    Auth: state.Authories
+    Roles: state.Roles
 })
 
-const mapDispatchToProps = { GetAllAuthories, GetSelectedAuthory, OpenDeleteModal, CloseDeleteModal }
+const mapDispatchToProps = { GetAllRoles, GetSelectedRole, OpenDeleteModal, CloseDeleteModal }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Authory))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Roles))

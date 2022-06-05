@@ -43,15 +43,12 @@ export class Edit extends Component {
     }
 
     componentDidMount() {
-        this.props.GetSelectedCase(this.props.match.params.CaseId)
+       this.getData()
     }
 
-    componentDidUpdate() {
-        const { selected_case, isSelected } = this.props.Cases
-        if (isSelected) {
-            this.setState({ currentitem: selected_case })
-            this.props.ClearSelectedCase()
-        }
+    getData = async () => {
+        await this.props.GetSelectedCase(this.props.match.params.CaseId)
+        this.setState({ currentitem: this.props.Cases.selected_case })
     }
 
     goBack = (e) => {

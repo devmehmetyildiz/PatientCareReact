@@ -4,10 +4,10 @@ import { withRouter, Link } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { CreateAuthory, GetRoles } from "../../Redux/actions/AuthoryActions"
+import { UpdateRole, GetAuthories, GetSelectedRole } from "../../Redux/actions/RoleActions"
 import Spinner from '../../shared/Spinner'
 
-export class Create extends Component {
+export class Edit extends Component {
 
     constructor(props) {
         super(props)
@@ -23,7 +23,7 @@ export class Create extends Component {
             UpdateTime: null,
             DeleteTime: null,
             IsActive: true,
-            roles: []
+            authories: []
         }
         const pagestatus = false
         const roles = []
@@ -31,11 +31,13 @@ export class Create extends Component {
     }
 
     componentDidMount() {
-        this.getRoles()
+        this.getAuthories()
     }
 
-    getRoles = async () => {
-        this.props.GetRoles();
+    getAuthories = async () => {
+        await this.props.GetSelectedRole(this.props.match.params.RoleId);
+        await this.props.GetAuthories();
+        this.setState({ currentitem: this.props.Roles.selected_role })
     }
 
     handlesubmit = (e) => {
@@ -53,40 +55,55 @@ export class Create extends Component {
         newdata[e.target.id] = e.target.value
         this.setState({ currentitem: newdata }, () => {
         })
-
     }
 
     handleonRolehange = (e) => {
-        console.log('e: ', e);
-        if (!this.state.currentitem.roles.includes(e.target.name)) {
+        let ishave = false;
+        this.state.currentitem.authories.find(x => x.name === e.target.name.name) ? ishave = true : ishave = false
+        if (!ishave) {
             const newdata = { ...this.state.currentitem }
-            newdata.roles.push(e.target.name)
+            newdata.authories.push(e.target.name)
             this.setState({ currentitem: newdata }, () => {
-                console.log('this.state.currentitem.roles: ', this.state.currentitem);
-                console.log("role eklendi")
             })
         }
         else {
             const newdata = { ...this.state.currentitem }
-            const index = this.state.currentitem.roles.indexOf(e.target.name);
+            let index = -1;
+            newdata.authories.find((x, i) => {
+                if (x.name === e.target.name.name) {
+                    index = i
+                }
+            }
+            )
             if (index > -1) {
-                this.state.currentitem.roles.splice(index, 1);
-                console.log("role silindi")// 2nd parameter means remove one item only
+                newdata.authories.splice(index, 1);
             }
             this.setState({ currentitem: newdata }, () => {
-                console.log('this.state.currentitem.roles: ', this.state.currentitem);
-
             })
         }
 
     }
 
+    checkstatetorender = (element) => {
+        let isok = false
+        const { authories } = this.state.currentitem
+        authories.find(x => x.concurrencyStamp === element.concurrencyStamp) ? isok = true : isok = false
+        
+        return isok;
+    }
+
     postData = async () => {
-        this.props.CreateAuthory(this.state.currentitem, this.props.history)
+        this.props.UpdateRole(this.state.currentitem, this.props.history)
     };
 
     render() {
-        const { isLoading, roles } = this.props.Auth
+        const { isLoading, roles } = this.props.Roles
+        if (roles.length !== 0) {
+            roles.forEach((element) => {
+                const role = element
+                role.isChecked = this.checkstatetorender(element)
+            });
+        }
         return (
             <>
                 {isLoading ? <Spinner /> :
@@ -94,14 +111,14 @@ export class Create extends Component {
                         <div className="col-12 grid-margin">
                             <div className="card">
                                 <div className="card-body">
-                                    <h4 className="card-title">Roller > Yeni</h4>
+                                    <h4 className="card-title">Roller > Güncelle</h4>
                                     <form className="form-sample" onSubmit={this.handlesubmit}>
                                         <div className="row">
                                             <InputItem
                                                 itemrowspan="2"
                                                 itemname="Role İsmi"
-                                                itemid="Name"
-                                                itemvalue={this.state.currentitem.Name}
+                                                itemid="name"
+                                                itemvalue={this.state.currentitem.name}
                                                 itemtype="text"
                                                 itemplaceholder="Role İsmi"
                                                 itemchange={this.handleonchange}
@@ -111,7 +128,7 @@ export class Create extends Component {
                                             <div className='col-12 pr-5'>
                                                 <div className='row border border-primary m-2'>
                                                     {roles.map((item) =>
-                                                        <div className='col-3'>
+                                                        <div className='col-3' key={item.ConcurrencyStamp}>
                                                             <div className="form-check">
                                                                 <label className="form-check-label">
                                                                     <input
@@ -119,11 +136,18 @@ export class Create extends Component {
                                                                             this.handleonRolehange({
                                                                                 target: {
                                                                                     name: item,
-                                                                                    value: e.target.checked,
+                                                                                    checked: e.target.checked,
                                                                                 },
                                                                             });
                                                                         }}
-                                                                        type="checkbox" key="{item}" className="form-check-input" name={item.name} value={item.name} id={item.name} />
+                                                                        type="checkbox"
+                                                                        key="{item}"
+                                                                        className="form-check-input"
+                                                                        name={item.name}
+                                                                        id={item.name}
+                                                                        checked={item.isChecked}
+                                                                    />
+
                                                                     <i className="input-helper"></i>
                                                                     {item.name}
                                                                 </label>
@@ -135,7 +159,7 @@ export class Create extends Component {
                                         </div>
                                         <div className='row d-flex pr-5 justify-content-end align-items-right'>
                                             <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
-                                            <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
+                                            <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Güncelle</button>
                                         </div>
                                     </form>
                                 </div>
@@ -149,9 +173,9 @@ export class Create extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    Auth: state.Authories
+    Roles: state.Roles
 })
 
-const mapDispatchToProps = { CreateAuthory, GetRoles }
+const mapDispatchToProps = { UpdateRole, GetAuthories, GetSelectedRole }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Edit))
