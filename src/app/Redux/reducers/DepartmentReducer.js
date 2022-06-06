@@ -13,7 +13,8 @@ const INITIAL_STATE = {
     createTime: null,
     updateTime: null,
     deleteTime: null,
-    isActive: true
+    isActive: true,
+    stations : []
   },
   errmsg: "",
   isLoading: false,

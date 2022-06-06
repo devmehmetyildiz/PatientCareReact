@@ -34,7 +34,15 @@ export const GetAllDepartments = () => async dispatch => {
         url: process.env.REACT_APP_BACKEND_URL + '/Department/GetAll',
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
-        .then(response => { dispatch({ type: ACTION_TYPES.GET_ALLDEPARTMENTS_SUCCESS, payload: response.data }) })
+        .then(response => {
+            response.data.forEach((item, index) => {
+                var text = item.authories.map((item) => {
+                    return item.name;
+                }).join(", ")
+                item.stations = text;
+            })
+            dispatch({ type: ACTION_TYPES.GET_ALLDEPARTMENTS_SUCCESS, payload: response.data })
+        })
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_ALLDEPARTMENTS_ERROR, payload: error }) })
 }
 
@@ -49,9 +57,9 @@ export const GetSelectedDepartment = (ItemId) => async dispatch => {
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDDEPARTMENT_ERROR, payload: error }) })
 };
 
-export const CreateDepartment = (Item, historypusher) => dispatch => {
+export const CreateDepartment = (Item, historypusher) => async dispatch => {
     dispatch({ type: ACTION_TYPES.CREATE_DEPARTMENT_INIT })
-    axios({
+    await axios({
         method: 'post',
         url: process.env.REACT_APP_BACKEND_URL + '/Department/Add',
         headers: { Authorization: `Bearer ${GetToken()}` },
@@ -66,9 +74,9 @@ export const CreateDepartment = (Item, historypusher) => dispatch => {
         })
 }
 
-export const UpdateDepartment = (Item, historypusher) => dispatch => {
+export const UpdateDepartment = (Item, historypusher) => async dispatch => {
     dispatch({ type: ACTION_TYPES.EDIT_DEPARTMENT_INIT })
-    axios({
+    await axios({
         method: 'post',
         url: process.env.REACT_APP_BACKEND_URL + '/Department/Update',
         headers: { Authorization: `Bearer ${GetToken()}` },
@@ -101,9 +109,9 @@ export const UpdateDepartment = (Item, historypusher) => dispatch => {
         })
 }
 
-export const DeleteDepartment = (Item) => dispatch => {
+export const DeleteDepartment = (Item) => async dispatch => {
     dispatch({ type: ACTION_TYPES.DELETE_DEPARTMENT_INIT })
-    axios({
+    await axios({
         method: 'delete',
         url: process.env.REACT_APP_BACKEND_URL + '/Department/Delete',
         headers: { Authorization: `Bearer ${GetToken()}` },
@@ -117,7 +125,7 @@ export const DeleteDepartment = (Item) => dispatch => {
         })
 }
 
-export const ClearSelectedDepartment = () => dispatch => {
+export const ClearSelectedDepartment = () => async dispatch => {
     dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDDEPARTMENT })
 }
 

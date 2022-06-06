@@ -1,5 +1,6 @@
 import axios from "axios"
 import { GetToken } from "../../Utils/TokenValidChecker";
+import Popup from "../../Utils/Popup"
 
 export const ACTION_TYPES = {
     GET_ALLSTATIONS_INIT: 'GET_ALLSTATIONS_INIT',
@@ -49,9 +50,9 @@ export const GetSelectedStation = (ItemId) => async dispatch => {
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDSTATION_ERROR, payload: error }) })
 };
 
-export const CreateStation = (Item, historypusher) => dispatch => {
+export const CreateStation = (Item, historypusher) => async dispatch => {
     dispatch({ type: ACTION_TYPES.CREATE_STATION_INIT })
-    axios({
+    await axios({
         method: 'post',
         url: process.env.REACT_APP_BACKEND_URL + '/Station/Add',
         headers: { Authorization: `Bearer ${GetToken()}` },
@@ -59,16 +60,18 @@ export const CreateStation = (Item, historypusher) => dispatch => {
     })
         .then(() => {
             dispatch({ type: ACTION_TYPES.CREATE_STATION_SUCCESS })
+            Popup("Success", "İstasyon Ekleme", "İstasyon Eklendi")
             historypusher.push("/Stations")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.CREATE_STATION_ERROR, payload: error })
+            Popup("Error", "İstasyon Ekleme", "İstasyon Eklenemedi")
         })
 }
 
-export const UpdateStation = (Item, historypusher) => dispatch => {
+export const UpdateStation = (Item, historypusher) => async dispatch => {
     dispatch({ type: ACTION_TYPES.EDIT_STATION_INIT })
-    axios({
+    await axios({
         method: 'post',
         url: process.env.REACT_APP_BACKEND_URL + '/Station/Update',
         headers: { Authorization: `Bearer ${GetToken()}` },
@@ -77,9 +80,11 @@ export const UpdateStation = (Item, historypusher) => dispatch => {
         .then(() => {
             dispatch({ type: ACTION_TYPES.EDIT_STATION_SUCCESS })
             dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDSTATION })
+            Popup("Success", "İstasyon Güncelleme", "İstasyon Güncellendi")
             historypusher.push("/Stations")
         })
         .catch(error => {
+            Popup("Error", "İstasyon Güncelleme", "İstasyon Güncellenemedi")
             dispatch({ type: ACTION_TYPES.EDIT_STATION_ERROR, payload: error })
             switch (error.response.status) {
                 case 400:
@@ -101,9 +106,9 @@ export const UpdateStation = (Item, historypusher) => dispatch => {
         })
 }
 
-export const DeleteStation = (Item) => dispatch => {
+export const DeleteStation = (Item) => async dispatch => {
     dispatch({ type: ACTION_TYPES.DELETE_STATION_INIT })
-    axios({
+    await axios({
         method: 'delete',
         url: process.env.REACT_APP_BACKEND_URL + '/Station/Delete',
         headers: { Authorization: `Bearer ${GetToken()}` },
@@ -111,20 +116,22 @@ export const DeleteStation = (Item) => dispatch => {
     })
         .then(() => {
             dispatch({ type: ACTION_TYPES.DELETE_STATION_SUCCESS })
+            Popup("Success", "İstasyon Silme", "İstasyon Silindi")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.DELETE_STATION_ERROR, payload: error })
+            Popup("Error", "İstasyon Silme", "İstasyon Silinemedi")
         })
 }
 
-export const ClearSelectedStation = () => dispatch => {
+export const ClearSelectedStation = () => async dispatch => {
     dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDSTATION })
 }
 
-export const OpenDeleteModal = () => dispatch => {
+export const OpenDeleteModal = () => async dispatch => {
     dispatch({ type: ACTION_TYPES.DELETE_MODAL_OPEN })
 }
 
-export const CloseDeleteModal = () => dispatch => {
+export const CloseDeleteModal = () => async dispatch => {
     dispatch({ type: ACTION_TYPES.DELETE_MODAL_CLOSE })
 }

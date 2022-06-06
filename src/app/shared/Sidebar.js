@@ -33,9 +33,9 @@ class Sidebar extends Component {
 
     const dropdownPaths = [
       {path:'Setting', state: 'SettingsMenuOpen'},
-      {path:'/Authory', state: 'basicUiMenuOpen'},
-      {path:'/advanced-ui', state: 'advancedUiMenuOpen'},
-      {path:'/form-elements', state: 'formElementsMenuOpen'},
+      {path:'/Roles', state: 'RolesOpen'},
+      {path:'/Stations', state: 'StationsOpen'},
+      {path:'/Cases', state: 'CasesOpen'},
       {path:'/tables', state: 'tablesMenuOpen'},
       {path:'/maps', state: 'mapsMenuOpen'},
       {path:'/icons', state: 'iconsMenuOpen'},
@@ -119,7 +119,10 @@ class Sidebar extends Component {
               <div>
                 <ul className="nav flex-column sub-menu">
                   <li className="nav-item"> <Link className={ this.isPathActive('/Cases') ? 'nav-link active' : 'nav-link' } to="/Cases">Durumlar</Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/Authory') ? 'nav-link active' : 'nav-link' } to="/Roles">Roller</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Roles') ? 'nav-link active' : 'nav-link' } to="/Roles">Roller</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Stations') ? 'nav-link active' : 'nav-link' } to="/Stations">İstasyonlar</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Departments') ? 'nav-link active' : 'nav-link' } to="/Departments">Departmanlar</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Users') ? 'nav-link active' : 'nav-link' } to="/Users">Kullanıcılar</Link></li>
                 </ul>
               </div>
             </Collapse>

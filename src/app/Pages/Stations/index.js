@@ -29,7 +29,7 @@ export class Stations extends Component {
                 hidden: true
             },  {
                 dataField: 'name',
-                text: 'İsim',
+                text: 'İsyasyon Adı',
                 sort: true
             }, {
                 dataField: 'normalizedName',
@@ -97,7 +97,7 @@ export class Stations extends Component {
                 },
                 events: {
                     onClick: (e, column, columnIndex, row, rowIndex) => {
-                        this.props.history.push('/Cases/' + row.id)
+                        this.props.history.push('/Stations/' + row.id)
                     }
                 }
             }
@@ -191,11 +191,11 @@ export class Stations extends Component {
                                 <div className="card-body">
                                     <div className='row'>
                                         <div className='col-6 d-flex justify-content-start'>
-                                            <h4 className="card-title">Durumlar</h4>
+                                            <h4 className="card-title">İsyasyonlar</h4>
                                         </div>
                                         <div className='col-6 d-flex justify-content-end'>
                                            {/*  <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
-                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Durum</button>
+                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni İstasyon</button>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -248,7 +248,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = { GetAllStations, GetSelectedStation, OpenDeleteModal, CloseDeleteModal }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Stations))
 
 
 

@@ -13,6 +13,14 @@ const Cases = lazy(() => import('./Pages/Cases'));
 const CasesCreate = lazy(() => import('./Pages/Cases/Create'));
 const CasesEdit = lazy(() => import('./Pages/Cases/Edit'));
 
+const Departments = lazy(() => import('./Pages/Departments'));
+const DepartmentsCreate = lazy(() => import('./Pages/Departments/Create'));
+const DepartmentsEdit = lazy(() => import('./Pages/Departments/Edit'));
+
+const Stations = lazy(() => import('./Pages/Stations'));
+const StationsCreate = lazy(() => import('./Pages/Stations/Create'));
+const StationsEdit = lazy(() => import('./Pages/Stations/Edit'));
+
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
 const Login = lazy(() => import('./User/Login'));
@@ -33,7 +41,15 @@ class AppRoutes extends Component {
           <ProtectedRoute exact path="/Cases" component={ Cases } />
           <ProtectedRoute exact path="/Cases/Create" component={ CasesCreate } />
           <ProtectedRoute exact path="/Cases/:CaseId" component={ CasesEdit } />
+
+          <ProtectedRoute exact path="/Departments" component={ Departments } />
+          <ProtectedRoute exact path="/Departments/Create" component={ DepartmentsCreate } />
+          <ProtectedRoute exact path="/Departments/:DepartmentId" component={ DepartmentsEdit } />
           
+          <ProtectedRoute exact path="/Stations" component={ Stations } />
+          <ProtectedRoute exact path="/Stations/Create" component={ StationsCreate } />
+          <ProtectedRoute exact path="/Stations/:StationId" component={ StationsEdit } />
+
           <Route exact path="/Login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />
           <Route exact path="/User/lockscreen" component={ Lockscreen } />
