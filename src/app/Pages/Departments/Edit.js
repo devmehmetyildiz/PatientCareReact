@@ -5,8 +5,9 @@ import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
 import { UpdateDepartment, GetSelectedDepartment } from "../../Redux/actions/DepartmentAction"
-import {GetAllStations} from "../../Redux/actions/StationAction"
+import { GetAllStations } from "../../Redux/actions/StationAction"
 import Spinner from '../../shared/Spinner'
+import Select from 'react-select';
 
 export class Edit extends Component {
 
@@ -27,7 +28,9 @@ export class Edit extends Component {
             stations: []
         }
         const pagestatus = false
-        this.state = { currentitem, pagestatus };
+        const selected_stations = []
+        const all_stations = []
+        this.state = { currentitem, selected_stations ,all_stations};
     }
 
     componentDidMount() {
@@ -37,7 +40,16 @@ export class Edit extends Component {
     GetData = async () => {
         await this.props.GetSelectedDepartment(this.props.match.params.DepartmentId);
         await this.props.GetAllStations();
-        this.setState({ currentitem: this.props.Departments.selected_department })
+        const prevData = this.props.Departments.selected_department.stations.map((item, index) => {
+            return { value: item, label: item.name }
+        })
+        const stations = this.props.Stations.list.map((item, index) => {
+         if(!this.props.Departments.selected_department.stations.includes(item)){
+            return { value: item, label: item.name }
+        }})
+        console.log('stations: ', stations);
+        this.setState({ currentitem: this.props.Departments.selected_department, selected_stations: prevData, all_stations: stations })
+        console.log(this.state.currentitem)
     }
 
     handlesubmit = (e) => {
@@ -57,53 +69,31 @@ export class Edit extends Component {
         })
     }
 
-    handleonRolehange = (e) => {
-        let ishave = false;
-        this.state.currentitem.authories.find(x => x.name === e.target.name.name) ? ishave = true : ishave = false
-        if (!ishave) {
-            const newdata = { ...this.state.currentitem }
-            newdata.authories.push(e.target.name)
-            this.setState({ currentitem: newdata }, () => {
-            })
-        }
-        else {
-            const newdata = { ...this.state.currentitem }
-            let index = -1;
-            newdata.authories.find((x, i) => {
-                if (x.name === e.target.name.name) {
-                    index = i
-                }
-            }
-            )
-            if (index > -1) {
-                newdata.authories.splice(index, 1);
-            }
-            this.setState({ currentitem: newdata }, () => {
-            })
-        }
-
-    }
-
-    checkstatetorender = (element) => {
-        let isok = false
-        const { authories } = this.state.currentitem
-        authories.find(x => x.concurrencyStamp === element.concurrencyStamp) ? isok = true : isok = false
-        
-        return isok;
+    handleselect = (e) => {
+        const newdata = { ...this.state.currentitem }
+        newdata.stations = e.map((item) => {
+            return item.value;
+        })
+        this.setState({ currentitem: newdata, selected_stations: e }, () => {
+        })
     }
 
     postData = async () => {
-        this.props.UpdateRole(this.state.currentitem, this.props.history)
+        this.props.UpdateDepartment(this.state.currentitem, this.props.history)
     };
 
     render() {
-        const { isLoading, roles } = this.props.Roles
-        if (roles.length !== 0) {
-            roles.forEach((element) => {
-                const role = element
-                role.isChecked = this.checkstatetorender(element)
-            });
-        }
+        const { isLoading } = this.props.Departments
+       /*  const list = this.props.Stations.list.map((item, index) => {
+            if (this.state.selected_stationguids.includes(item.ConcurrencyStamp)) {
+             
+            }
+            else {
+                return  { value: item, label: item.name }
+            }
+            return { value: item, label: item.name }
+        }) */
+        const list = this.state.all_stations
         return (
             <>
                 {isLoading ? <Spinner /> :
@@ -125,36 +115,13 @@ export class Edit extends Component {
                                             />
                                         </div>
                                         <div className='row'>
-                                            <div className='col-12 pr-5'>
-                                                <div className='row border border-primary m-2'>
-                                                    {roles.map((item) =>
-                                                        <div className='col-3' key={item.ConcurrencyStamp}>
-                                                            <div className="form-check">
-                                                                <label className="form-check-label">
-                                                                    <input
-                                                                        onChange={(e) => {
-                                                                            this.handleonRolehange({
-                                                                                target: {
-                                                                                    name: item,
-                                                                                    checked: e.target.checked,
-                                                                                },
-                                                                            });
-                                                                        }}
-                                                                        type="checkbox"
-                                                                        key="{item}"
-                                                                        className="form-check-input"
-                                                                        name={item.name}
-                                                                        id={item.name}
-                                                                        checked={item.isChecked}
-                                                                    />
-
-                                                                    <i className="input-helper"></i>
-                                                                    {item.name}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
+                                            <div className='col-12 pr-5 mb-3'>
+                                                <Select
+                                                    value={this.state.selected_stations}
+                                                    onChange={this.handleselect}
+                                                    isMulti={true}
+                                                    options={list}
+                                                />
                                             </div>
                                         </div>
                                         <div className='row d-flex pr-5 justify-content-end align-items-right'>
@@ -174,7 +141,7 @@ export class Edit extends Component {
 
 const mapStateToProps = (state) => ({
     Stations: state.Stations,
-    Departments : state.Departments
+    Departments: state.Departments
 })
 
 const mapDispatchToProps = { UpdateDepartment, GetAllStations, GetSelectedDepartment }

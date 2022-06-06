@@ -3,11 +3,8 @@ import { connect } from 'react-redux'
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import axios from 'axios';
-import { GetToken } from '../../Utils/TokenValidChecker';
 import { GetAllDepartments, GetSelectedDepartment, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/DepartmentAction'
 import { withRouter } from 'react-router-dom';
-import cogoToast from 'cogo-toast';
 import Spinner from "../../shared/Spinner"
 import DeleteModal from "./Delete"
 
@@ -33,7 +30,7 @@ export class Departments extends Component {
                 hidden: true
             }, {
                 dataField: 'name',
-                text: 'İsim',
+                text: 'Departman Adı',
                 sort: true
             }, {
                 dataField: 'normalizedName',
@@ -169,7 +166,7 @@ export class Departments extends Component {
 
 
     handleDeleteRole = async (e, row) => {
-        await this.props.GetAllDepartments(row.id)
+        await this.props.GetSelectedDepartment(row.id)
         this.props.OpenDeleteModal()
     }
 
@@ -190,7 +187,7 @@ export class Departments extends Component {
         return (
             <div>
                 <DeleteModal
-                    show={this.props.Roles.isModalOpen}
+                    show={this.props.Departments.isModalOpen}
                     onHide={() => this.props.CloseDeleteModal()}
                 />
                 {isLoading ? <Spinner /> :
@@ -200,11 +197,11 @@ export class Departments extends Component {
                                 <div className="card-body">
                                     <div className='row'>
                                         <div className='col-6 d-flex justify-content-start'>
-                                            <h4 className="card-title">Roller</h4>
+                                            <h4 className="card-title">Departmanlar</h4>
                                         </div>
                                         <div className='col-6 d-flex justify-content-end'>
                                             {/*   <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
-                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Yetki</button>
+                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Departman</button>
                                         </div>
                                     </div>
                                     <div className="row">
