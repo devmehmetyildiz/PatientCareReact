@@ -29,8 +29,8 @@ export class Edit extends Component {
         }
         const pagestatus = false
         const selected_stations = []
-        const all_stations = []
-        this.state = { currentitem, selected_stations ,all_stations};
+        const prevselected_station = []
+        this.state = { currentitem, selected_stations, prevselected_station };
     }
 
     componentDidMount() {
@@ -41,15 +41,9 @@ export class Edit extends Component {
         await this.props.GetSelectedDepartment(this.props.match.params.DepartmentId);
         await this.props.GetAllStations();
         const prevData = this.props.Departments.selected_department.stations.map((item, index) => {
-            return { value: item, label: item.name }
+            return { value: item.concurrencyStamp, label: item.name }
         })
-        const stations = this.props.Stations.list.map((item, index) => {
-         if(!this.props.Departments.selected_department.stations.includes(item)){
-            return { value: item, label: item.name }
-        }})
-        console.log('stations: ', stations);
-        this.setState({ currentitem: this.props.Departments.selected_department, selected_stations: prevData, all_stations: stations })
-        console.log(this.state.currentitem)
+        this.setState({ currentitem: this.props.Departments.selected_department, selected_stations: prevData })
     }
 
     handlesubmit = (e) => {
@@ -62,7 +56,7 @@ export class Edit extends Component {
         this.props.history.push("/Departments")
     }
 
-    handleonchange = (e) => {
+    handlechange = (e) => {
         const newdata = { ...this.state.currentitem }
         newdata[e.target.id] = e.target.value
         this.setState({ currentitem: newdata }, () => {
@@ -71,10 +65,16 @@ export class Edit extends Component {
 
     handleselect = (e) => {
         const newdata = { ...this.state.currentitem }
-        newdata.stations = e.map((item) => {
-            return item.value;
-        })
+        if (e === null) {
+            newdata.stations = []
+        }
+        else {
+            newdata.stations = e.map((item) => {
+                return this.props.Stations.list.find(station => station.concurrencyStamp === item.value);
+            })
+        }
         this.setState({ currentitem: newdata, selected_stations: e }, () => {
+            console.log(this.state.currentitem)
         })
     }
 
@@ -84,16 +84,10 @@ export class Edit extends Component {
 
     render() {
         const { isLoading } = this.props.Departments
-       /*  const list = this.props.Stations.list.map((item, index) => {
-            if (this.state.selected_stationguids.includes(item.ConcurrencyStamp)) {
-             
-            }
-            else {
-                return  { value: item, label: item.name }
-            }
-            return { value: item, label: item.name }
-        }) */
-        const list = this.state.all_stations
+        const { selected_stations } = this.state
+        const list = this.props.Stations.list.map((item, index) => {
+            return { value: item.concurrencyStamp, label: item.name }
+        })
         return (
             <>
                 {isLoading ? <Spinner /> :
@@ -101,23 +95,23 @@ export class Edit extends Component {
                         <div className="col-12 grid-margin">
                             <div className="card">
                                 <div className="card-body">
-                                    <h4 className="card-title">Roller > Güncelle</h4>
+                                    <h4 className="card-title">Departmanlar > Güncelle</h4>
                                     <form className="form-sample" onSubmit={this.handlesubmit}>
                                         <div className="row">
                                             <InputItem
                                                 itemrowspan="2"
-                                                itemname="Role İsmi"
+                                                itemname="Departman Adı"
                                                 itemid="name"
                                                 itemvalue={this.state.currentitem.name}
                                                 itemtype="text"
-                                                itemplaceholder="Role İsmi"
-                                                itemchange={this.handleonchange}
+                                                itemplaceholder="Departman Adı"
+                                                itemchange={this.handlechange}
                                             />
                                         </div>
                                         <div className='row'>
                                             <div className='col-12 pr-5 mb-3'>
                                                 <Select
-                                                    value={this.state.selected_stations}
+                                                    value={selected_stations}
                                                     onChange={this.handleselect}
                                                     isMulti={true}
                                                     options={list}
