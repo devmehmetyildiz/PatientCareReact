@@ -9,7 +9,7 @@ import Spinner from "../../shared/Spinner"
 import DeleteModal from "./Delete"
 
 
-export class Departments extends Component {
+export class Users extends Component {
 
     constructor(props) {
         super(props)
@@ -94,11 +94,71 @@ export class Departments extends Component {
                 dataField: 'emailConfirmed',
                 text: 'E Posta Doğrulama',
                 sort: false,
+                type: 'bool'
+            }
+            ,{
+                dataField: 'phoneNumber',
+                text: 'Telefon',
+                sort: false,
+                type: 'string'
+            }
+            ,{
+                dataField: 'phoneNumberConfirmed',
+                text: 'Telefon Doğrulama',
+                sort: false,
+                type: 'bool'
+            }
+            ,{
+                dataField: 'accessFailedCount',
+                text: 'Hatalı Giriş Denemesi',
+                sort: false,
+                type: 'bool'
+            }
+            ,{
+                dataField: 'city',
+                text: 'Şehir',
+                sort: false,
+                type: 'string'
+            }
+            ,{
+                dataField: 'town',
+                text: 'İlçe',
+                sort: false,
+                type: 'string'
+            }
+            ,{
+                dataField: 'address',
+                text: 'Adres',
+                sort: false,
+                type: 'string'
+            }
+            ,{
+                dataField: 'userID',
+                text: 'Kullanıcı Numarası',
+                sort: false,
+                type: 'number'
+            }
+            ,{
+                dataField: 'language',
+                text: 'Dil',
+                sort: false,
                 type: 'string'
             }
             , {
                 dataField: 'stations',
                 text: 'İstasyonlar',
+                sort: false,
+                type: 'string'
+            }
+            , {
+                dataField: 'roles',
+                text: 'Roller',
+                sort: false,
+                type: 'string'
+            }
+            , {
+                dataField: 'departments',
+                text: 'Departmanlar',
                 sort: false,
                 type: 'string'
             }
@@ -123,7 +183,7 @@ export class Departments extends Component {
                 },
                 events: {
                     onClick: (e, column, columnIndex, row, rowIndex) => {
-                        this.props.history.push('/Departments/' + row.id)
+                        this.props.history.push('/Users/' + row.id)
                     }
                 }
             }
@@ -142,7 +202,7 @@ export class Departments extends Component {
                 },
                 events: {
                     onClick: (e, column, columnIndex, row, rowIndex) => {
-                        this.handleDeleteRole(e, row)
+                        this.handleDelete(e, row)
                     }
                 }
             }
@@ -182,8 +242,8 @@ export class Departments extends Component {
     );
 
 
-    handleDeleteRole = async (e, row) => {
-        await this.props.GetSelectedDepartment(row.id)
+    handleDelete = async (e, row) => {
+        await this.props.GetSelectedUser(row.id)
         this.props.OpenDeleteModal()
     }
 
@@ -192,19 +252,19 @@ export class Departments extends Component {
     }
 
     handleonaddnew = (e) => {
-        this.props.history.push("/Departments/Create")
+        this.props.history.push("/Users/Create")
     }
 
     componentDidMount() {
-        this.props.GetAllDepartments();
+        this.props.GetAllUsers();
     }
 
     render() {
-        const { isLoading, list } = this.props.Departments;
+        const { isLoading, list,isModalOpen } = this.props.Users;
         return (
             <div>
                 <DeleteModal
-                    show={this.props.Departments.isModalOpen}
+                    show={isModalOpen}
                     onHide={() => this.props.CloseDeleteModal()}
                 />
                 {isLoading ? <Spinner /> :
@@ -214,11 +274,11 @@ export class Departments extends Component {
                                 <div className="card-body">
                                     <div className='row'>
                                         <div className='col-6 d-flex justify-content-start'>
-                                            <h4 className="card-title">Departmanlar</h4>
+                                            <h4 className="card-title">Kullanıcılar</h4>
                                         </div>
                                         <div className='col-6 d-flex justify-content-end'>
                                             {/*   <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
-                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Departman</button>
+                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Kullanıcı</button>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -273,4 +333,4 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = { GetAllUsers, GetSelectedUser, OpenDeleteModal, CloseDeleteModal }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Departments))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Users))

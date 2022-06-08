@@ -1,6 +1,7 @@
 import { ACTION_TYPES } from "../actions/StationAction"
 const INITIAL_STATE = {
     list: [],
+    filtered_stations : [],
     selected_station: {
         id: 0,
         name: "",
@@ -56,8 +57,18 @@ export const StationReducer = (state = INITIAL_STATE, { type, payload }) => {
             return { ...state, errmsg: payload, isLoading: false }
         case ACTION_TYPES.DELETE_MODAL_OPEN:
             return { ...state, isModalOpen: true }
-        case ACTION_TYPES.DELETE_MODAL_CLOSE:
-            return { ...state, isModalOpen: false }
+        case ACTION_TYPES.GET_STATIONBYUSER_INIT:
+            return { ...state, isLoading: true  }
+        case ACTION_TYPES.GET_STATIONBYUSER_SUCCESS:
+            return { ...state, isLoading: false , filtered_stations:payload}
+        case ACTION_TYPES.GET_STATIONBYUSER_ERROR:
+            return { ...state, isLoading: false , errmsg : payload}
+        case ACTION_TYPES.GET_STATIONBYDEPARTMENT_INIT:
+            return { ...state, isLoading: true }
+        case ACTION_TYPES.GET_STATIONBYDEPARTMENT_SUCCESS:
+            return { ...state, isLoading: false , filtered_stations:payload}
+        case ACTION_TYPES.GET_STATIONBYDEPARTMENT_ERROR:
+            return { ...state, isLoading: false , errmsg : payload}
         default:
             return state;
     }

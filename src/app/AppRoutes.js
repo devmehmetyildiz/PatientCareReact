@@ -13,6 +13,10 @@ const Cases = lazy(() => import('./Pages/Cases'));
 const CasesCreate = lazy(() => import('./Pages/Cases/Create'));
 const CasesEdit = lazy(() => import('./Pages/Cases/Edit'));
 
+const Users = lazy(() => import('./Pages/Users'));
+const UsersCreate = lazy(() => import('./Pages/Users/Create'));
+const UsersEdit = lazy(() => import('./Pages/Users/Edit'));
+
 const Departments = lazy(() => import('./Pages/Departments'));
 const DepartmentsCreate = lazy(() => import('./Pages/Departments/Create'));
 const DepartmentsEdit = lazy(() => import('./Pages/Departments/Edit'));
@@ -49,6 +53,10 @@ class AppRoutes extends Component {
           <ProtectedRoute exact path="/Stations" component={ Stations } />
           <ProtectedRoute exact path="/Stations/Create" component={ StationsCreate } />
           <ProtectedRoute exact path="/Stations/:StationId" component={ StationsEdit } />
+
+          <ProtectedRoute exact path="/Users" component={ Users } />
+          <ProtectedRoute exact path="/Users/Create" component={ UsersCreate } />
+          <ProtectedRoute exact path="/Users/:StationId" component={ UsersEdit } />
 
           <Route exact path="/Login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />

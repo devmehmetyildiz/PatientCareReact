@@ -70,26 +70,6 @@ class Sidebar extends Component {
               <span className="menu-title"><Trans>Dashboard</Trans></span>
             </Link>
           </li>         
-          <li className={ this.isPathActive('/User') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
-            <div className={ this.state.userPagesMenuOpen ? 'nav-link menu-expanded' : 'nav-link' } onClick={ () => this.toggleMenuState('userPagesMenuOpen') } data-toggle="collapse">
-              <span className="menu-icon">
-                <i className="mdi mdi-security"></i>
-              </span>
-              <span className="menu-title"><Trans>User Pages</Trans></span>
-              <i className="menu-arrow"></i>
-            </div>
-            <Collapse in={ this.state.userPagesMenuOpen }>
-              <div>
-                <ul className="nav flex-column sub-menu">
-                  <li className="nav-item"> <Link className={ this.isPathActive('/User/login') ? 'nav-link active' : 'nav-link' } to="/Login"><Trans>Login</Trans></Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/User/login-2') ? 'nav-link active' : 'nav-link' } to="/User/login-2"><Trans>Login 2</Trans></Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/User/Register') ? 'nav-link active' : 'nav-link' } to="/User/Register"><Trans>Register</Trans></Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/User/register-2') ? 'nav-link active' : 'nav-link' } to="/User/register-2"><Trans>Register 2</Trans></Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/User/lockscreen') ? 'nav-link active' : 'nav-link' } to="/User/lockscreen"><Trans>Lockscreen</Trans></Link></li>
-                </ul>
-              </div>
-            </Collapse>
-          </li>      
           <li className={ this.isPathActive('/error-pages') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
             <div className={ this.state.errorPagesMenuOpen ? 'nav-link menu-expanded' : 'nav-link' } onClick={ () => this.toggleMenuState('errorPagesMenuOpen') } data-toggle="collapse">
               <span className="menu-icon">

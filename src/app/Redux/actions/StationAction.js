@@ -11,6 +11,14 @@ export const ACTION_TYPES = {
     GET_SELECTEDSTATION_SUCCESS: 'GET_SELECTEDSTATION_SUCCESS',
     GET_SELECTEDSTATION_ERROR: 'GET_SELECTEDSTATION_ERROR',
 
+    GET_STATIONBYUSER_INIT: 'GET_STATIONBYUSER_INIT',
+    GET_STATIONBYUSER_SUCCESS: 'GET_STATIONBYUSER_SUCCESS',
+    GET_STATIONBYUSER_ERROR: 'GET_STATIONBYUSER_ERROR',
+
+    GET_STATIONBYDEPARTMENT_INIT: 'GET_STATIONBYDEPARTMENT_INIT',
+    GET_STATIONBYDEPARTMENT_SUCCESS: 'GET_STATIONBYDEPARTMENT_SUCCESS',
+    GET_STATIONBYDEPARTMENT_ERROR: 'GET_STATIONBYDEPARTMENT_ERROR',
+
     REMOVE_SELECTEDSTATION: 'REMOVE_SELECTEDSTATION',
     DELETE_MODAL_OPEN: 'DELETE_MODAL_OPEN',
     DELETE_MODAL_CLOSE: 'DELETE_MODAL_CLOSE',
@@ -26,6 +34,28 @@ export const ACTION_TYPES = {
     DELETE_STATION_INIT: 'DELETE_STATION_INIT',
     DELETE_STATION_SUCCESS: 'DELETE_STATION_SUCCESS',
     DELETE_STATION_ERROR: 'DELETE_STATION_ERROR',
+}
+
+export const GetStationsByUser = (UserID) => async dispatch => {
+    dispatch({type : ACTION_TYPES.GET_STATIONBYUSER_INIT})
+    await axios({
+        method: 'get',
+        url: `${process.env.REACT_APP_BACKEND_URL}/Station/GetStationsByUser?ID=${UserID}`,
+        headers: { Authorization: `Bearer ${GetToken()}` }
+    })
+        .then(response => { dispatch({ type: ACTION_TYPES.GET_STATIONBYUSER_SUCCESS, payload: response.data }) })
+        .catch(error => { dispatch({ type: ACTION_TYPES.GET_STATIONBYUSER_ERROR, payload: error }) })
+}
+
+export const GetStationByDepartments = (Departments) => async dispatch => {
+    dispatch({type : ACTION_TYPES.GET_STATIONBYDEPARTMENT_INIT})
+    await axios({
+        method: 'get',
+        url: `${process.env.REACT_APP_BACKEND_URL}/Station/GetStationsByDepartments?Departments=${Departments}`,
+        headers: { Authorization: `Bearer ${GetToken()}` }
+    })
+        .then(response => { dispatch({ type: ACTION_TYPES.GET_STATIONBYDEPARTMENT_SUCCESS, payload: response.data }) })
+        .catch(error => { dispatch({ type: ACTION_TYPES.GET_STATIONBYDEPARTMENT_ERROR, payload: error }) })
 }
 
 export const GetAllStations = () => async dispatch => {

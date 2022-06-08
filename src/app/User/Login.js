@@ -1,15 +1,11 @@
 import React, { Component } from 'react'
-import { Link, useHistory } from 'react-router-dom';
-import axios from 'axios'
-import Cookies from 'universal-cookie';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import InputItem from "../Components/Common/Authinput"
-import "../../assets/styles/Custom/Login.scss"
+import InputItem from "../Components/Common/Forminput"
 import Spinner from "../shared/Spinner"
-import ErrorHandler from '../Utils/ErrorHandler';
-import {  SetLogin } from '../Redux/actions/loginActions';
-import Popup from '../Utils/Popup';
+import { SetLogin } from '../Redux/actions/loginActions';
+import { Button, Form } from 'react-bootstrap';
 export class Login extends Component {
     constructor(props) {
         super(props)
@@ -37,7 +33,7 @@ export class Login extends Component {
     }
 
     PostData = async () => {
-        this.props.SetLogin(this.state.currentitem,this.props.history)
+        this.props.SetLogin(this.state.currentitem, this.props.history)
     }
 
     render() {
@@ -46,54 +42,55 @@ export class Login extends Component {
             <>
                 {
                     isLoading ? <Spinner /> :
-                        <div className='loginpage'>
-                            <div className="d-flex align-items-stretch auth auth-img-bg h-100">
-                                <div className="row flex-grow">
-                                    <div className="col-lg-12 d-flex align-items-center justify-content-center">
-                                        <div className="auth-form-transparent text-left formscreen">
+                        <div>
+                            <div className="d-flex align-items-center auth px-0">
+                                <div className="row w-100 mx-0">
+                                    <div className="col-lg-4 mx-auto">
+                                        <div className="card text-left py-5 px-4 px-sm-5">
                                             <div className="brand-logo">
-                                                <img src={require("../../assets/images/Custom/Login/Amblem.png")} alt="logo" />
-                                                <h3 className="text-center">HASTA BAKIM VE YARDIM</h3>
+                                                <img src={require("../../assets/images/logo.svg")} alt="logo" />
                                             </div>
-                                            <form className="pt-3" onSubmit={this.handlesubmit}>
-                                                <InputItem
-                                                    itemclass="mdi mdi-account-outline text-primary"
-                                                    title="Kullanıcı Adı"
-                                                    itemid="username"
-                                                    itemtype="text"
-                                                    itemholder="Kullanıcı Adı"
-                                                    itemvalue={this.state.currentitem.username || ''}
-                                                    itemchangefunc={this.handleChangeInput}
-                                                ></InputItem>
-                                                <InputItem
-                                                    itemclass="mdi mdi-lock-outline text-primary"
-                                                    title="Parola"
-                                                    itemid="password"
-                                                    itemtype="password"
-                                                    itemholder="Parola"
-                                                    itemvalue={this.state.currentitem.password || ''}
-                                                    itemchangefunc={this.handleChangeInput}
-                                                ></InputItem>
+                                            <h4>Patient Care Hasta Bakım Yardım Uygulaması</h4>
+                                            <h6 className="font-weight-light">Devam Etmek için Giriş Yapın.</h6>
+                                            <Form className="pt-3">
+                                                <div className='row'>
+                                                    <InputItem
+                                                        itemrowspan="2"
+                                                        itemname="Kullanıcı Adı"
+                                                        itemid="username"
+                                                        itemvalue={this.state.currentitem.username}
+                                                        itemtype="text"
+                                                        itemplaceholder="Kullanıcı Adı"
+                                                        itemchange={this.handleChangeInput}
+                                                    />
+                                                </div>
+                                                <div className='row'>
+                                                    <InputItem
+                                                        itemrowspan="2"
+                                                        itemname="Şifre"
+                                                        itemid="password"
+                                                        itemvalue={this.state.currentitem.password}
+                                                        itemtype="password"
+                                                        itemplaceholder="Şifre"
+                                                        itemchange={this.handleChangeInput}
+                                                    />
+                                                </div>
+                                                <div className="mt-3 col-12 pr-5">
+                                                    <button className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" onClick={this.handlesubmit}>Giriş Yap</button>
+                                                </div>
                                                 <div className="my-2 d-flex justify-content-between align-items-center">
                                                     <div className="form-check">
                                                         <label className="form-check-label text-muted">
                                                             <input type="checkbox" className="form-check-input" />
                                                             <i className="input-helper"></i>
-                                                            Beni Hatırla
+                                                            Beni Giriş Yapılı Tut
                                                         </label>
                                                     </div>
-                                                    <a href="!#" onClick={event => event.preventDefault()} className="auth-link text-muted">Şifreyi mi unuttun?</a>
+                                                    <a href="!#" onClick={event => event.preventDefault()} className="auth-link text-muted">Şifreyi Unuttum?</a>
                                                 </div>
-                                                <div className="my-3">
-                                                    <button className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" >Giriş Yap</button>
-                                                </div>
-                                                <div className="text-center mt-4 font-weight-light">
-                                                    <span>Hesabın Yok mu?</span> <Link to="/User/Register" className="text-primary">Kayıt Ol</Link>
-                                                </div>
-                                            </form>
+                                            </Form>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -105,5 +102,5 @@ export class Login extends Component {
 const mapStateToProps = (state) => ({
     user: state.ActiveUser
 })
-const mapDispatchToProps = { SetLogin  }
+const mapDispatchToProps = { SetLogin }
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login))
