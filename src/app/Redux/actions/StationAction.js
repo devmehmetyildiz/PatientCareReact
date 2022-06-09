@@ -20,6 +20,8 @@ export const ACTION_TYPES = {
     GET_STATIONBYDEPARTMENT_ERROR: 'GET_STATIONBYDEPARTMENT_ERROR',
 
     REMOVE_SELECTEDSTATION: 'REMOVE_SELECTEDSTATION',
+    REMOVE_FILTEREDSTATION: 'REMOVE_FILTEREDSTATION',
+
     DELETE_MODAL_OPEN: 'DELETE_MODAL_OPEN',
     DELETE_MODAL_CLOSE: 'DELETE_MODAL_CLOSE',
 
@@ -37,10 +39,11 @@ export const ACTION_TYPES = {
 }
 
 export const GetStationsByUser = (UserID) => async dispatch => {
-    dispatch({type : ACTION_TYPES.GET_STATIONBYUSER_INIT})
+    dispatch({ type: ACTION_TYPES.GET_STATIONBYUSER_INIT })
     await axios({
-        method: 'get',
-        url: `${process.env.REACT_APP_BACKEND_URL}/Station/GetStationsByUser?ID=${UserID}`,
+        method: 'post',
+        url: `${process.env.REACT_APP_BACKEND_URL}/Station/GetStationsByUser`,
+        data: UserID,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => { dispatch({ type: ACTION_TYPES.GET_STATIONBYUSER_SUCCESS, payload: response.data }) })
@@ -48,10 +51,11 @@ export const GetStationsByUser = (UserID) => async dispatch => {
 }
 
 export const GetStationByDepartments = (Departments) => async dispatch => {
-    dispatch({type : ACTION_TYPES.GET_STATIONBYDEPARTMENT_INIT})
+    dispatch({ type: ACTION_TYPES.GET_STATIONBYDEPARTMENT_INIT })
     await axios({
-        method: 'get',
-        url: `${process.env.REACT_APP_BACKEND_URL}/Station/GetStationsByDepartments?Departments=${Departments}`,
+        method: 'post',
+        url: `${process.env.REACT_APP_BACKEND_URL}/Station/GetStationsByDepartments`,
+        data: Departments,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => { dispatch({ type: ACTION_TYPES.GET_STATIONBYDEPARTMENT_SUCCESS, payload: response.data }) })
@@ -152,6 +156,10 @@ export const DeleteStation = (Item) => async dispatch => {
             dispatch({ type: ACTION_TYPES.DELETE_STATION_ERROR, payload: error })
             Popup("Error", "İstasyon Silme", "İstasyon Silinemedi")
         })
+}
+
+export const ClearfilteredStation = () => async dispatch => {
+dispatch({ type: ACTION_TYPES.REMOVE_FILTEREDSTATION })
 }
 
 export const ClearSelectedStation = () => async dispatch => {

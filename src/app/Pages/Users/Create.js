@@ -5,31 +5,50 @@ import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
 import { CreateUser } from "../../Redux/actions/UserAction"
-import { GetStationByDepartments , GetStationsByUser } from "../../Redux/actions/StationAction"
+import { GetStationByDepartments, GetStationsByUser, ClearfilteredStation } from "../../Redux/actions/StationAction"
 import { GetAllRoles } from "../../Redux/actions/RoleActions"
 import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
+import { Form } from 'react-bootstrap'
 export class Create extends Component {
 
     constructor(props) {
         super(props)
         const currentitem = {
-            Id: 0,
-            Name: "",
-            NormalizedName: null,
-            ConcurrencyStamp: null,
-            CreatedUser: "",
-            UpdatedUser: null,
-            DeleteUser: null,
-            CreateTime: null,
-            UpdateTime: null,
-            DeleteTime: null,
-            IsActive: true,
-            stations: []
+            id: 0,
+            name: "",
+            normalizedName: null,
+            concurrencyStamp: null,
+            createdUser: "",
+            updatedUser: null,
+            deleteUser: null,
+            createTime: null,
+            updateTime: null,
+            deleteTime: null,
+            isActive: true,
+            username: "",
+            passwordHash: "",
+            email: "",
+            emailConfirmed: false,
+            phoneNumber: "",
+            phoneNumberConfirmed: false,
+            accessFailedCount: 0,
+            town: "",
+            address: "",
+            city: "",
+            language: "",
+            userID: 0,
+            stations: [],
+            roles: [],
+            departments: []
         }
-       
-        this.state = { currentitem };
+        const language = [
+            { label: 'TR', value: 'TR' },
+            { label: 'EN', value: 'EN' }
+        ]
+        const { selected_stations, selected_departments, selected_roles } = []
+        this.state = { currentitem, selected_departments, selected_stations, selected_roles, language };
     }
 
     componentDidMount() {
@@ -37,7 +56,9 @@ export class Create extends Component {
     }
 
     getData = async () => {
-      //  await this.props.GetAllStations();
+        await this.props.GetAllDepartments();
+        await this.props.GetAllRoles();
+        await this.props.ClearfilteredStation();
     }
 
     handlesubmit = (e) => {
@@ -58,26 +79,68 @@ export class Create extends Component {
 
     }
 
-    handleselect = (e) => {
+    handleselectstation = (e) => {
         const newdata = { ...this.state.currentitem }
-        newdata.stations =e.map((item) => {
+        newdata.stations = e.map((item) => {
             return item.value;
         })
-        this.setState({ currentitem:newdata ,selected_stations:e }, () => {
-            console.log('selected_stations: ', this.state.selected_stations);
-            console.log('currentitem: ', this.state.currentitem);
+        this.setState({ currentitem: newdata, selected_stations: e }, () => {
+        })
+    }
+
+    handleselectdepartments = (e) => {
+        let stations = this.state.selected_stations
+        
+        const newdata = { ...this.state.currentitem }
+        newdata.departments = (e || []).map((item) => {
+            return item.value;
+        })
+        const departments = (e || []).map((item) => {
+            return item.value.concurrencyStamp;
+        })
+        if (e === null) {
+            this.props.ClearfilteredStation()
+            newdata.stations = []
+            stations = []
+        } else {
+            this.props.GetStationByDepartments(departments)
+        }
+        this.setState({ currentitem: newdata, selected_departments: e , selected_stations : stations }, () => {
+        })
+    }
+
+    handleselectroles = (e) => {
+        const newdata = { ...this.state.currentitem }
+        newdata.roles = e.map((item) => {
+            return item.value;
+        })
+        this.setState({ currentitem: newdata, selected_roles: e }, () => {
+        })
+    }
+
+    handleselectLanguage = (e) => {
+        const newdata = { ...this.state.currentitem }
+        newdata.language = e.value
+        this.setState({ currentitem: newdata }, () => {
         })
     }
 
     postData = async () => {
-        this.props.CreateDepartment(this.state.currentitem, this.props.history)
+        this.props.createdUser(this.state.currentitem, this.props.history)
     };
 
     render() {
-        const { isLoading } = this.props.Departments
-        const list = this.props.Stations.list.map((item, index) => {
+        const { isLoading } = this.props.Users
+        const Departments = this.props.Departments.list.map((item, index) => {
             return { value: item, label: item.name }
         })
+        const Stations = this.props.Stations.filtered_stations.map((item, index) => {
+            return { value: item, label: item.name }
+        })
+        const Roles = this.props.Roles.list.map((item, index) => {
+            return { value: item, label: item.name }
+        })
+
         return (
             <>
                 {isLoading ? <Spinner /> :
@@ -97,7 +160,7 @@ export class Create extends Component {
                                                 itemplaceholder="Kullanıcı Adı"
                                                 itemchange={this.handleonchange}
                                             />
-                                             <InputItem
+                                            <InputItem
                                                 itemrowspan="4"
                                                 itemname="İsim"
                                                 itemid="name"
@@ -106,7 +169,7 @@ export class Create extends Component {
                                                 itemplaceholder="Departman Adı"
                                                 itemchange={this.handleonchange}
                                             />
-                                             <InputItem
+                                            <InputItem
                                                 itemrowspan="4"
                                                 itemname="Soyisim"
                                                 itemid="surname"
@@ -115,7 +178,7 @@ export class Create extends Component {
                                                 itemplaceholder="Soyisim"
                                                 itemchange={this.handleonchange}
                                             />
-                                             <InputItem
+                                            <InputItem
                                                 itemrowspan="4"
                                                 itemname="E-Posta"
                                                 itemid="email"
@@ -126,7 +189,7 @@ export class Create extends Component {
                                             />
                                         </div>
                                         <div className='row'>
-                                        <InputItem
+                                            <InputItem
                                                 itemrowspan="4"
                                                 itemname="Telefon"
                                                 itemid="phonenumber"
@@ -164,14 +227,76 @@ export class Create extends Component {
                                             />
                                         </div>
                                         <div className='row'>
-                                            <div className='col-3 pr-5 mb-3'>
-                                                <Select
-                                                    value={this.state.currentitem}
-                                                    onChange={this.handleselect}
-                                                    isMulti={true}
-                                                    options={list}
-                                                />
+                                            <div className="pr-5 col-6">
+                                                <div className='row'>
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Departmanlar</label>
+                                                </div>
+                                                <Form.Group className="row" >
+                                                    <div style={{ margin: '0 0 0 -10px' }} className='col-12'>
+                                                        <Select
+                                                            value={this.state.selected_departments}
+                                                            onChange={this.handleselectdepartments}
+                                                            isMulti={true}
+                                                            options={Departments}
+                                                        />
+                                                    </div>
+                                                </Form.Group>
                                             </div>
+                                            <div className="pr-5 col-6">
+                                                <div className='row'>
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">İstasyonlar</label>
+                                                </div>
+                                                <Form.Group className="row" >
+                                                    <div style={{ margin: '0 0 0 -10px' }} className='col-12'>
+                                                        <Select
+                                                            value={this.state.selected_stations}
+                                                            onChange={this.handleselectstation}
+                                                            isMulti={true}
+                                                            options={Stations}
+                                                        />
+                                                    </div>
+                                                </Form.Group>
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className="pr-5 col-6">
+                                                <div className='row'>
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Roller</label>
+                                                </div>
+                                                <Form.Group className="row" >
+                                                    <div style={{ margin: '0 0 0 -10px' }} className='col-12'>
+                                                        <Select
+                                                            value={this.state.selected_roles}
+                                                            onChange={this.handleselectroles}
+                                                            isMulti={true}
+                                                            options={Roles}
+                                                        />
+                                                    </div>
+                                                </Form.Group>
+                                            </div>
+                                            <div className="pr-5 col-3">
+                                                <div className='row'>
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Uygulama Dili</label>
+                                                </div>
+                                                <Form.Group className="row" >
+                                                    <div style={{ margin: '0 0 0 -10px' }} className='col-12'>
+                                                        <Select
+                                                            value={this.state.currentitem}
+                                                            onChange={this.handleselect}
+                                                            isMulti={true}
+                                                        />
+                                                    </div>
+                                                </Form.Group>
+                                            </div>
+                                            <InputItem
+                                                itemrowspan="4"
+                                                itemname="Kullanıcı Numarası"
+                                                itemid="userID"
+                                                itemvalue={this.state.currentitem.userID}
+                                                itemtype="text"
+                                                itemplaceholder="Kullanıcı Numarası"
+                                                itemchange={this.handleonchange}
+                                            />
                                         </div>
                                         <div className='row d-flex pr-5 justify-content-end align-items-right'>
                                             <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
@@ -191,10 +316,10 @@ export class Create extends Component {
 const mapStateToProps = (state) => ({
     Users: state.Users,
     Stations: state.Stations,
-    Roles : state.Roles,
-    Departments : state.Departments
+    Roles: state.Roles,
+    Departments: state.Departments
 })
 
-const mapDispatchToProps = { CreateUser,GetAllRoles,GetStationByDepartments, GetStationsByUser ,GetAllDepartments}
+const mapDispatchToProps = { CreateUser, GetAllRoles, GetStationByDepartments, GetStationsByUser, GetAllDepartments, ClearfilteredStation }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))
