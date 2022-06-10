@@ -5,7 +5,7 @@ import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
 import { CreateUser } from "../../Redux/actions/UserAction"
-import { GetStationByDepartments, GetStationsByUser, ClearfilteredStation } from "../../Redux/actions/StationAction"
+import { GetStationByDepartments, GetStationsByUser, ClearfilteredStation, GetAllStations } from "../../Redux/actions/StationAction"
 import { GetAllRoles } from "../../Redux/actions/RoleActions"
 import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
 import Spinner from '../../shared/Spinner'
@@ -58,6 +58,7 @@ export class Create extends Component {
     getData = async () => {
         await this.props.GetAllDepartments();
         await this.props.GetAllRoles();
+        await this.props.GetAllStations();
         await this.props.ClearfilteredStation();
     }
 
@@ -81,8 +82,8 @@ export class Create extends Component {
 
     handleselectstation = (e) => {
         const newdata = { ...this.state.currentitem }
-        newdata.stations = e.map((item) => {
-            return item.value;
+        newdata.stations = (e || []).map((item) => {
+            return this.props.Stations.list.find(station => station.concurrencyStamp === item.value);
         })
         this.setState({ currentitem: newdata, selected_stations: e }, () => {
         })
@@ -90,29 +91,29 @@ export class Create extends Component {
 
     handleselectdepartments = (e) => {
         let stations = this.state.selected_stations
-        
         const newdata = { ...this.state.currentitem }
         newdata.departments = (e || []).map((item) => {
-            return item.value;
+            return this.props.Departments.list.find(department => department.concurrencyStamp === item.value);
         })
         const departments = (e || []).map((item) => {
-            return item.value.concurrencyStamp;
+            return item.value
         })
         if (e === null) {
             this.props.ClearfilteredStation()
             newdata.stations = []
             stations = []
         } else {
-            this.props.GetStationByDepartments(departments)
+            this.props.GetStationByDepartments(departments); 
+            stations = []           
         }
-        this.setState({ currentitem: newdata, selected_departments: e , selected_stations : stations }, () => {
+        this.setState({ currentitem: newdata, selected_departments: e, selected_stations: stations }, () => {
         })
     }
 
     handleselectroles = (e) => {
         const newdata = { ...this.state.currentitem }
         newdata.roles = e.map((item) => {
-            return item.value;
+            return this.props.Roles.list.find(role => role.concurrencyStamp === item.value);
         })
         this.setState({ currentitem: newdata, selected_roles: e }, () => {
         })
@@ -132,13 +133,13 @@ export class Create extends Component {
     render() {
         const { isLoading } = this.props.Users
         const Departments = this.props.Departments.list.map((item, index) => {
-            return { value: item, label: item.name }
+            return { value: item.concurrencyStamp, label: item.name }
         })
         const Stations = this.props.Stations.filtered_stations.map((item, index) => {
-            return { value: item, label: item.name }
+            return { value: item.concurrencyStamp, label: item.name }
         })
         const Roles = this.props.Roles.list.map((item, index) => {
-            return { value: item, label: item.name }
+            return { value: item.concurrencyStamp, label: item.name }
         })
 
         return (
@@ -166,7 +167,7 @@ export class Create extends Component {
                                                 itemid="name"
                                                 itemvalue={this.state.currentitem.name}
                                                 itemtype="text"
-                                                itemplaceholder="Departman Adı"
+                                                itemplaceholder="İsim"
                                                 itemchange={this.handleonchange}
                                             />
                                             <InputItem
@@ -320,6 +321,6 @@ const mapStateToProps = (state) => ({
     Departments: state.Departments
 })
 
-const mapDispatchToProps = { CreateUser, GetAllRoles, GetStationByDepartments, GetStationsByUser, GetAllDepartments, ClearfilteredStation }
+const mapDispatchToProps = { CreateUser, GetAllRoles, GetStationByDepartments, GetStationsByUser, GetAllDepartments, ClearfilteredStation, GetAllStations }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))
