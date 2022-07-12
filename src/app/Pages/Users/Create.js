@@ -47,8 +47,9 @@ export class Create extends Component {
             { label: 'TR', value: 'TR' },
             { label: 'EN', value: 'EN' }
         ]
+        const passswordHashConfirm = ""
         const { selected_stations, selected_departments, selected_roles } = []
-        this.state = { currentitem, selected_departments, selected_stations, selected_roles, language };
+        this.state = { currentitem, selected_departments, selected_stations, selected_roles, language, passswordHashConfirm };
     }
 
     componentDidMount() {
@@ -103,8 +104,8 @@ export class Create extends Component {
             newdata.stations = []
             stations = []
         } else {
-            this.props.GetStationByDepartments(departments); 
-            stations = []           
+            this.props.GetStationByDepartments(departments);
+            stations = []
         }
         this.setState({ currentitem: newdata, selected_departments: e, selected_stations: stations }, () => {
         })
@@ -112,7 +113,7 @@ export class Create extends Component {
 
     handleselectroles = (e) => {
         const newdata = { ...this.state.currentitem }
-        newdata.roles = e.map((item) => {
+        newdata.roles = (e || []).map((item) => {
             return this.props.Roles.list.find(role => role.concurrencyStamp === item.value);
         })
         this.setState({ currentitem: newdata, selected_roles: e }, () => {
@@ -120,10 +121,10 @@ export class Create extends Component {
     }
 
     handleselectLanguage = (e) => {
-        const newdata = { ...this.state.currentitem }
-        newdata.language = e.value
-        this.setState({ currentitem: newdata }, () => {
-        })
+            const newdata = { ...this.state.currentitem }
+            newdata.language = (e || {}).value
+            this.setState({ currentitem: newdata }, () => {
+            })
     }
 
     postData = async () => {
@@ -141,6 +142,7 @@ export class Create extends Component {
         const Roles = this.props.Roles.list.map((item, index) => {
             return { value: item.concurrencyStamp, label: item.name }
         })
+        const Languages = this.state.language
 
         return (
             <>
@@ -228,6 +230,25 @@ export class Create extends Component {
                                             />
                                         </div>
                                         <div className='row'>
+                                            <InputItem
+                                                itemrowspan="1"
+                                                itemname="Şifre"
+                                                itemid="passwordHash"
+                                                itemvalue={this.state.currentitem.passwordHash}
+                                                itemtype="password"
+                                                itemplaceholder="Şifre"
+                                                itemchange={this.handleonchange}
+                                            />
+                                            <InputItem
+                                                itemrowspan="1"
+                                                itemname="Şifre Yeniden"
+                                                itemid="passwordHash"
+                                                itemvalue={this.state.passswordHashConfirm}
+                                                itemtype="password"
+                                                itemplaceholder="Şifre Yeniden"
+                                            />
+                                        </div>
+                                        <div className='row'>
                                             <div className="pr-5 col-6">
                                                 <div className='row'>
                                                     <label style={{ fontSize: "12px" }} className="col-form-label">Departmanlar</label>
@@ -282,9 +303,10 @@ export class Create extends Component {
                                                 <Form.Group className="row" >
                                                     <div style={{ margin: '0 0 0 -10px' }} className='col-12'>
                                                         <Select
-                                                            value={this.state.currentitem}
-                                                            onChange={this.handleselect}
+                                                            value={this.state.currentitem.language}
+                                                            onChange={this.handleselectLanguage}
                                                             isMulti={true}
+                                                            options={Languages}
                                                         />
                                                     </div>
                                                 </Form.Group>

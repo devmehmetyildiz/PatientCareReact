@@ -4,9 +4,8 @@ import { withRouter, Link } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { UpdateRole, GetAuthories, GetSelectedRole } from "../../Redux/actions/RoleActions"
+import { UpdateRole, GetAuthories, GetSelectedRole, ClearSelectedRole } from "../../Redux/actions/RoleActions"
 import Spinner from '../../shared/Spinner'
-
 export class Edit extends Component {
 
     constructor(props) {
@@ -14,7 +13,6 @@ export class Edit extends Component {
         const currentitem = {
             Id: 0,
             Name: "",
-            NormalizedName: null,
             ConcurrencyStamp: null,
             CreatedUser: "",
             UpdatedUser: null,
@@ -23,26 +21,69 @@ export class Edit extends Component {
             UpdateTime: null,
             DeleteTime: null,
             IsActive: true,
-            authories: []
+            Authories: []
         }
+        this.checkbox = []
+        const authories = []
         const pagestatus = false
         const roles = []
-        this.state = { currentitem, roles, pagestatus };
+        const groupcount = 0
+        const allsetup = false
+        this.state = { currentitem, authories, roles, pagestatus, groupcount, allsetup };
     }
 
     componentDidMount() {
-        this.getAuthories()
+        this.GetData()
     }
 
-    getAuthories = async () => {
-        await this.props.GetSelectedRole(this.props.match.params.RoleId);
+    GetData = async () => {
         await this.props.GetAuthories();
-        this.setState({ currentitem: this.props.Roles.selected_role })
+        await this.props.GetSelectedRole(this.props.match.params.RoleId);
+    }
+
+
+    componentDidUpdate() {
+        if (this.props.Roles.roles.length > 0 &&
+            this.state.authories.length === 0 &&
+            Object.keys(this.props.Roles.selected_role).length !== 0 &&
+            !this.props.Roles.isLoading
+        ) {
+            const currentnewdata = { ...this.props.Roles.selected_role }
+            this.setState({ currentitem: currentnewdata })
+            const authries = { ...this.props.Roles.roles }
+            var newdata = Object.keys(authries)
+                .map(function (key) {
+                    return authries[key];
+                });
+            newdata.forEach(element => {
+                this.props.Roles.selected_role.authories.forEach(prevelement => {
+                    if (prevelement.concurrencyStamp === element.concurrencyStamp) {
+                        element.isAdded = true
+                    }
+                })
+            })
+            this.setState({ authories: newdata }, () => {
+                this.props.Roles.selected_role.authories.forEach(element => {
+                    if (this.checkbox[element.concurrencyStamp] !== undefined) {
+                        this.checkbox[element.concurrencyStamp].checked = true
+                    }
+                })
+            })
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.ClearSelectedRole()
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
-        this.postData();
+        const newdata = { ...this.state.currentitem }
+        newdata.authories = this.state.authories.filter(element => element.isAdded === true)
+
+        this.setState({ currentitem: newdata }, () => {
+            this.postData();
+        })
     }
 
     goBack = (e) => {
@@ -55,55 +96,55 @@ export class Edit extends Component {
         newdata[e.target.id] = e.target.value
         this.setState({ currentitem: newdata }, () => {
         })
+
+    }
+
+    handleaddallauth = () => {
+        const authries = { ...this.state.authories }
+        var newdata = Object.keys(authries)
+            .map(function (key) {
+                return authries[key];
+            });
+        newdata.forEach(element => {
+            element.isAdded = true
+        })
+        this.setState({ authories: newdata })
+        const checkboxex = { ...this.checkbox }
+        var newdata = Object.keys(checkboxex)
+            .map(function (key) {
+                return checkboxex[key];
+            });
+        newdata.forEach(element => {
+            element.checked = true
+        })
     }
 
     handleonRolehange = (e) => {
-        let ishave = false;
-        this.state.currentitem.authories.find(x => x.name === e.target.name.name) ? ishave = true : ishave = false
-        if (!ishave) {
-            const newdata = { ...this.state.currentitem }
-            newdata.authories.push(e.target.name)
-            this.setState({ currentitem: newdata }, () => {
-            })
-        }
-        else {
-            const newdata = { ...this.state.currentitem }
-            let index = -1;
-            newdata.authories.find((x, i) => {
-                if (x.name === e.target.name.name) {
-                    index = i
-                }
+        const authries = { ...this.state.authories }
+        var newdata = Object.keys(authries)
+            .map(function (key) {
+                return authries[key];
+            });
+        newdata.forEach(element => {
+            if (element.concurrencyStamp === e.target.name.concurrencyStamp) {
+                element.isAdded = e.target.value
             }
-            )
-            if (index > -1) {
-                newdata.authories.splice(index, 1);
-            }
-            this.setState({ currentitem: newdata }, () => {
-            })
-        }
-
-    }
-
-    checkstatetorender = (element) => {
-        let isok = false
-        const { authories } = this.state.currentitem
-        authories.find(x => x.concurrencyStamp === element.concurrencyStamp) ? isok = true : isok = false
-        
-        return isok;
-    }
+        })
+        this.setState({ authories: newdata })
+    };
 
     postData = async () => {
         this.props.UpdateRole(this.state.currentitem, this.props.history)
     };
 
     render() {
-        const { isLoading, roles } = this.props.Roles
-        if (roles.length !== 0) {
-            roles.forEach((element) => {
-                const role = element
-                role.isChecked = this.checkstatetorender(element)
-            });
-        }
+        const { isLoading } = this.props.Roles
+        let authgroups = []
+        this.state.authories.forEach(element => {
+            if (!authgroups.includes(element.group)) {
+                authgroups.push(element.group)
+            }
+        });
         return (
             <>
                 {isLoading ? <Spinner /> :
@@ -111,13 +152,20 @@ export class Edit extends Component {
                         <div className="col-12 grid-margin">
                             <div className="card">
                                 <div className="card-body">
-                                    <h4 className="card-title">Roller > Güncelle</h4>
+                                    <div className='row'>
+                                        <div className='col-6 d-flex justify-content-start'>
+                                            <h4 className="card-title">Roller > Güncelle</h4>
+                                        </div>
+                                        <div className='col-6 d-flex justify-content-end'>
+                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleaddallauth} className="btn btn-primary mr-2">Tüm Yetkiler</button>
+                                        </div>
+                                    </div>
                                     <form className="form-sample" onSubmit={this.handlesubmit}>
                                         <div className="row">
                                             <InputItem
                                                 itemrowspan="2"
                                                 itemname="Role İsmi"
-                                                itemid="name"
+                                                itemid="Name"
                                                 itemvalue={this.state.currentitem.name}
                                                 itemtype="text"
                                                 itemplaceholder="Role İsmi"
@@ -125,32 +173,36 @@ export class Edit extends Component {
                                             />
                                         </div>
                                         <div className='row'>
+                                            <label style={{ fontSize: "12px" }} className="col-form-label">Yetkiler</label>
+                                        </div>
+                                        <div className='row'>
                                             <div className='col-12 pr-5'>
-                                                <div className='row border border-primary m-2'>
-                                                    {roles.map((item) =>
-                                                        <div className='col-3' key={item.ConcurrencyStamp}>
-                                                            <div className="form-check">
-                                                                <label className="form-check-label">
-                                                                    <input
-                                                                        onChange={(e) => {
-                                                                            this.handleonRolehange({
-                                                                                target: {
-                                                                                    name: item,
-                                                                                    checked: e.target.checked,
-                                                                                },
-                                                                            });
-                                                                        }}
-                                                                        type="checkbox"
-                                                                        key="{item}"
-                                                                        className="form-check-input"
-                                                                        name={item.name}
-                                                                        id={item.name}
-                                                                        checked={item.isChecked}
-                                                                    />
-
-                                                                    <i className="input-helper"></i>
-                                                                    {item.name}
-                                                                </label>
+                                                <div style={{ borderRadius: "25px", marginBottom: '10px' }} className='row border border-primary p-2'>
+                                                    {authgroups.map((item) =>
+                                                        <div className='col-12'>
+                                                            <label style={{ fontSize: '15px', marginBottom: "-2px" }}>{item}</label>
+                                                            <div className='row'>
+                                                                {this.state.authories.filter(element => element.group === item).map((subitem) =>
+                                                                    <div className='col-3'>
+                                                                        <div className="form-check">
+                                                                            <label className="form-check-label">
+                                                                                <input
+                                                                                    onChange={(e) => {
+                                                                                        this.handleonRolehange({
+                                                                                            target: {
+                                                                                                name: subitem,
+                                                                                                value: e.target.checked,
+                                                                                            },
+                                                                                        });
+                                                                                    }}
+                                                                                    type="checkbox" key="{item}" className="form-check-input" name={subitem.name} value={subitem.IsAdded} ref={checkbox => this.checkbox[subitem.concurrencyStamp] = checkbox} />
+                                                                                <i className="input-helper"></i>
+                                                                                {subitem.name}
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                                }
                                                             </div>
                                                         </div>
                                                     )}
@@ -176,6 +228,6 @@ const mapStateToProps = (state) => ({
     Roles: state.Roles
 })
 
-const mapDispatchToProps = { UpdateRole, GetAuthories, GetSelectedRole }
+const mapDispatchToProps = { UpdateRole, GetAuthories, GetSelectedRole, ClearSelectedRole }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Edit))

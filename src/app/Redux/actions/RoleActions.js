@@ -152,6 +152,7 @@ export const OpenDeleteModal = () => dispatch => {
 }
 
 export const CloseDeleteModal = () => dispatch => {
+    dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDROLE })
     dispatch({ type: ACTION_TYPES.DELETE_MODAL_CLOSE })
 }
 

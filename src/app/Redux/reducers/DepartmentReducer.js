@@ -5,7 +5,6 @@ const INITIAL_STATE = {
   selected_department: {
     id: 0,
     name: "",
-    normalizedName: null,
     concurrencyStamp: null,
     createdUser: "",
     updatedUser: null,
@@ -14,6 +13,7 @@ const INITIAL_STATE = {
     updateTime: null,
     deleteTime: null,
     isActive: true,
+    isAdded:false,
     stations : []
   },
   errmsg: "",

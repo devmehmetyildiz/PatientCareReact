@@ -32,11 +32,6 @@ export class Stations extends Component {
                 text: 'İsyasyon Adı',
                 sort: true
             }, {
-                dataField: 'normalizedName',
-                text: 'Normalize İsim',
-                sort: true,
-                hidden: true
-            }, {
                 dataField: 'concurrencyStamp',
                 text: 'Unik ID',
                 sort: true

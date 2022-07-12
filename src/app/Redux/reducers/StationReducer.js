@@ -2,19 +2,7 @@ import { ACTION_TYPES } from "../actions/StationAction"
 const INITIAL_STATE = {
     list: [],
     filtered_stations: [],
-    selected_station: {
-        id: 0,
-        name: "",
-        normalizedName: null,
-        concurrencyStamp: null,
-        createdUser: "",
-        updatedUser: null,
-        deleteUser: null,
-        createTime: null,
-        updateTime: null,
-        deleteTime: null,
-        isActive: true
-    },
+    selected_station: {},
     errmsg: "",
     isLoading: false,
     isSelected: false,
@@ -57,6 +45,8 @@ export const StationReducer = (state = INITIAL_STATE, { type, payload }) => {
             return { ...state, errmsg: payload, isLoading: false }
         case ACTION_TYPES.DELETE_MODAL_OPEN:
             return { ...state, isModalOpen: true }
+        case ACTION_TYPES.DELETE_MODAL_CLOSE:
+            return { ...state, isModalOpen: false }
         case ACTION_TYPES.GET_STATIONBYUSER_INIT:
             return { ...state, isLoading: true }
         case ACTION_TYPES.GET_STATIONBYUSER_SUCCESS:

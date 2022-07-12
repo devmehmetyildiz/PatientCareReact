@@ -6,7 +6,6 @@ import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
 import { CreateRole, GetAuthories } from "../../Redux/actions/RoleActions"
 import Spinner from '../../shared/Spinner'
-
 export class Create extends Component {
 
     constructor(props) {
@@ -14,7 +13,6 @@ export class Create extends Component {
         const currentitem = {
             Id: 0,
             Name: "",
-            NormalizedName: null,
             ConcurrencyStamp: null,
             CreatedUser: "",
             UpdatedUser: null,
@@ -23,24 +21,40 @@ export class Create extends Component {
             UpdateTime: null,
             DeleteTime: null,
             IsActive: true,
-            authories: []
+            Authories: []
         }
+        const authories = []
         const pagestatus = false
         const roles = []
-        this.state = { currentitem, roles, pagestatus };
+        const groupcount = 0
+        const allsetup = false
+        this.state = { currentitem, authories, roles, pagestatus, groupcount, allsetup };
+        this.checkbox = []
     }
 
     componentDidMount() {
         this.getAuthories()
+
+    }
+
+    componentDidUpdate() {
+        if (this.props.Roles.roles.length > 0 && this.state.authories.length === 0) {
+            this.setState({ authories: this.props.Roles.roles })
+        }
     }
 
     getAuthories = async () => {
-        this.props.GetAuthories();
+        await this.props.GetAuthories();
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
-        this.postData();
+        const newdata = { ...this.state.currentitem }
+        newdata.Authories = this.state.authories.filter(element => element.isAdded === true)
+        this.setState({ currentitem: newdata }, () => {
+            console.log('currentitem: ', this.state.currentitem);
+            this.postData();
+        })
     }
 
     goBack = (e) => {
@@ -56,33 +70,50 @@ export class Create extends Component {
 
     }
 
-    handleonRolehange = (e) => {
-        if (!this.state.currentitem.authories.includes(e.target.name)) {
-            const newdata = { ...this.state.currentitem }
-            newdata.authories.push(e.target.name)
-            this.setState({ currentitem: newdata }, () => {
-            })
-        }
-        else {
-            const newdata = { ...this.state.currentitem }
-            const index = this.state.currentitem.authories.indexOf(e.target.name);
-            if (index > -1) {
-                this.state.currentitem.authories.splice(index, 1);
-            }
-            this.setState({ currentitem: newdata }, () => {
-
-            })
-        }
-
+    handleaddallauth = () => {
+        const authries = { ...this.state.authories }
+        var newdata = Object.keys(authries)
+            .map(function (key) {
+                return authries[key];
+            });
+        newdata.forEach(element => {
+            element.isAdded = true
+        })
+        this.setState({ authories: newdata })
+        console.log('checkbox: ', this.checkbox);
+        this.checkbox.forEach(element => {
+            console.log('element: ', element);
+            element.checked = true
+        })
     }
+
+    handleonRolehange = (e) => {
+        const authries = { ...this.state.authories }
+        var newdata = Object.keys(authries)
+            .map(function (key) {
+                return authries[key];
+            });
+        newdata.forEach(element => {
+            if (element.concurrencyStamp === e.target.name.concurrencyStamp) {
+                element.isAdded = e.target.value
+            }
+        })
+        this.setState({ authories: newdata })
+    };
 
     postData = async () => {
         this.props.CreateRole(this.state.currentitem, this.props.history)
     };
 
     render() {
-        const { isLoading, roles } = this.props.Roles
-        
+        const { isLoading } = this.props.Roles
+        let authgroups = []
+        this.state.authories.forEach(element => {
+            if (!authgroups.includes(element.group)) {
+                authgroups.push(element.group)
+            }
+        });
+        console.log('this.state.authories: ', this.state.authories);
         return (
             <>
                 {isLoading ? <Spinner /> :
@@ -90,7 +121,14 @@ export class Create extends Component {
                         <div className="col-12 grid-margin">
                             <div className="card">
                                 <div className="card-body">
-                                    <h4 className="card-title">Roller > Yeni</h4>
+                                    <div className='row'>
+                                        <div className='col-6 d-flex justify-content-start'>
+                                            <h4 className="card-title">Roller > Yeni</h4>
+                                        </div>
+                                        <div className='col-6 d-flex justify-content-end'>
+                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleaddallauth} className="btn btn-primary mr-2">Tüm Yetkiler</button>
+                                        </div>
+                                    </div>
                                     <form className="form-sample" onSubmit={this.handlesubmit}>
                                         <div className="row">
                                             <InputItem
@@ -104,25 +142,36 @@ export class Create extends Component {
                                             />
                                         </div>
                                         <div className='row'>
+                                            <label style={{ fontSize: "12px" }} className="col-form-label">Yetkiler</label>
+                                        </div>
+                                        <div className='row'>
                                             <div className='col-12 pr-5'>
-                                                <div className='row border border-primary m-2'>
-                                                    {roles.map((item) =>
-                                                        <div className='col-3'>
-                                                            <div className="form-check">
-                                                                <label className="form-check-label">
-                                                                    <input
-                                                                        onChange={(e) => {
-                                                                            this.handleonRolehange({
-                                                                                target: {
-                                                                                    name: item,
-                                                                                    value: e.target.checked,
-                                                                                },
-                                                                            });
-                                                                        }}
-                                                                        type="checkbox" key="{item}" className="form-check-input" name={item.name} value={item.name} id={item.name} />
-                                                                    <i className="input-helper"></i>
-                                                                    {item.name}
-                                                                </label>
+                                                <div style={{ borderRadius: "25px", marginBottom: '10px' }} className='row border border-primary p-2'>
+                                                    {authgroups.map((item) =>
+                                                        <div className='col-12'>
+                                                            <label style={{ fontSize: '15px', marginBottom: "-2px" }}>{item}</label>
+                                                            <div className='row'>
+                                                                {this.state.authories.filter(element => element.group === item).map((subitem) =>
+                                                                    <div className='col-3'>
+                                                                        <div className="form-check">
+                                                                            <label className="form-check-label">
+                                                                                <input
+                                                                                    onChange={(e) => {
+                                                                                        this.handleonRolehange({
+                                                                                            target: {
+                                                                                                name: subitem,
+                                                                                                value: e.target.checked,
+                                                                                            },
+                                                                                        });
+                                                                                    }}
+                                                                                    type="checkbox" key="{item}" className="form-check-input" name={subitem.name} value={subitem.isAdded} ref={checkbox => this.checkbox[subitem.id] = checkbox} />
+                                                                                <i className="input-helper"></i>
+                                                                                {subitem.name}
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                                }
                                                             </div>
                                                         </div>
                                                     )}

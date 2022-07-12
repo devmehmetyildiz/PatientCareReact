@@ -20,7 +20,8 @@ export class Create extends Component {
             createTime: null,
             updateTime: null,
             deleteTime: null,
-            isActive: true
+            isActive: true,
+            isAdded:true
         }
         this.state = { currentitem };
     }
@@ -38,10 +39,7 @@ export class Create extends Component {
     handleonchange = (e) => {
         const newdata = { ...this.state.currentitem }
         newdata[e.target.id] = e.target.value
-        this.setState({ currentitem: newdata }, () => {
-            console.log('currentitem: ',this.state.currentitem);
-        })
-
+        this.setState({ currentitem: newdata  })
     }
 
     postData = async () => {

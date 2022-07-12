@@ -209,7 +209,7 @@ export class Roles extends Component {
                                         </div>
                                         <div className='col-6 d-flex justify-content-end'>
                                             {/*   <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
-                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Yetki</button>
+                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Rol</button>
                                         </div>
                                     </div>
                                     <div className="row">

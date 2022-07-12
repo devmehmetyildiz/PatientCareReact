@@ -14,23 +14,20 @@ export class Edit extends Component {
     constructor(props) {
         super(props)
         const currentitem = {
-            Id: 0,
-            Name: "",
-            NormalizedName: null,
-            ConcurrencyStamp: null,
-            CreatedUser: "",
-            UpdatedUser: null,
-            DeleteUser: null,
-            CreateTime: null,
-            UpdateTime: null,
-            DeleteTime: null,
-            IsActive: true,
+            id: 0,
+            name: "",
+            createdUser: "",
+            updatedUser: null,
+            deleteUser: null,
+            createTime: null,
+            updateTime: null,
+            deleteTime: null,
+            isActive: true,
             stations: []
         }
-        const pagestatus = false
+        const stations = []
         const selected_stations = []
-        const prevselected_station = []
-        this.state = { currentitem, selected_stations, prevselected_station };
+        this.state = { currentitem, selected_stations, stations };
     }
 
     componentDidMount() {
@@ -40,15 +37,40 @@ export class Edit extends Component {
     GetData = async () => {
         await this.props.GetSelectedDepartment(this.props.match.params.DepartmentId);
         await this.props.GetAllStations();
-        const prevData = this.props.Departments.selected_department.stations.map((item, index) => {
-            return { value: item.concurrencyStamp, label: item.name }
-        })
-        this.setState({ currentitem: this.props.Departments.selected_department, selected_stations: prevData })
+    }
+
+    componentDidUpdate() {
+        if (this.props.Stations.list.length > 0 &&
+            this.state.stations.length === 0 &&
+            Object.keys(this.props.Departments.selected_department).length !== 0 &&
+            !this.props.Departments.isLoading) {
+            const prevData = this.props.Departments.selected_department.stations.map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+
+            const list = this.props.Stations.list.map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+
+            this.setState({ stations: list, selected_stations: prevData, currentitem: this.props.Departments.selected_department }, () => {
+                console.log('currentitem: ', this.state.currentitem);
+
+            })
+        }
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
-        this.postData();
+        let stations = []
+        this.state.selected_stations.forEach(element => {
+            stations.push(this.props.Stations.list.find(station => station.concurrencyStamp===element.value))
+        });
+        const newdata = { ...this.state.currentitem }
+        newdata.stations = stations
+        this.setState({ currentitem: newdata }, () => {
+            this.props.UpdateDepartment(this.state.currentitem, this.props.history)
+        })
+       
     }
 
     goBack = (e) => {
@@ -64,23 +86,8 @@ export class Edit extends Component {
     }
 
     handleselect = (e) => {
-        const newdata = { ...this.state.currentitem }
-        if (e === null) {
-            newdata.stations = []
-        }
-        else {
-            newdata.stations = e.map((item) => {
-                return this.props.Stations.list.find(station => station.concurrencyStamp === item.value);
-            })
-        }
-        this.setState({ currentitem: newdata, selected_stations: e }, () => {
-            console.log(this.state.currentitem)
-        })
+        this.setState({ selected_stations: e })
     }
-
-    postData = async () => {
-        this.props.UpdateDepartment(this.state.currentitem, this.props.history)
-    };
 
     render() {
         const { isLoading } = this.props.Departments

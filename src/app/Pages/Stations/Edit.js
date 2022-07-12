@@ -17,7 +17,6 @@ export class Edit extends Component {
         const currentitem = {
             id: 0,
             name: "",
-            normalizedName: null,
             concurrencyStamp: null,
             createdUser: "",
             updatedUser: null,
@@ -40,7 +39,17 @@ export class Edit extends Component {
     }
 
     componentDidMount() {
-       this.getData()
+        this.getData()
+    }
+
+    componentDidUpdate() {
+        if (Object.keys(this.state.currentitem).length === 0 &&
+            Object.keys(this.props.Stations.selected_station).length !== 0 &&
+            !this.props.Stations.isLoading
+        ) {
+            this.setState({ currentitem: this.props.Stations.selected_station })
+        }
+
     }
 
     getData = async () => {
@@ -77,7 +86,7 @@ export class Edit extends Component {
                         <div className="col-12 grid-margin">
                             <div className="card">
                                 <div className="card-body">
-                                    <h4 className="card-title">Durumlar > Güncelle</h4>
+                                    <h4 className="card-title">İstasyonlar > Güncelle</h4>
                                     <form className="form-sample" onSubmit={this.handlesubmit}>
                                         <div className="row">
                                             <InputItem

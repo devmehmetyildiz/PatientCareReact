@@ -2,16 +2,18 @@ import React, { Component } from 'react'
 import { Button, Modal, Form, Col, Row, Container } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import { GetAllStations, CloseDeleteModal, DeleteStation } from '../../Redux/actions/StationAction'
+import {  GetAllStations, CloseDeleteModal, DeleteStation } from '../../Redux/actions/StationAction'
 
 export class Delete extends Component {
 
     DeleteHandle = async () => {
-       await this.props.DeleteStation(this.props.Stations.selected_station)
-       await this.props.GetAllStations()
-       await this.props.CloseDeleteModal()
+        await this.props.DeleteStation(this.props.Stations.selected_station)
+        await this.props.ClearSelectedStation()
+        await this.props.GetAllStations()
+        await this.props.CloseDeleteModal()
     }
 
+   
     render() {
         return (
             <Modal
@@ -43,7 +45,7 @@ const mapStateToProps = (state) => ({
     Stations: state.Stations,
 })
 
-const mapDispatchToProps = { GetAllStations,  CloseDeleteModal, DeleteStation }
+const mapDispatchToProps = { GetAllStations, CloseDeleteModal, DeleteStation }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Delete))
 

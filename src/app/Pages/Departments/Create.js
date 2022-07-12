@@ -15,7 +15,6 @@ export class Create extends Component {
         const currentitem = {
             Id: 0,
             Name: "",
-            NormalizedName: null,
             ConcurrencyStamp: null,
             CreatedUser: "",
             UpdatedUser: null,
@@ -24,10 +23,12 @@ export class Create extends Component {
             UpdateTime: null,
             DeleteTime: null,
             IsActive: true,
-            stations: []
+            Stations: []
         }
+        const stations = []
         const selected_stations = []
-        this.state = { currentitem, selected_stations };
+        this.state = { currentitem, selected_stations, stations };
+
     }
 
     componentDidMount() {
@@ -38,9 +39,28 @@ export class Create extends Component {
         await this.props.GetAllStations();
     }
 
+    componentDidUpdate() {
+        if (this.props.Stations.list.length > 0 && this.state.stations.length === 0) {
+            const list = this.props.Stations.list.map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+            this.setState({ stations: list })
+        }
+    }
+
     handlesubmit = (e) => {
         e.preventDefault()
-        this.postData();
+        let stations = []
+        this.state.selected_stations.forEach(element => {
+            stations.push(this.props.Stations.list.find(station => station.concurrencyStamp===element.value))
+        });
+        const newdata = { ...this.state.currentitem }
+        newdata.Stations = stations
+        this.setState({ currentitem: newdata }, () => {
+            console.log('currentitem: ', this.state.currentitem);
+            this.props.CreateDepartment(this.state.currentitem, this.props.history)
+        })
+       
     }
 
     goBack = (e) => {
@@ -53,29 +73,15 @@ export class Create extends Component {
         newdata[e.target.id] = e.target.value
         this.setState({ currentitem: newdata }, () => {
         })
-
     }
 
     handleselect = (e) => {
-        const newdata = { ...this.state.currentitem }
-        newdata.stations =e.map((item) => {
-            return item.value;
-        })
-        this.setState({ currentitem:newdata ,selected_stations:e }, () => {
-            console.log('selected_stations: ', this.state.selected_stations);
-            console.log('currentitem: ', this.state.currentitem);
-        })
+        this.setState({ selected_stations: e })
     }
-
-    postData = async () => {
-        this.props.CreateDepartment(this.state.currentitem, this.props.history)
-    };
 
     render() {
         const { isLoading } = this.props.Departments
-        const list = this.props.Stations.list.map((item, index) => {
-            return { value: item, label: item.name }
-        })
+        const list = this.state.stations
         return (
             <>
                 {isLoading ? <Spinner /> :
@@ -97,7 +103,10 @@ export class Create extends Component {
                                             />
                                         </div>
                                         <div className='row'>
-                                            <div className='col-12 pr-5 mb-3'>
+                                            <label style={{ fontSize: "12px" }} className="col-form-label">İstasyonlar</label>
+                                        </div>
+                                        <div className='row'>
+                                            <div style={{ marginRight: '-5px' }} className='col-12 pr-5 mb-3'>
                                                 <Select
                                                     value={this.state.selected_stations}
                                                     onChange={this.handleselect}

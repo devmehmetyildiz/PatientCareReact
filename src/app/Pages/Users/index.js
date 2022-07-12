@@ -29,24 +29,87 @@ export class Users extends Component {
                 type: 'number',
                 hidden: true
             }, {
-                dataField: 'name',
-                text: 'Departman Adı',
-                sort: true
-            }, {
-                dataField: 'normalizedName',
-                text: 'Normalize İsim',
+                dataField: 'username',
+                text: 'Kullanıcı Adı',
+                sort: true,
+                hidden: false
+            },
+             {
+                dataField: 'normalizedUsername',
+                text: 'Normalize Kullanıcı Adı',
                 sort: true,
                 hidden: true
-            }, {
+            },
+            {
+                dataField: 'email',
+                text: 'E Posta',
+                sort: false,
+                type: 'string'
+            },{
+                dataField: 'emailConfirmed',
+                text: 'E Posta Doğrulama',
+                sort: false,
+                type: 'bool'
+            },{
+                dataField: 'accessFailedCount',
+                text: 'Hatalı Giriş Denemesi',
+                sort: false,
+                type: 'bool'
+            },{
+                dataField: 'name',
+                text: 'İsim',
+                sort: false,
+                type: 'string'
+            },{
+                dataField: 'surname',
+                text: 'Soyisim',
+                sort: false,
+                type: 'string'
+            },{
+                dataField: 'phoneNumber',
+                text: 'Telefon',
+                sort: false,
+                type: 'string'
+            },{
+                dataField: 'phoneNumberConfirmed',
+                text: 'Telefon Doğrulama',
+                sort: false,
+                type: 'bool'
+            },{
+                dataField: 'city',
+                text: 'Şehir',
+                sort: false,
+                type: 'string'
+            },{
+                dataField: 'town',
+                text: 'İlçe',
+                sort: false,
+                type: 'string'
+            },{
+                dataField: 'address',
+                text: 'Adres',
+                sort: false,
+                type: 'string'
+            },{
+                dataField: 'userID',
+                text: 'Kullanıcı Numarası',
+                sort: false,
+                type: 'number'
+            },{
+                dataField: 'language',
+                text: 'Dil',
+                sort: false,
+                type: 'string'
+            },{
                 dataField: 'concurrencyStamp',
                 text: 'Unik ID',
                 sort: true,
-                hidden: true
+                hidden: false
             }, {
                 dataField: 'createdUser',
                 text: 'Oluşturan Kullanıcı',
                 sort: true,
-                hidden: true
+                hidden: false
             }, {
                 dataField: 'updatedUser',
                 text: 'Güncelleyen Kullanıcı',
@@ -57,8 +120,7 @@ export class Users extends Component {
                 text: 'Silen Kullanıcı',
                 sort: true,
                 hidden: true
-            },
-            , {
+            },{
                 dataField: 'createTime',
                 text: 'Oluşturma Tarihi',
                 sort: true,
@@ -72,103 +134,34 @@ export class Users extends Component {
                 type: 'date',
                 hidden: true
             },
-            , {
+            ,{
                 dataField: 'deletetime',
                 text: 'Silme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },{
-                dataField: 'username',
-                text: 'Kullanıcı Adı',
-                sort: false,
-                type: 'string'
-            }
-            ,{
-                dataField: 'email',
-                text: 'E Posta',
-                sort: false,
-                type: 'string'
-            }
-            ,{
-                dataField: 'emailConfirmed',
-                text: 'E Posta Doğrulama',
-                sort: false,
-                type: 'bool'
-            }
-            ,{
-                dataField: 'phoneNumber',
-                text: 'Telefon',
-                sort: false,
-                type: 'string'
-            }
-            ,{
-                dataField: 'phoneNumberConfirmed',
-                text: 'Telefon Doğrulama',
-                sort: false,
-                type: 'bool'
-            }
-            ,{
-                dataField: 'accessFailedCount',
-                text: 'Hatalı Giriş Denemesi',
-                sort: false,
-                type: 'bool'
-            }
-            ,{
-                dataField: 'city',
-                text: 'Şehir',
-                sort: false,
-                type: 'string'
-            }
-            ,{
-                dataField: 'town',
-                text: 'İlçe',
-                sort: false,
-                type: 'string'
-            }
-            ,{
-                dataField: 'address',
-                text: 'Adres',
-                sort: false,
-                type: 'string'
-            }
-            ,{
-                dataField: 'userID',
-                text: 'Kullanıcı Numarası',
-                sort: false,
-                type: 'number'
-            }
-            ,{
-                dataField: 'language',
-                text: 'Dil',
-                sort: false,
-                type: 'string'
-            }
-            , {
-                dataField: 'stations',
-                text: 'İstasyonlar',
-                sort: false,
-                type: 'string'
-            }
-            , {
-                dataField: 'roles',
-                text: 'Roller',
-                sort: false,
-                type: 'string'
-            }
-            , {
-                dataField: 'departments',
-                text: 'Departmanlar',
-                sort: false,
-                type: 'string'
-            }
-            , {
                 dataField: 'isActive',
                 text: 'Aktiflik Durumu',
                 sort: true,
                 type: 'bool',
                 hidden: true
-            }, {
+            },{
+                dataField: 'stations',
+                text: 'İstasyonlar',
+                sort: false,
+                type: 'string'
+            },{
+                dataField: 'roles',
+                text: 'Roller',
+                sort: false,
+                type: 'string'
+            },{
+                dataField: 'departments',
+                text: 'Departmanlar',
+                sort: false,
+                type: 'string'
+            },{
                 dataField: 'update',
                 text: 'Güncelle',
                 sort: true,
@@ -310,7 +303,7 @@ export class Users extends Component {
                                                                 pagination={paginationFactory()}
                                                                 {...props.baseProps}
                                                                 wrapperClasses="table-responsive"
-                                                            />
+                                                            ></BootstrapTable>
                                                         </div>
                                                     )
                                                 }

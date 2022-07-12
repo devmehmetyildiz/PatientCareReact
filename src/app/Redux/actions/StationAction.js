@@ -171,5 +171,6 @@ export const OpenDeleteModal = () => async dispatch => {
 }
 
 export const CloseDeleteModal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDSTATION })
     dispatch({ type: ACTION_TYPES.DELETE_MODAL_CLOSE })
 }

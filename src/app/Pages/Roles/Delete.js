@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Modal, Form, Col, Row, Container } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import {  CloseDeleteModal, DeleteRole } from '../../Redux/actions/RoleActions'
+import {  CloseDeleteModal, DeleteRole,GetAllRoles,ClearSelectedRole } from '../../Redux/actions/RoleActions'
 
 export class Delete extends Component {
     render() {
@@ -25,7 +25,11 @@ export class Delete extends Component {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={() => { this.props.CloseDeleteModal() }}>Vazgeç</Button>
-                    <Button onClick={() => { this.props.DeleteRole(this.props.Roles.selected_role) }}>Sil</Button>
+                    <Button onClick={async () => { 
+                        await this.props.DeleteRole(this.props.Roles.selected_role) 
+                        await this.props.ClearSelectedRole()
+                        await this.props.GetAllRoles()
+                        }}>Sil</Button>
                 </Modal.Footer>
             </Modal>
         )
@@ -36,7 +40,7 @@ const mapStateToProps = (state) => ({
     Roles: state.Roles,
 })
 
-const mapDispatchToProps = {  CloseDeleteModal, DeleteRole }
+const mapDispatchToProps = {  CloseDeleteModal, DeleteRole,GetAllRoles,ClearSelectedRole }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Delete))
 
