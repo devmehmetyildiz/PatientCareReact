@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios';
-import { GetToken } from '../../Utils/TokenValidChecker';
 import { withRouter } from 'react-router-dom';
-import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
 import { GetSelectedCase, UpdateCase, ClearSelectedCase } from '../../Redux/actions/CaseActions';
 import { GetCurrentUser } from '../../Redux/actions/loginActions';

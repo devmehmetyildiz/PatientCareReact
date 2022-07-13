@@ -1,6 +1,4 @@
 import { ACTION_TYPES } from "../actions/loginActions"
-import Popup from "../../Utils/Popup";
-
 const INITIAL_STATE = {
     user: "",
     message: "",

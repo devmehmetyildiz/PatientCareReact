@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter} from 'react-router-dom';
 import { GetCurrentUser } from '../../Redux/actions/loginActions';
-import cogoToast from 'cogo-toast';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
 import { CreateCase } from "../../Redux/actions/CaseActions"

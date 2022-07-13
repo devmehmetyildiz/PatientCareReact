@@ -1,6 +1,5 @@
 import axios from "axios"
 import { GetToken } from "../../Utils/TokenValidChecker";
-import Popup from "../../Utils/Popup"
 
 export const ACTION_TYPES = {
     GET_ALLUSERS_INIT: 'GET_ALLUSERS_INIT',

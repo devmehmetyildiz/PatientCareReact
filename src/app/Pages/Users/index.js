@@ -127,13 +127,13 @@ export class Users extends Component {
                 type: 'date',
                 hidden: true
             },
-            , {
+            {
                 dataField: 'updateTime',
                 text: 'Güncelleme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
-            },
+            }
             ,{
                 dataField: 'deletetime',
                 text: 'Silme Tarihi',
@@ -210,7 +210,6 @@ export class Users extends Component {
         onColumnToggle,
         toggles
     }) => (
-        console.log(toggles),
         <div className="btn-group btn-group-toggle btn-group-vertical" data-toggle="buttons">
             {
                 columns

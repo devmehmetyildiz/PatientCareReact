@@ -3,11 +3,7 @@ import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 
 
 export class ToggleColumns extends Component {
-    constructor(props) {
-        super(props);
-      
-
-    }
+    
     
     render() {
         return (

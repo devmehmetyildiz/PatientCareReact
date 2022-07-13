@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Modal, Form, Col, Row, Container } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import { GetAllDepartments, CloseDeleteModal, DeleteDepartment } from '../../Redux/actions/DepartmentAction'

@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom';
-import cogoToast from 'cogo-toast';
+import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { UpdateDepartment, GetSelectedDepartment } from "../../Redux/actions/DepartmentAction"
+import { UpdateDepartment, GetSelectedDepartment,ClearSelectedDepartment } from "../../Redux/actions/DepartmentAction"
 import { GetAllStations } from "../../Redux/actions/StationAction"
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
@@ -37,6 +36,10 @@ export class Edit extends Component {
     GetData = async () => {
         await this.props.GetSelectedDepartment(this.props.match.params.DepartmentId);
         await this.props.GetAllStations();
+    }
+
+    componentWillUnmount() {
+        this.props.ClearSelectedDepartment()
     }
 
     componentDidUpdate() {
@@ -145,6 +148,6 @@ const mapStateToProps = (state) => ({
     Departments: state.Departments
 })
 
-const mapDispatchToProps = { UpdateDepartment, GetAllStations, GetSelectedDepartment }
+const mapDispatchToProps = { UpdateDepartment, GetAllStations, GetSelectedDepartment,ClearSelectedDepartment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Edit))

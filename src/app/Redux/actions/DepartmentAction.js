@@ -39,7 +39,7 @@ export const GetAllDepartments = () => async dispatch => {
                     var text = item.stations.map((item) => {
                         return item.name;
                     }).join(", ")
-                    item.stations = text;
+                    item.stationstxt = text;
                 })
             dispatch({ type: ACTION_TYPES.GET_ALLDEPARTMENTS_SUCCESS, payload: response.data })
         })

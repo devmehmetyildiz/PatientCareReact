@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom';
-import cogoToast from 'cogo-toast';
+import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
 import { UpdateRole, GetAuthories, GetSelectedRole, ClearSelectedRole } from "../../Redux/actions/RoleActions"
@@ -110,11 +109,11 @@ export class Edit extends Component {
         })
         this.setState({ authories: newdata })
         const checkboxex = { ...this.checkbox }
-        var newdata = Object.keys(checkboxex)
+        var newdatacheckbox = Object.keys(checkboxex)
             .map(function (key) {
                 return checkboxex[key];
             });
-        newdata.forEach(element => {
+            newdatacheckbox.forEach(element => {
             element.checked = true
         })
     }

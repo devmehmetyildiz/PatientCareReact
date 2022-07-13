@@ -3,11 +3,8 @@ import { connect } from 'react-redux'
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import axios from 'axios';
-import { GetToken } from '../../Utils/TokenValidChecker';
 import { GetAllRoles, GetSelectedRole, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/RoleActions'
 import { withRouter } from 'react-router-dom';
-import cogoToast from 'cogo-toast';
 import Spinner from "../../shared/Spinner"
 import DeleteModal from "./Delete"
 
@@ -61,34 +58,34 @@ export class Roles extends Component {
                 sort: true,
                 hidden: true
             },
-            , {
+             {
                 dataField: 'createTime',
                 text: 'Oluşturma Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-            , {
+             {
                 dataField: 'updateTime',
                 text: 'Güncelleme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-            , {
+             {
                 dataField: 'deletetime',
                 text: 'Silme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-            , {
+             {
                 dataField: 'authories',
                 text: 'Yetkiler',
                 sort: false,
                 type: 'string'
-            }
-            , {
+            },
+             {
                 dataField: 'isActive',
                 text: 'Aktiflik Durumu',
                 sort: true,
@@ -143,7 +140,6 @@ export class Roles extends Component {
         onColumnToggle,
         toggles
     }) => (
-        console.log(toggles),
         <div className="btn-group btn-group-toggle btn-group-vertical" data-toggle="buttons">
             {
                 columns

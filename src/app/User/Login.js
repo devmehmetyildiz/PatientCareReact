@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import InputItem from "../Components/Common/Forminput"
 import Spinner from "../shared/Spinner"
 import { SetLogin } from '../Redux/actions/loginActions';
-import { Button, Form } from 'react-bootstrap';
+import {  Form } from 'react-bootstrap';
 export class Login extends Component {
     constructor(props) {
         super(props)

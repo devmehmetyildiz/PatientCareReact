@@ -58,29 +58,29 @@ export class Departments extends Component {
                 sort: true,
                 hidden: true
             },
-            , {
+             {
                 dataField: 'createTime',
                 text: 'Oluşturma Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-            , {
+             {
                 dataField: 'updateTime',
                 text: 'Güncelleme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-            , {
+             {
                 dataField: 'deletetime',
                 text: 'Silme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-            , {
-                dataField: 'stations',
+             {
+                dataField: 'stationstxt',
                 text: 'İstasyonlar',
                 sort: false,
                 type: 'string'
@@ -140,7 +140,6 @@ export class Departments extends Component {
         onColumnToggle,
         toggles
     }) => (
-        console.log(toggles),
         <div className="btn-group btn-group-toggle btn-group-vertical" data-toggle="buttons">
             {
                 columns

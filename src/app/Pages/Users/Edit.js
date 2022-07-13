@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom';
-import cogoToast from 'cogo-toast';
+import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
 import { EditUser, ClearSelectedUser, GetSelectedUser } from "../../Redux/actions/UserAction"

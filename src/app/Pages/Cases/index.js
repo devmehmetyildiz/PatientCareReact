@@ -4,7 +4,6 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import { withRouter } from 'react-router-dom';
-import ToggleColumns from "../../Components/Common/ToggleColumns"
 import { GetAllCases, GetSelectedCase, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/CaseActions'
 import Spinner from '../../shared/Spinner'
 import DeleteCaseModal from "./Delete"
@@ -63,28 +62,28 @@ export class Cases extends Component {
                 sort: true,
                 hidden: true
             },
-            , {
+             {
                 dataField: 'createTime',
                 text: 'Oluşturma Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-            , {
+            {
                 dataField: 'updateTime',
                 text: 'Güncelleme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-            , {
+             {
                 dataField: 'deletetime',
                 text: 'Silme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-            , {
+             {
                 dataField: 'isActive',
                 text: 'Aktiflik Durumu',
                 sort: true,

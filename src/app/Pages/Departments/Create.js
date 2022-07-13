@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom';
-import cogoToast from 'cogo-toast';
+import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { CreateDepartment } from "../../Redux/actions/DepartmentAction"
+import { CreateDepartment  } from "../../Redux/actions/DepartmentAction"
 import { GetAllStations } from "../../Redux/actions/StationAction"
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
