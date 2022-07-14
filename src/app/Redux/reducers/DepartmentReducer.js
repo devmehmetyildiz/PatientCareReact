@@ -14,6 +14,7 @@ const INITIAL_STATE = {
     deleteTime: null,
     isActive: true,
     isAdded:false,
+    stationstxt:"",
     stations : []
   },
   errmsg: "",

@@ -3,13 +3,15 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { EditUser, ClearSelectedUser, GetSelectedUser } from "../../Redux/actions/UserAction"
+import { EditUser, GetSelectedUser, ClearSelectedUser } from "../../Redux/actions/UserAction"
 import { GetStationByDepartments, GetStationsByUser, ClearfilteredStation, GetAllStations } from "../../Redux/actions/StationAction"
 import { GetAllRoles } from "../../Redux/actions/RoleActions"
 import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
 import { Form } from 'react-bootstrap'
+import Popup from "../../Utils/Popup"
+
 export class Edit extends Component {
 
     constructor(props) {
@@ -17,11 +19,12 @@ export class Edit extends Component {
         const currentitem = {
             id: 0,
             name: "",
-            normalizedName: null,
-            concurrencyStamp: null,
+            surname: "",
+            normalizedUsername: "",
+            concurrencyStamp: "",
             createdUser: "",
-            updatedUser: null,
-            deleteUser: null,
+            updatedUser: "",
+            deleteUser: "",
             createTime: null,
             updateTime: null,
             deleteTime: null,
@@ -46,30 +49,97 @@ export class Edit extends Component {
             { label: 'TR', value: 'TR' },
             { label: 'EN', value: 'EN' }
         ]
+        const currentlanguage = {}
         const passswordHashConfirm = ""
-        const { selected_stations, selected_departments, selected_roles } = []
-        this.state = { currentitem, selected_departments, selected_stations, selected_roles, language, passswordHashConfirm };
+        const selected_stations = []
+        const selected_departments = []
+        const selected_roles = []
+        const roles = []
+        const stations = []
+        const departments = []
+        this.state = {
+            currentitem, selected_departments, selected_stations, selected_roles,
+            departments, stations, roles, language, passswordHashConfirm, currentlanguage
+        };
     }
 
     componentDidMount() {
         this.getData()
     }
 
-    componentWillUnmount() {
-        this.props.ClearSelectedUser()
+    getData = async () => {
+        this.props.GetSelectedUser(this.props.match.params.UserId);
+        this.props.GetAllDepartments();
+        this.props.GetAllRoles();
+        this.props.GetAllStations();
     }
 
-    getData = async () => {
-        await this.props.GetAllDepartments();
-        await this.props.GetAllRoles();
-        await this.props.GetAllStations();
-        await this.props.ClearfilteredStation();
-        await this.props.GetSelectedUser()
+    componentDidUpdate() {
+        if (this.props.Stations.list.length > 0 &&
+            this.props.Departments.list.length > 0 &&
+            this.props.Roles.list.length > 0 &&
+            this.state.stations.length === 0 &&
+            this.state.departments.length === 0 &&
+            Object.keys(this.props.Users.selected_user).length !== 0 &&
+            this.state.roles.length === 0) {
+
+            const currentstationslist = (this.props.Users.selected_user.stations || []).map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+
+            const currentdepartmentslist = (this.props.Users.selected_user.departments || []).map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+
+            const currentroleslist = (this.props.Users.selected_user.roles || []).map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+
+            const stationslist = (this.props.Stations.list || []).map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+            const departmentlist = (this.props.Departments.list || []).map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+            const roleslist = (this.props.Roles.list || []).map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+            this.setState({ stations: stationslist, departments: departmentlist, roles: roleslist, selected_stations : currentstationslist , 
+                              selected_roles : currentroleslist, selected_departments:currentdepartmentslist
+            })
+        }
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
-        this.postData();
+
+        if (this.state.currentitem.passwordHash === this.state.passswordHashConfirm) {
+
+            let stations = [];
+            let roles = [];
+            let departments = [];
+            (this.state.selected_stations || []).map(element => {
+                stations.push(this.props.Stations.list.find(station => station.concurrencyStamp === element.value))
+            });
+            (this.state.selected_roles || []).map(element => {
+                roles.push(this.props.Roles.list.find(roles => roles.concurrencyStamp === element.value))
+            });
+            (this.state.selected_departments || []).map(element => {
+                departments.push(this.props.Departments.list.find(department => department.concurrencyStamp === element.value))
+            });
+
+            const newdata = { ...this.state.currentitem }
+            newdata.stations = stations
+            newdata.departments = departments
+            newdata.roles = roles
+            newdata.language = this.state.currentlanguage.value
+            this.setState({ currentitem: newdata }, () => {
+                this.props.CreateUser(this.state.currentitem, this.props.history)
+            })
+        } else {
+            Popup("Error", "Kullanıcı Ekleme", "Lütfen Parolaları Doğru Giriniz")
+
+        }
     }
 
     goBack = (e) => {
@@ -86,66 +156,64 @@ export class Edit extends Component {
     }
 
     handleselectstation = (e) => {
-        const newdata = { ...this.state.currentitem }
-        newdata.stations = (e || []).map((item) => {
-            return this.props.Stations.list.find(station => station.concurrencyStamp === item.value);
-        })
-        this.setState({ currentitem: newdata, selected_stations: e }, () => {
-        })
+        this.setState({ selected_stations: e })
+    }
+
+    handlechangepassword = (e) => {
+        this.setState({ passswordHashConfirm: e.target.value })
     }
 
     handleselectdepartments = (e) => {
-        let stations = this.state.selected_stations
-        const newdata = { ...this.state.currentitem }
-        newdata.departments = (e || []).map((item) => {
-            return this.props.Departments.list.find(department => department.concurrencyStamp === item.value);
-        })
-        const departments = (e || []).map((item) => {
-            return item.value
-        })
-        if (e === null) {
-            this.props.ClearfilteredStation()
-            newdata.stations = []
-            stations = []
-        } else {
-            this.props.GetStationByDepartments(departments);
-            stations = []
-        }
-        this.setState({ currentitem: newdata, selected_departments: e, selected_stations: stations }, () => {
+        this.setState({ selected_departments: e }, () => {
+            const Stations = [];
+            (this.state.stations || []).map(item => {
+                let returnitem = {};
+                (this.state.selected_departments || []).map(department => {
+                    let departmentobj = this.props.Departments.list.find(u => u.concurrencyStamp === department.value)
+                    if (departmentobj.stations.filter(e => e.concurrencyStamp === item.value).length > 0) {
+                        returnitem = item
+                    }
+                });
+                if (Object.keys(returnitem).length !== 0) {
+                    Stations.push(returnitem)
+                }
+            })
+            const newselectedstation = [];
+            (this.state.selected_stations || []).map(element => {
+                if (Stations.filter(e => e.value === element.value).length > 0) {
+                    newselectedstation.push(element)
+                }
+            });
+            this.setState({ selected_stations: newselectedstation })
         })
     }
 
     handleselectroles = (e) => {
-        const newdata = { ...this.state.currentitem }
-        newdata.roles = (e || []).map((item) => {
-            return this.props.Roles.list.find(role => role.concurrencyStamp === item.value);
-        })
-        this.setState({ currentitem: newdata, selected_roles: e }, () => {
-        })
+        this.setState({ selected_roles: e })
     }
 
     handleselectLanguage = (e) => {
-        const newdata = { ...this.state.currentitem }
-        newdata.language = (e || {}).value
-        this.setState({ currentitem: newdata }, () => {
-        })
+        this.setState({ currentlanguage: e })
     }
-
-    postData = async () => {
-       // this.props.createdUser(this.state.currentitem, this.props.history)
-    };
 
     render() {
         const { isLoading } = this.props.Users
-        const Departments = this.props.Departments.list.map((item, index) => {
-            return { value: item.concurrencyStamp, label: item.name }
+        const Departments = this.state.departments
+        const Roles = this.state.roles
+        const Stations = [];
+        (this.state.stations || []).map(item => {
+            let returnitem = {};
+            (this.state.selected_departments || []).map(department => {
+                let departmentobj = this.props.Departments.list.find(u => u.concurrencyStamp === department.value)
+                if (departmentobj.stations.filter(e => e.concurrencyStamp === item.value).length > 0) {
+                    returnitem = item
+                }
+            });
+            if (Object.keys(returnitem).length !== 0) {
+                Stations.push(returnitem)
+            }
         })
-        const Stations = this.props.Stations.filtered_stations.map((item, index) => {
-            return { value: item.concurrencyStamp, label: item.name }
-        })
-        const Roles = this.props.Roles.list.map((item, index) => {
-            return { value: item.concurrencyStamp, label: item.name }
-        })
+
         const Languages = this.state.language
 
         return (
@@ -199,7 +267,7 @@ export class Edit extends Component {
                                             <InputItem
                                                 itemrowspan="4"
                                                 itemname="Telefon"
-                                                itemid="phonenumber"
+                                                itemid="phoneNumber"
                                                 itemvalue={this.state.currentitem.phoneNumber}
                                                 itemtype="text"
                                                 itemplaceholder="Telefon"
@@ -246,10 +314,11 @@ export class Edit extends Component {
                                             <InputItem
                                                 itemrowspan="1"
                                                 itemname="Şifre Yeniden"
-                                                itemid="passwordHash"
+                                                itemid="passwordHashre"
                                                 itemvalue={this.state.passswordHashConfirm}
                                                 itemtype="password"
                                                 itemplaceholder="Şifre Yeniden"
+                                                itemchange={this.handlechangepassword}
                                             />
                                         </div>
                                         <div className='row'>
@@ -307,9 +376,8 @@ export class Edit extends Component {
                                                 <Form.Group className="row" >
                                                     <div style={{ margin: '0 0 0 -10px' }} className='col-12'>
                                                         <Select
-                                                            value={this.state.currentitem.language}
+                                                            value={this.state.currentlanguage}
                                                             onChange={this.handleselectLanguage}
-                                                            isMulti={true}
                                                             options={Languages}
                                                         />
                                                     </div>
@@ -320,7 +388,7 @@ export class Edit extends Component {
                                                 itemname="Kullanıcı Numarası"
                                                 itemid="userID"
                                                 itemvalue={this.state.currentitem.userID}
-                                                itemtype="text"
+                                                itemtype="number"
                                                 itemplaceholder="Kullanıcı Numarası"
                                                 itemchange={this.handleonchange}
                                             />
@@ -347,6 +415,9 @@ const mapStateToProps = (state) => ({
     Departments: state.Departments
 })
 
-const mapDispatchToProps = { GetAllRoles, GetStationByDepartments, GetStationsByUser, GetAllDepartments, ClearfilteredStation, GetAllStations, EditUser, ClearSelectedUser, GetSelectedUser }
+const mapDispatchToProps = {
+    EditUser, GetAllRoles, GetStationByDepartments, GetStationsByUser, GetAllDepartments, ClearfilteredStation, GetAllStations,
+    GetSelectedUser, ClearSelectedUser
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Edit))

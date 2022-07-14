@@ -87,7 +87,7 @@ export const DeleteUser = (Item) => async dispatch => {
         })
 }
 
-export const CreateUser = (Item) => async dispatch => {
+export const CreateUser = (Item, historypusher) => async dispatch => {
     dispatch({ type: ACTION_TYPES.CREATE_USER_INIT })
     await axios({
         method: 'post',
@@ -97,13 +97,14 @@ export const CreateUser = (Item) => async dispatch => {
     })
         .then(() => {
             dispatch({ type: ACTION_TYPES.CREATE_USER_SUCCESS })
+            historypusher.push("/Users")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.CREATE_USER_ERROR, payload: error })
         })
 }
 
-export const EditUser = (Item) => async dispatch => {
+export const EditUser = (Item, historypusher) => async dispatch => {
     dispatch({ type: ACTION_TYPES.EDIT_USER_INIT })
     await axios({
         method: 'post',
@@ -114,6 +115,7 @@ export const EditUser = (Item) => async dispatch => {
         .then(() => {
             dispatch({ type: ACTION_TYPES.EDIT_USER_SUCCESS })
             dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDUSER })
+            historypusher.push("/Users")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.EDIT_USER_ERROR, payload: error })

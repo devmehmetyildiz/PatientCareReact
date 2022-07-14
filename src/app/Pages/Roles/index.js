@@ -80,7 +80,7 @@ export class Roles extends Component {
                 hidden: true
             },
              {
-                dataField: 'authories',
+                dataField: 'authoriestxt',
                 text: 'Yetkiler',
                 sort: false,
                 type: 'string'

@@ -19,12 +19,12 @@ export class Create extends Component {
         const currentitem = {
             id: 0,
             name: "",
-            surname:"",
-            normalizedUsername: null,
-            concurrencyStamp: null,
+            surname: "",
+            normalizedUsername: "",
+            concurrencyStamp: "",
             createdUser: "",
-            updatedUser: null,
-            deleteUser: null,
+            updatedUser: "",
+            deleteUser: "",
             createTime: null,
             updateTime: null,
             deleteTime: null,
@@ -59,7 +59,7 @@ export class Create extends Component {
         const departments = []
         this.state = {
             currentitem, selected_departments, selected_stations, selected_roles,
-            departments, stations, roles, language, passswordHashConfirm,currentlanguage
+            departments, stations, roles, language, passswordHashConfirm, currentlanguage
         };
     }
 
@@ -101,7 +101,7 @@ export class Create extends Component {
             let stations = [];
             let roles = [];
             let departments = [];
-            (this.state.selected_stations|| []).map(element => {
+            (this.state.selected_stations || []).map(element => {
                 stations.push(this.props.Stations.list.find(station => station.concurrencyStamp === element.value))
             });
             (this.state.selected_roles || []).map(element => {
@@ -116,9 +116,7 @@ export class Create extends Component {
             newdata.departments = departments
             newdata.roles = roles
             newdata.language = this.state.currentlanguage.value
-
             this.setState({ currentitem: newdata }, () => {
-                console.log('currentitem: ', this.state.currentitem);
                 this.props.CreateUser(this.state.currentitem, this.props.history)
             })
         } else {
@@ -373,7 +371,7 @@ export class Create extends Component {
                                                 itemname="Kullanıcı Numarası"
                                                 itemid="userID"
                                                 itemvalue={this.state.currentitem.userID}
-                                                itemtype="text"
+                                                itemtype="number"
                                                 itemplaceholder="Kullanıcı Numarası"
                                                 itemchange={this.handleonchange}
                                             />

@@ -56,7 +56,7 @@ class AppRoutes extends Component {
 
           <ProtectedRoute exact path="/Users" component={ Users } />
           <ProtectedRoute exact path="/Users/Create" component={ UsersCreate } />
-          <ProtectedRoute exact path="/Users/:StationId" component={ UsersEdit } />
+          <ProtectedRoute exact path="/Users/:UserId" component={ UsersEdit } />
 
           <Route exact path="/Login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />

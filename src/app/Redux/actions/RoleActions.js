@@ -56,7 +56,7 @@ export const GetAllRoles = () => async dispatch => {
                 var text = item.authories.map((item) => {
                     return item.name;
                 }).join(", ")
-                item.authories = text;
+                item.authoriestxt = text;
             })
             dispatch({ type: ACTION_TYPES.GET_ROLES_SUCCESS, payload: response.data })
 
