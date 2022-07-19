@@ -36,7 +36,6 @@ export const GetAllUnits = () => async dispatch => {
     })
         .then(response => {
             response.data.forEach((item, index) => {
-                console.log('item: ', item);
                 var text = item.departments.map((item) => {
                     return item.name;
                 }).join(", ")
