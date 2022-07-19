@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { CreateCase } from "../../Redux/actions/CaseActions"
+import { CreateUnit } from "../../Redux/actions/UnitActions"
 import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
@@ -14,7 +14,7 @@ export class Create extends Component {
         super(props)
         const currentitem = {
             id: 0,
-            caseStatus: 0,
+            unittype: 0,
             name: "",
             concurrencyStamp: null,
             createdUser: "",
@@ -23,9 +23,9 @@ export class Create extends Component {
             createTime: null,
             updateTime: null,
             deleteTime: null,
-            departmentstxt: "",
-            departments: [],
-            isActive: true
+            isActive: true,
+            departmentstxt : "",
+            departments : []
         }
         const selecteddepartments = []
         const departments = []
@@ -41,7 +41,7 @@ export class Create extends Component {
         const newdata = { ...this.state.currentitem }
         newdata.departments = departments
         this.setState({ currentitem: newdata }, () => {
-            this.props.CreateCase(this.state.currentitem, this.props.history)
+            this.props.CreateUnit(this.state.currentitem, this.props.history)
         })
     }
 
@@ -59,7 +59,7 @@ export class Create extends Component {
 
     goBack = (e) => {
         e.preventDefault()
-        this.props.history.push("/Cases")
+        this.props.history.push("/Units")
     }
 
     handleonchange = (e) => {
@@ -74,7 +74,7 @@ export class Create extends Component {
 
     render() {
         const list = this.state.departments
-        const isLoading = (this.props.Departments.isLoading || this.props.Cases.isLoading)
+        const isLoading = (this.props.Departments.isLoading || this.props.Units.isLoading)
         return (
             <>
                 {isLoading ? <Spinner /> :
@@ -82,25 +82,25 @@ export class Create extends Component {
                         <div className="col-12 grid-margin">
                             <div className="card">
                                 <div className="card-body">
-                                    <h4 className="card-title">Durumlar > Yeni</h4>
+                                    <h4 className="card-title">Birimler > Yeni</h4>
                                     <form className="form-sample" onSubmit={this.handlesubmit}>
                                         <div className="row">
                                             <InputItem
                                                 itemrowspan="1"
-                                                itemname="isim"
+                                                itemname="Birim Adı"
                                                 itemid="name"
                                                 itemvalue={this.state.currentitem.name}
                                                 itemtype="text"
-                                                itemplaceholder="İsim"
+                                                itemplaceholder="Birim Adı"
                                                 itemchange={this.handleonchange}
                                             />
                                             <InputItem
                                                 itemrowspan="1"
-                                                itemname="Durum Değeri"
+                                                itemname="Birim Değeri"
                                                 itemid="caseStatus"
-                                                itemvalue={this.state.currentitem.caseStatus}
+                                                itemvalue={this.state.currentitem.unittype}
                                                 itemtype="number"
-                                                itemplaceholder="Durum Değeri"
+                                                itemplaceholder="Birim Değeri"
                                                 itemchange={this.handleonchange}
                                             />
                                         </div>
@@ -133,10 +133,10 @@ export class Create extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    Cases: state.Cases,
+    Units: state.Units,
     Departments: state.Departments
 })
 
-const mapDispatchToProps = { CreateCase, GetAllDepartments }
+const mapDispatchToProps = { CreateUnit, GetAllDepartments }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))

@@ -2,14 +2,18 @@ import React, { Component } from 'react'
 import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import { GetAllDepartments, CloseDeleteModal, DeleteDepartment } from '../../Redux/actions/DepartmentAction'
+import { GetAllDepartments, CloseDeleteModal, DeleteDepartment, ClearSelectedDepartment } from '../../Redux/actions/DepartmentAction'
 
 export class Delete extends Component {
 
     DeleteHandle = async () => {
-       await this.props.DeleteDepartment(this.props.Departments.selected_department)
-       await this.props.GetAllDepartments()
-       await this.props.CloseDeleteModal()
+        await this.props.DeleteDepartment(this.props.Departments.selected_department)
+        await this.props.GetAllDepartments()
+        await this.props.CloseDeleteModal()
+    }
+
+    componentWillUnmount() {
+        this.props.ClearSelectedDepartment()
     }
 
     render() {
@@ -43,7 +47,7 @@ const mapStateToProps = (state) => ({
     Departments: state.Departments,
 })
 
-const mapDispatchToProps = { GetAllDepartments,  CloseDeleteModal, DeleteDepartment }
+const mapDispatchToProps = { GetAllDepartments, CloseDeleteModal, DeleteDepartment, ClearSelectedDepartment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Delete))
 

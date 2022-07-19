@@ -1,11 +1,16 @@
-import { ACTION_TYPES } from "../actions/CaseActions"
+import { ACTION_TYPES } from "../actions/StockActions"
 
 const INITIAL_STATE = {
   list: [],
-  selected_case: {
+  selected_stock: {
     id: 0,
-    caseStatus: 0,
     name: "",
+    description: "",
+    skt: "",
+    unitid: "",
+    unit: {},
+    departmentid: "",
+    department: {},
     concurrencyStamp: null,
     createdUser: "",
     updatedUser: null,
@@ -23,40 +28,40 @@ const INITIAL_STATE = {
   isModalOpen: false
 }
 
-export const caseReducer = (state = INITIAL_STATE, { type, payload }) => {
+export const StockReducer = (state = INITIAL_STATE, { type, payload }) => {
 
   switch (type) {
-    case ACTION_TYPES.GET_ALLCASES_INIT:
+    case ACTION_TYPES.GET_ALLSTOCKS_INIT:
       return { ...state, isLoading: true };
-    case ACTION_TYPES.GET_ALLCASES_SUCCESS:
+    case ACTION_TYPES.GET_ALLSTOCKS_SUCCESS:
       return { ...state, list: payload, isLoading: false }
-    case ACTION_TYPES.GET_ALLCASES_ERROR:
+    case ACTION_TYPES.GET_ALLSTOCKS_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
-    case ACTION_TYPES.GET_SELECTEDCASE_INIT:
+    case ACTION_TYPES.GET_SELECTEDSTOCK_INIT:
       return { ...state, isLoading: true }
-    case ACTION_TYPES.GET_SELECTEDCASE_SUCCESS:
-      return { ...state, selected_case: payload, isSelected: true, isLoading: false }
-    case ACTION_TYPES.GET_SELECTEDCASE_ERROR:
+    case ACTION_TYPES.GET_SELECTEDSTOCK_SUCCESS:
+      return { ...state, selected_stock: payload, isSelected: true, isLoading: false }
+    case ACTION_TYPES.GET_SELECTEDSTOCK_ERROR:
       return { ...state, errmsg: payload, isLoading: true }
-    case ACTION_TYPES.REMOVE_SELECTEDCASE:
-      return { ...state, selected_case: {}, isSelected: false }
-    case ACTION_TYPES.EDIT_CASE_INIT:
+    case ACTION_TYPES.REMOVE_SELECTEDSTOCK:
+      return { ...state, selected_stock: {}, isSelected: false }
+    case ACTION_TYPES.EDIT_STOCK_INIT:
       return { ...state, isLoading: true }
-    case ACTION_TYPES.EDIT_CASE_SUCCESS:
+    case ACTION_TYPES.EDIT_STOCK_SUCCESS:
       return { ...state, isLoading: false }
-    case ACTION_TYPES.EDIT_CASE_ERROR:
+    case ACTION_TYPES.EDIT_STOCK_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
-    case ACTION_TYPES.ADD_CASE_INIT:
+    case ACTION_TYPES.ADD_STOCK_INIT:
       return { ...state, isLoading: true }
-    case ACTION_TYPES.ADD_CASE_SUCCESS:
+    case ACTION_TYPES.ADD_STOCK_SUCCESS:
       return { ...state, isLoading: false }
-    case ACTION_TYPES.ADD_CASE_ERROR:
+    case ACTION_TYPES.ADD_STOCK_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
-    case ACTION_TYPES.DELETE_CASE_INIT:
+    case ACTION_TYPES.DELETE_STOCK_INIT:
       return { ...state, isLoading: true }
-    case ACTION_TYPES.DELETE_CASE_SUCCESS:
+    case ACTION_TYPES.DELETE_STOCK_SUCCESS:
       return { ...state, isLoading: false, isModalOpen: false }
-    case ACTION_TYPES.DELETE_CASE_ERROR:
+    case ACTION_TYPES.DELETE_STOCK_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
     case ACTION_TYPES.DELETE_MODAL_OPEN:
       return { ...state, isModalOpen: true }

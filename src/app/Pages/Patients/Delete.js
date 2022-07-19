@@ -2,19 +2,18 @@ import React, { Component } from 'react'
 import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import { GetAllCases, GetSelectedCase, CloseDeleteModal, DeleteCase, ClearSelectedCase } from '../../Redux/actions/CaseActions'
+import { GetAllPatients, CloseDeleteModal,DeletePatient, ClearSelectedPatient } from '../../Redux/actions/PatientActions'
 
 export class Delete extends Component {
 
     DeleteHandle = async () => {
-        await this.props.DeleteCase(this.props.Cases.selected_case)
-        await this.props.ClearSelectedCase()
-        await this.props.GetAllCases()
+        await this.props.DeletePatient(this.props.Patients.selected_patient)
+        await this.props.GetAllPatients()
         await this.props.CloseDeleteModal()
     }
 
     componentWillUnmount() {
-        this.props.ClearSelectedCase()
+        this.props.ClearSelectedPatient()
     }
 
     render() {
@@ -27,17 +26,17 @@ export class Delete extends Component {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Durum Silme
+                        Tanımlı Hasta Silme
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <p>
-                        {this.props.Cases.selected_case.name} durumunu silmek istediğinize Eminmisiniz?
+                        {this.props.Patients.selected_patient.name} {this.props.Patients.selected_patient.surname} hastasını silmek istediğinize Eminmisiniz?
                     </p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={() => { this.props.CloseDeleteModal() }}>Vazgeç</Button>
-                    <Button onClick={() => { this.DeleteHandle()}}>Sil</Button>
+                    <Button onClick={() => { this.DeleteHandle() }}>Sil</Button>
                 </Modal.Footer>
             </Modal>
         )
@@ -45,10 +44,10 @@ export class Delete extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    Cases: state.Cases,
+    Patients: state.Patients,
 })
 
-const mapDispatchToProps = { GetAllCases, GetSelectedCase, CloseDeleteModal, DeleteCase, ClearSelectedCase }
+const mapDispatchToProps = { GetAllPatients, CloseDeleteModal,DeletePatient,ClearSelectedPatient }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Delete))
 

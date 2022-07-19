@@ -83,6 +83,10 @@ export class Edit extends Component {
             Object.keys(this.props.Users.selected_user).length !== 0 &&
             this.state.roles.length === 0) {
 
+            const newdata = { ...this.props.Users.selected_user }
+
+            const currentlanguage = { value: this.props.Users.selected_user.language, label : this.props.Users.selected_user.language }
+
             const currentstationslist = (this.props.Users.selected_user.stations || []).map((item, index) => {
                 return { value: item.concurrencyStamp, label: item.name }
             })
@@ -104,42 +108,36 @@ export class Edit extends Component {
             const roleslist = (this.props.Roles.list || []).map((item, index) => {
                 return { value: item.concurrencyStamp, label: item.name }
             })
-            this.setState({ stations: stationslist, departments: departmentlist, roles: roleslist, selected_stations : currentstationslist , 
-                              selected_roles : currentroleslist, selected_departments:currentdepartmentslist
+            this.setState({
+                stations: stationslist, departments: departmentlist, roles: roleslist, selected_stations: currentstationslist,
+                selected_roles: currentroleslist, selected_departments: currentdepartmentslist, currentitem: newdata ,currentlanguage:currentlanguage
             })
         }
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
+        let stations = [];
+        let roles = [];
+        let departments = [];
+        (this.state.selected_stations || []).map(element => {
+            stations.push(this.props.Stations.list.find(station => station.concurrencyStamp === element.value))
+        });
+        (this.state.selected_roles || []).map(element => {
+            roles.push(this.props.Roles.list.find(roles => roles.concurrencyStamp === element.value))
+        });
+        (this.state.selected_departments || []).map(element => {
+            departments.push(this.props.Departments.list.find(department => department.concurrencyStamp === element.value))
+        });
 
-        if (this.state.currentitem.passwordHash === this.state.passswordHashConfirm) {
-
-            let stations = [];
-            let roles = [];
-            let departments = [];
-            (this.state.selected_stations || []).map(element => {
-                stations.push(this.props.Stations.list.find(station => station.concurrencyStamp === element.value))
-            });
-            (this.state.selected_roles || []).map(element => {
-                roles.push(this.props.Roles.list.find(roles => roles.concurrencyStamp === element.value))
-            });
-            (this.state.selected_departments || []).map(element => {
-                departments.push(this.props.Departments.list.find(department => department.concurrencyStamp === element.value))
-            });
-
-            const newdata = { ...this.state.currentitem }
-            newdata.stations = stations
-            newdata.departments = departments
-            newdata.roles = roles
-            newdata.language = this.state.currentlanguage.value
-            this.setState({ currentitem: newdata }, () => {
-                this.props.CreateUser(this.state.currentitem, this.props.history)
-            })
-        } else {
-            Popup("Error", "Kullanıcı Ekleme", "Lütfen Parolaları Doğru Giriniz")
-
-        }
+        const newdata = { ...this.state.currentitem }
+        newdata.stations = stations
+        newdata.departments = departments
+        newdata.roles = roles
+        newdata.language = this.state.currentlanguage.value
+        this.setState({ currentitem: newdata }, () => {
+            this.props.EditUser(this.state.currentitem, this.props.history)
+        })
     }
 
     goBack = (e) => {
@@ -157,10 +155,6 @@ export class Edit extends Component {
 
     handleselectstation = (e) => {
         this.setState({ selected_stations: e })
-    }
-
-    handlechangepassword = (e) => {
-        this.setState({ passswordHashConfirm: e.target.value })
     }
 
     handleselectdepartments = (e) => {
@@ -197,7 +191,7 @@ export class Edit extends Component {
     }
 
     render() {
-        const { isLoading } = this.props.Users
+        const  isLoading  = (this.props.Users.isLoading || this.props.Stations.isLoading || this.props.Roles.isLoading || this.props.Departments.isLoading)
         const Departments = this.state.departments
         const Roles = this.state.roles
         const Stations = [];
@@ -234,6 +228,7 @@ export class Edit extends Component {
                                                 itemtype="text"
                                                 itemplaceholder="Kullanıcı Adı"
                                                 itemchange={this.handleonchange}
+                                                readonly={true}
                                             />
                                             <InputItem
                                                 itemrowspan="4"
@@ -299,26 +294,6 @@ export class Edit extends Component {
                                                 itemtype="text"
                                                 itemplaceholder="Adres"
                                                 itemchange={this.handleonchange}
-                                            />
-                                        </div>
-                                        <div className='row'>
-                                            <InputItem
-                                                itemrowspan="1"
-                                                itemname="Şifre"
-                                                itemid="passwordHash"
-                                                itemvalue={this.state.currentitem.passwordHash}
-                                                itemtype="password"
-                                                itemplaceholder="Şifre"
-                                                itemchange={this.handleonchange}
-                                            />
-                                            <InputItem
-                                                itemrowspan="1"
-                                                itemname="Şifre Yeniden"
-                                                itemid="passwordHashre"
-                                                itemvalue={this.state.passswordHashConfirm}
-                                                itemtype="password"
-                                                itemplaceholder="Şifre Yeniden"
-                                                itemchange={this.handlechangepassword}
                                             />
                                         </div>
                                         <div className='row'>
@@ -395,7 +370,7 @@ export class Edit extends Component {
                                         </div>
                                         <div className='row d-flex pr-5 justify-content-end align-items-right'>
                                             <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
-                                            <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
+                                            <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Güncelle</button>
                                         </div>
                                     </form>
                                 </div>

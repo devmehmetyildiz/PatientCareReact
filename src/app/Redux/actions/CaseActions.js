@@ -34,7 +34,15 @@ export const GetAllCases = () => async dispatch => {
         url: process.env.REACT_APP_BACKEND_URL + '/Case/GetAll',
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
-        .then(response => { dispatch({ type: ACTION_TYPES.GET_ALLCASES_SUCCESS, payload: response.data }) })
+        .then(response => {
+            response.data.forEach((item, index) => {
+                var text = item.departments.map((item) => {
+                    return item.name;
+                }).join(", ")
+                item.departmentstxt = text;
+            })
+            { dispatch({ type: ACTION_TYPES.GET_ALLCASES_SUCCESS, payload: response.data }) }
+        })
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_ALLCASES_ERROR, payload: error }) })
 }
 

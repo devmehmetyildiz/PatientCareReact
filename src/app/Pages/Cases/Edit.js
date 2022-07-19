@@ -2,22 +2,19 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
-import { GetSelectedCase, UpdateCase, ClearSelectedCase } from '../../Redux/actions/CaseActions';
-import { GetCurrentUser } from '../../Redux/actions/loginActions';
 import "../../../assets/styles/Pages/Create.scss"
+import { UpdateCase, GetSelectedCase, ClearSelectedCase } from "../../Redux/actions/CaseActions"
+import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
 import Spinner from '../../shared/Spinner'
-
-
+import Select from 'react-select';
 export class Edit extends Component {
 
     constructor(props) {
         super(props)
         const currentitem = {
             id: 0,
-            caseGroup: "",
             caseStatus: 0,
             name: "",
-            normalizedName: null,
             concurrencyStamp: null,
             createdUser: "",
             updatedUser: null,
@@ -25,27 +22,48 @@ export class Edit extends Component {
             createTime: null,
             updateTime: null,
             deleteTime: null,
+            departmentstxt: "",
+            departments: [],
             isActive: true
         }
-        this.state = { currentitem };
+        const selecteddepartments = []
+        const departments = []
+        this.state = { currentitem, selecteddepartments, departments };
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
-        this.postData();
-    }
-
-    componentWillUnmount() {
-        this.props.ClearSelectedCase()
+        let departments = []
+        this.state.selecteddepartments.forEach(element => {
+            departments.push(this.props.Departments.list.find(station => station.concurrencyStamp === element.value))
+        });
+        const newdata = { ...this.state.currentitem }
+        newdata.departments = departments
+        this.setState({ currentitem: newdata }, () => {
+            this.props.UpdateCase(this.state.currentitem, this.props.history)
+        })
     }
 
     componentDidMount() {
-       this.getData()
+        this.props.GetSelectedCase(this.props.match.params.CaseId);
+        this.props.GetAllDepartments();
     }
+    componentDidUpdate() {
+        if (this.props.Departments.list.length > 0 &&
+            this.state.departments.length === 0 &&
+            Object.keys(this.props.Cases.selected_case).length !== 0 &&
+            !this.props.Departments.isLoading &&
+            !this.props.Cases.isLoading) {
 
-    getData = async () => {
-        await this.props.GetSelectedCase(this.props.match.params.CaseId)
-        this.setState({ currentitem: this.props.Cases.selected_case })
+            const prevData = this.props.Cases.selected_case.departments.map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+
+            const list = this.props.Departments.list.map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+            this.setState({ departments: list, selecteddepartments: prevData, currentitem: this.props.Cases.selected_case })
+        }
     }
 
     goBack = (e) => {
@@ -54,41 +72,39 @@ export class Edit extends Component {
     }
 
     handleonchange = (e) => {
-        console.log('this.state.currentitem:')
         const newdata = { ...this.state.currentitem }
         newdata[e.target.id] = e.target.value
-        this.setState({ currentitem: newdata }, () => {
-        })
-
+        this.setState({ currentitem: newdata })
     }
 
-    postData = async () => {
-        this.props.UpdateCase(this.state.currentitem, this.props.history)
-    };
+    handleselect = (e) => {
+        this.setState({ selecteddepartments: e })
+    }
 
     render() {
-
-
-
+        const list = this.state.departments
+        const isLoading = (this.props.Departments.isLoading || this.props.Cases.isLoading)
         return (
-            <div>
-                {this.props.Cases.isLoading ? <Spinner /> :
+            <>
+                {isLoading ? <Spinner /> :
                     <div className='Page'>
                         <div className="col-12 grid-margin">
                             <div className="card">
                                 <div className="card-body">
-                                    <h4 className="card-title">Durumlar > Güncelle</h4>
+                                    <h4 className="card-title">Durumlar > Yeni</h4>
                                     <form className="form-sample" onSubmit={this.handlesubmit}>
                                         <div className="row">
                                             <InputItem
-                                                itemname="Durum Grubu"
-                                                itemid="caseGroup"
-                                                itemvalue={this.state.currentitem.caseGroup}
+                                                itemrowspan="1"
+                                                itemname="isim"
+                                                itemid="name"
+                                                itemvalue={this.state.currentitem.name}
                                                 itemtype="text"
-                                                itemplaceholder="Durum Grubu"
+                                                itemplaceholder="İsim"
                                                 itemchange={this.handleonchange}
                                             />
                                             <InputItem
+                                                itemrowspan="1"
                                                 itemname="Durum Değeri"
                                                 itemid="caseStatus"
                                                 itemvalue={this.state.currentitem.caseStatus}
@@ -97,16 +113,18 @@ export class Edit extends Component {
                                                 itemchange={this.handleonchange}
                                             />
                                         </div>
-                                        <div className="row">
-                                            <InputItem
-                                                itemrowspan="2"
-                                                itemname="İsim"
-                                                itemid="name"
-                                                itemvalue={this.state.currentitem.name}
-                                                itemtype="text"
-                                                itemplaceholder="İsim"
-                                                itemchange={this.handleonchange}
-                                            />
+                                        <div className='row'>
+                                            <label style={{ fontSize: "12px" }} className="col-form-label">Departmanlar</label>
+                                        </div>
+                                        <div className='row'>
+                                            <div style={{ marginRight: '-5px' }} className='col-12 pr-5 mb-3'>
+                                                <Select
+                                                    value={this.state.selecteddepartments}
+                                                    onChange={this.handleselect}
+                                                    isMulti={true}
+                                                    options={list}
+                                                />
+                                            </div>
                                         </div>
                                         <div className='row d-flex pr-5 justify-content-end align-items-right'>
                                             <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
@@ -118,16 +136,16 @@ export class Edit extends Component {
                         </div>
                     </div>
                 }
-            </div>
+            </>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
     Cases: state.Cases,
-    ActiveUser: state.ActiveUser
+    Departments: state.Departments
 })
 
-const mapDispatchToProps = { GetSelectedCase, UpdateCase, ClearSelectedCase, GetCurrentUser }
+const mapDispatchToProps = { UpdateCase, GetSelectedCase, GetAllDepartments }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Edit))

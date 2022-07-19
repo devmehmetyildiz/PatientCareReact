@@ -56,7 +56,6 @@ export class Create extends Component {
         const newdata = { ...this.state.currentitem }
         newdata.Stations = stations
         this.setState({ currentitem: newdata }, () => {
-            console.log('currentitem: ', this.state.currentitem);
             this.props.CreateDepartment(this.state.currentitem, this.props.history)
         })
        

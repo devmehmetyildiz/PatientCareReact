@@ -25,6 +25,26 @@ const Stations = lazy(() => import('./Pages/Stations'));
 const StationsCreate = lazy(() => import('./Pages/Stations/Create'));
 const StationsEdit = lazy(() => import('./Pages/Stations/Edit'));
 
+const Files = lazy(() => import('./Pages/Files'));
+const FilesCreate = lazy(() => import('./Pages/Files/Create'));
+const FilesEdit = lazy(() => import('./Pages/Files/Edit'));
+
+const Patients = lazy(() => import('./Pages/Patients'));
+const PatientsCreate = lazy(() => import('./Pages/Patients/Create'));
+const PatientsEdit = lazy(() => import('./Pages/Patients/Edit'));
+
+const Patienttypes = lazy(() => import('./Pages/Patienttypes'));
+const PatienttypesCreate = lazy(() => import('./Pages/Patienttypes/Create'));
+const PatienttypesEdit = lazy(() => import('./Pages/Patienttypes/Edit'));
+
+const Stocks = lazy(() => import('./Pages/Stocks'));
+const StocksCreate = lazy(() => import('./Pages/Stocks/Create'));
+const StocksEdit = lazy(() => import('./Pages/Stocks/Edit'));
+
+const Units = lazy(() => import('./Pages/Units'));
+const UnitsCreate = lazy(() => import('./Pages/Units/Create'));
+const UnitsEdit = lazy(() => import('./Pages/Units/Edit'));
+
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
 const Login = lazy(() => import('./User/Login'));
@@ -53,6 +73,30 @@ class AppRoutes extends Component {
           <ProtectedRoute exact path="/Stations" component={ Stations } />
           <ProtectedRoute exact path="/Stations/Create" component={ StationsCreate } />
           <ProtectedRoute exact path="/Stations/:StationId" component={ StationsEdit } />
+
+          <ProtectedRoute exact path="/Users" component={ Users } />
+          <ProtectedRoute exact path="/Users/Create" component={ UsersCreate } />
+          <ProtectedRoute exact path="/Users/:UserId" component={ UsersEdit } />
+
+          <ProtectedRoute exact path="/Files" component={ Files } />
+          <ProtectedRoute exact path="/Files/Create" component={ FilesCreate } />
+          <ProtectedRoute exact path="/Files/:FileId" component={ FilesEdit } />
+
+          <ProtectedRoute exact path="/Patients" component={ Patients } />
+          <ProtectedRoute exact path="/Patients/Create" component={ PatientsCreate } />
+          <ProtectedRoute exact path="/Patients/:PatientId" component={ PatientsEdit } />
+
+          <ProtectedRoute exact path="/Patienttypes" component={ Patienttypes } />
+          <ProtectedRoute exact path="/Patienttypes/Create" component={ PatienttypesCreate } />
+          <ProtectedRoute exact path="/Patienttypes/:PatienttypeId" component={ PatienttypesEdit } />
+
+          <ProtectedRoute exact path="/Stocks" component={ Stocks } />
+          <ProtectedRoute exact path="/Stocks/Create" component={ StocksCreate } />
+          <ProtectedRoute exact path="/Stocks/:StockId" component={ StocksEdit } />
+
+          <ProtectedRoute exact path="/Units" component={ Units } />
+          <ProtectedRoute exact path="/Units/Create" component={ UnitsCreate } />
+          <ProtectedRoute exact path="/Units/:UnitId" component={ UnitsEdit } />
 
           <ProtectedRoute exact path="/Users" component={ Users } />
           <ProtectedRoute exact path="/Users/Create" component={ UsersCreate } />

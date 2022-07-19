@@ -3,12 +3,11 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { CreateCase } from "../../Redux/actions/CaseActions"
+import { UpdateUnit, GetSelectedUnit, ClearSelectedUnit } from "../../Redux/actions/UnitActions"
 import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
-
-export class Create extends Component {
+export class Edit extends Component {
 
     constructor(props) {
         super(props)
@@ -36,36 +35,47 @@ export class Create extends Component {
         e.preventDefault()
         let departments = []
         this.state.selecteddepartments.forEach(element => {
-            departments.push(this.props.Departments.list.find(station => station.concurrencyStamp===element.value))
+            departments.push(this.props.Departments.list.find(station => station.concurrencyStamp === element.value))
         });
         const newdata = { ...this.state.currentitem }
         newdata.departments = departments
         this.setState({ currentitem: newdata }, () => {
-            this.props.CreateCase(this.state.currentitem, this.props.history)
+            this.props.UpdateUnit(this.state.currentitem, this.props.history)
         })
     }
 
     componentDidMount() {
+        this.props.GetSelectedUnit(this.props.match.params.UnitId);
         this.props.GetAllDepartments();
     }
     componentDidUpdate() {
-        if (this.props.Departments.list.length > 0 && this.state.departments.length === 0) {
+        if ((this.props.Departments.list || []).length > 0 &&
+            this.state.departments.length === 0 &&
+            Object.keys(this.props.Units.selected_unit).length !== 0 &&
+            !this.props.Departments.isLoading &&
+            !this.props.Units.isLoading) {
+
+            const prevData = this.props.Units.selected_unit.departments.map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+
             const list = this.props.Departments.list.map((item, index) => {
                 return { value: item.concurrencyStamp, label: item.name }
             })
-            this.setState({ departments: list })
+            this.setState({ departments: list, selecteddepartments: prevData, currentitem: this.props.Units.selected_unit })
         }
     }
 
     goBack = (e) => {
         e.preventDefault()
-        this.props.history.push("/Cases")
+        this.props.history.push("/Units")
     }
 
     handleonchange = (e) => {
         const newdata = { ...this.state.currentitem }
         newdata[e.target.id] = e.target.value
         this.setState({ currentitem: newdata })
+        
     }
 
     handleselect = (e) => {
@@ -74,7 +84,7 @@ export class Create extends Component {
 
     render() {
         const list = this.state.departments
-        const isLoading = (this.props.Departments.isLoading || this.props.Cases.isLoading)
+        const isLoading = (this.props.Units.isLoading || this.props.Units.isLoading)
         return (
             <>
                 {isLoading ? <Spinner /> :
@@ -82,25 +92,25 @@ export class Create extends Component {
                         <div className="col-12 grid-margin">
                             <div className="card">
                                 <div className="card-body">
-                                    <h4 className="card-title">Durumlar > Yeni</h4>
+                                    <h4 className="card-title">Birimler > Yeni</h4>
                                     <form className="form-sample" onSubmit={this.handlesubmit}>
                                         <div className="row">
                                             <InputItem
                                                 itemrowspan="1"
-                                                itemname="isim"
+                                                itemname="Birim Adı"
                                                 itemid="name"
                                                 itemvalue={this.state.currentitem.name}
                                                 itemtype="text"
-                                                itemplaceholder="İsim"
+                                                itemplaceholder="Birim Adı"
                                                 itemchange={this.handleonchange}
                                             />
                                             <InputItem
                                                 itemrowspan="1"
-                                                itemname="Durum Değeri"
+                                                itemname="Birim Değeri"
                                                 itemid="caseStatus"
-                                                itemvalue={this.state.currentitem.caseStatus}
+                                                itemvalue={this.state.currentitem.unittype}
                                                 itemtype="number"
-                                                itemplaceholder="Durum Değeri"
+                                                itemplaceholder="Birim Değeri"
                                                 itemchange={this.handleonchange}
                                             />
                                         </div>
@@ -119,7 +129,7 @@ export class Create extends Component {
                                         </div>
                                         <div className='row d-flex pr-5 justify-content-end align-items-right'>
                                             <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
-                                            <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
+                                            <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Güncelle</button>
                                         </div>
                                     </form>
                                 </div>
@@ -133,10 +143,10 @@ export class Create extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    Cases: state.Cases,
+    Units: state.Units,
     Departments: state.Departments
 })
 
-const mapDispatchToProps = { CreateCase, GetAllDepartments }
+const mapDispatchToProps = { UpdateUnit, GetSelectedUnit, GetAllDepartments }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Edit))

@@ -4,11 +4,12 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import { withRouter } from 'react-router-dom';
-import { GetAllCases, GetSelectedCase, OpenDeleteModal, CloseDeleteModal , ClearSelectedCase } from '../../Redux/actions/CaseActions'
+import { GetAllPatienttype, GetSelectedPatienttype, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/PatienttypeActions'
 import Spinner from '../../shared/Spinner'
 import DeleteCaseModal from "./Delete"
 import { Form } from "react-bootstrap";
-export class Cases extends Component {
+
+export class Patienttypes extends React.Component {
 
     constructor(props) {
         super(props)
@@ -25,20 +26,11 @@ export class Cases extends Component {
                 sort: true,
                 type: 'number',
                 hidden: true
-            }, {
+            },  {
                 dataField: 'name',
-                text: 'İsim',
+                text: 'Hasta Tür Adı',
                 sort: true
             }, {
-                dataField: 'caseStatus',
-                text: 'Durum Değeri',
-                sort: true
-            }, {
-                dataField: 'departmentstxt',
-                text: 'Geçerli Departmanlar',
-                sort: true
-            }
-            , {
                 dataField: 'concurrencyStamp',
                 text: 'Unik ID',
                 sort: true
@@ -65,7 +57,7 @@ export class Cases extends Component {
                 type: 'date',
                 hidden: true
             },
-            {
+             {
                 dataField: 'updateTime',
                 text: 'Güncelleme Tarihi',
                 sort: true,
@@ -99,7 +91,7 @@ export class Cases extends Component {
                 },
                 events: {
                     onClick: (e, column, columnIndex, row, rowIndex) => {
-                        this.props.history.push('/Cases/' + row.id)
+                        this.props.history.push('/Patienttypes/' + row.id)
                     }
                 }
             }
@@ -159,50 +151,40 @@ export class Cases extends Component {
     );
 
     handleonaddnew = (e) => {
-        this.props.history.push("/Cases/Create")
+        this.props.history.push("/Patienttypes/Create")
     }
 
-    handleDeleteCase = async (e, row) => {
-        await this.props.GetSelectedCase(row.id)
-        await this.props.OpenDeleteModal()
+    handleDeleteCase = (e, row) => {
+        this.props.GetSelectedPatienttype(row.id)
+        this.props.OpenDeleteModal()
     }
 
     componentDidMount() {
-        this.getData()
-    }
-
-    getData = async () => {
-        console.log("index basladı")
-        await this.props.GetAllCases();
-        console.log("index bitti")
-    };
-
-    componentWillUnmount() {
-        this.props.ClearSelectedCase()
+      this.props.GetAllPatienttype();
     }
 
     render() {
         const { SearchBar } = Search;
-        const Data = this.props.Cases.list
+        const Data = this.props.Patienttypes.list
         const Columns = this.state.columns
         return (
             <div>
                 <DeleteCaseModal
-                    show={this.props.Cases.isModalOpen}
+                    show={this.props.Patienttypes.isModalOpen}
                     onHide={() => this.props.CloseDeleteModal()}
                 />
-                {this.props.Cases.isLoading ? <Spinner /> :
+                {this.props.Patienttypes.isLoading ? <Spinner /> :
                     <div className="row datatable">
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-body">
                                     <div className='row'>
                                         <div className='col-6 d-flex justify-content-start'>
-                                            <h4 className="card-title">Durumlar</h4>
+                                            <h4 className="card-title">Hasta Türleri</h4>
                                         </div>
                                         <div className='col-6 d-flex justify-content-end'>
                                            {/*  <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
-                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Durum</button>
+                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Hasta Türü</button>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -250,12 +232,12 @@ export class Cases extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    Cases: state.Cases,
+    Patienttypes: state.Patienttypes
 })
 
-const mapDispatchToProps = { GetAllCases, GetSelectedCase, OpenDeleteModal, CloseDeleteModal,ClearSelectedCase }
+const mapDispatchToProps = { GetAllPatienttype, GetSelectedPatienttype, OpenDeleteModal, CloseDeleteModal }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Patienttypes))
 
 
 

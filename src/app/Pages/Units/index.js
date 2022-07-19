@@ -3,17 +3,19 @@ import { connect } from 'react-redux'
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import { GetAllUnits,GetSelectedUnit, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/UnitActions'
 import { withRouter } from 'react-router-dom';
-import { GetAllCases, GetSelectedCase, OpenDeleteModal, CloseDeleteModal , ClearSelectedCase } from '../../Redux/actions/CaseActions'
-import Spinner from '../../shared/Spinner'
-import DeleteCaseModal from "./Delete"
-import { Form } from "react-bootstrap";
-export class Cases extends Component {
+import Spinner from "../../shared/Spinner"
+import DeleteModal from "./Delete"
 
+
+export class Units extends Component {
     constructor(props) {
         super(props)
-        const modalShow = false;
+        var currentitem = []
+        const isLoading = true
         const columnvisiblebar = false
+        const { SearchBar } = Search;
         const defaultSorted = [{
             dataField: 'Id',
             order: 'asc'
@@ -27,21 +29,13 @@ export class Cases extends Component {
                 hidden: true
             }, {
                 dataField: 'name',
-                text: 'İsim',
+                text: 'Birim Adı',
                 sort: true
             }, {
-                dataField: 'caseStatus',
-                text: 'Durum Değeri',
-                sort: true
-            }, {
-                dataField: 'departmentstxt',
-                text: 'Geçerli Departmanlar',
-                sort: true
-            }
-            , {
                 dataField: 'concurrencyStamp',
                 text: 'Unik ID',
-                sort: true
+                sort: true,
+                hidden: true
             }, {
                 dataField: 'createdUser',
                 text: 'Oluşturan Kullanıcı',
@@ -65,7 +59,7 @@ export class Cases extends Component {
                 type: 'date',
                 hidden: true
             },
-            {
+             {
                 dataField: 'updateTime',
                 text: 'Güncelleme Tarihi',
                 sort: true,
@@ -80,10 +74,17 @@ export class Cases extends Component {
                 hidden: true
             },
              {
+                dataField: 'departmentstxt',
+                text: 'Gerçerli Departmanlar',
+                sort: false,
+                type: 'string'
+            }
+            , {
                 dataField: 'isActive',
                 text: 'Aktiflik Durumu',
                 sort: true,
-                type: 'bool'
+                type: 'bool',
+                hidden: true
             }, {
                 dataField: 'update',
                 text: 'Güncelle',
@@ -99,7 +100,7 @@ export class Cases extends Component {
                 },
                 events: {
                     onClick: (e, column, columnIndex, row, rowIndex) => {
-                        this.props.history.push('/Cases/' + row.id)
+                        this.props.history.push('/Units/' + row.id)
                     }
                 }
             }
@@ -118,91 +119,84 @@ export class Cases extends Component {
                 },
                 events: {
                     onClick: (e, column, columnIndex, row, rowIndex) => {
-                        this.handleDeleteCase(e, row)
+                        this.handleDeleteRole(e, row)
                     }
                 }
             }
 
         ];
-        this.state = { columnvisiblebar, defaultSorted, columns, modalShow };
 
+        this.state = { columnvisiblebar, currentitem, defaultSorted, columns, SearchBar, isLoading };
     }
-
-
 
     CustomToggleList = ({
         columns,
         onColumnToggle,
         toggles
     }) => (
-        <div className="text-center">
-            {columns
-                .map(column => ({
-                    ...column,
-                    toggle: toggles[column.dataField]
-                }))
-                .map((column, index) => (
-                    <Form.Check
-                        type="checkbox"
-                        key={column.dataField}
-                        inline
-                        label={column.text}
-                        id={column.dataField}
-                        //aria-pressed={(column.toggle) ? "true" : "false"}
-                        checked={column.toggle}
-                        aria-checked={column.toggle ? "true" : "false"}
-                        onChange={() => onColumnToggle(column.dataField)}
-                    //onClick={() => onColumnToggle(column.dataField)}
-                    />
-                ))}
+        <div className="btn-group btn-group-toggle btn-group-vertical" data-toggle="buttons">
+            {
+                columns
+                    .map(column => ({
+                        ...column,
+                        toggle: toggles[column.dataField]
+                    }))
+                    .map(column => (
+                        <button
+                            type="button"
+                            key={column.dataField}
+                            className={`m-1 btn btn-warning ${column.toggle ? 'active' : ''}`}
+                            data-toggle="button"
+                            aria-pressed={column.toggle ? 'true' : 'false'}
+                            onClick={() => onColumnToggle(column.dataField)}
+                        >
+                            {column.text}
+                        </button>
+                    ))
+            }
         </div>
     );
 
-    handleonaddnew = (e) => {
-        this.props.history.push("/Cases/Create")
+
+    handleDeleteRole = async (e, row) => {
+        await this.props.GetSelectedUnit(row.id)
+        this.props.OpenDeleteModal()
     }
 
-    handleDeleteCase = async (e, row) => {
-        await this.props.GetSelectedCase(row.id)
-        await this.props.OpenDeleteModal()
+    changecolumnvisiblebar = () => {
+        this.setState({ columnvisiblebar: !this.state.columnvisiblebar })
+    }
+
+    handleonaddnew = (e) => {
+        this.props.history.push("/Units/Create")
     }
 
     componentDidMount() {
-        this.getData()
-    }
-
-    getData = async () => {
-        console.log("index basladı")
-        await this.props.GetAllCases();
-        console.log("index bitti")
-    };
-
-    componentWillUnmount() {
-        this.props.ClearSelectedCase()
+        this.props.GetAllUnits();
     }
 
     render() {
         const { SearchBar } = Search;
-        const Data = this.props.Cases.list
+        const Data = this.props.Units.list
         const Columns = this.state.columns
         return (
             <div>
-                <DeleteCaseModal
-                    show={this.props.Cases.isModalOpen}
+                <DeleteModal
+                    show={this.props.Units.isModalOpen}
                     onHide={() => this.props.CloseDeleteModal()}
                 />
-                {this.props.Cases.isLoading ? <Spinner /> :
+                {this.props.Units.isLoading ? <Spinner /> :
                     <div className="row datatable">
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-body">
                                     <div className='row'>
                                         <div className='col-6 d-flex justify-content-start'>
-                                            <h4 className="card-title">Durumlar</h4>
+                                            <h4 className="card-title">Birimler</h4>
                                         </div>
                                         <div className='col-6 d-flex justify-content-end'>
                                            {/*  <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
-                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Durum</button>
+                                            <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Birim</button>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -250,14 +244,9 @@ export class Cases extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    Cases: state.Cases,
+    Units: state.Units
 })
 
-const mapDispatchToProps = { GetAllCases, GetSelectedCase, OpenDeleteModal, CloseDeleteModal,ClearSelectedCase }
+const mapDispatchToProps = { GetAllUnits,GetSelectedUnit, OpenDeleteModal, CloseDeleteModal  }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))
-
-
-
-
-
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Units))

@@ -34,8 +34,8 @@ export class Edit extends Component {
     }
 
     GetData = async () => {
-        await this.props.GetSelectedDepartment(this.props.match.params.DepartmentId);
-        await this.props.GetAllStations();
+         this.props.GetSelectedDepartment(this.props.match.params.DepartmentId);
+         this.props.GetAllStations();
     }
 
     componentWillUnmount() {

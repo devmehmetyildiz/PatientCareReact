@@ -108,7 +108,7 @@ export const EditUser = (Item, historypusher) => async dispatch => {
     dispatch({ type: ACTION_TYPES.EDIT_USER_INIT })
     await axios({
         method: 'post',
-        url: process.env.REACT_APP_BACKEND_URL + '/Users/Edit',
+        url: process.env.REACT_APP_BACKEND_URL + '/Users/Update',
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })

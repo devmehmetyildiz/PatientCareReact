@@ -33,18 +33,15 @@ class Sidebar extends Component {
 
     const dropdownPaths = [
       {path:'Setting', state: 'SettingsMenuOpen'},
-      {path:'/Roles', state: 'RolesOpen'},
-      {path:'/Stations', state: 'StationsOpen'},
-      {path:'/Cases', state: 'CasesOpen'},
-      {path:'/tables', state: 'tablesMenuOpen'},
-      {path:'/maps', state: 'mapsMenuOpen'},
-      {path:'/icons', state: 'iconsMenuOpen'},
-      {path:'/charts', state: 'chartsMenuOpen'},
-      {path:'/User', state: 'userPagesMenuOpen'},
-      {path:'/error-pages', state: 'errorPagesMenuOpen'},
-      {path:'/general-pages', state: 'generalPagesMenuOpen'},
-      {path:'/ecommerce', state: 'ecommercePagesMenuOpen'},
-      {path:'/editors', state: 'editorsMenuOpen'},
+      {path:'/Users', state: 'SettingsMenuOpen'},
+      {path:'/Roles', state: 'SettingsMenuOpen'},
+      {path:'/Departments', state: 'SettingsMenuOpen'},
+      {path:'/Stations', state: 'SettingsMenuOpen'},
+      {path:'/Patients', state: 'SettingsMenuOpen'},
+      {path:'/Stocks', state: 'SettingsMenuOpen'},
+      {path:'/Files', state: 'SettingsMenuOpen'},
+      {path:'/Cases', state: 'SettingsMenuOpen'},
+      {path:'/Units', state: 'SettingsMenuOpen'},
     ];
 
     dropdownPaths.forEach((obj => {
@@ -98,11 +95,16 @@ class Sidebar extends Component {
             <Collapse in={ this.state.SettingsMenuOpen }>
               <div>
                 <ul className="nav flex-column sub-menu">
-                  <li className="nav-item"> <Link className={ this.isPathActive('/Cases') ? 'nav-link active' : 'nav-link' } to="/Cases">Durumlar</Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/Roles') ? 'nav-link active' : 'nav-link' } to="/Roles">Roller</Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/Stations') ? 'nav-link active' : 'nav-link' } to="/Stations">İstasyonlar</Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/Departments') ? 'nav-link active' : 'nav-link' } to="/Departments">Departmanlar</Link></li>
                   <li className="nav-item"> <Link className={ this.isPathActive('/Users') ? 'nav-link active' : 'nav-link' } to="/Users">Kullanıcılar</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Roles') ? 'nav-link active' : 'nav-link' } to="/Roles">Roller</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Departments') ? 'nav-link active' : 'nav-link' } to="/Departments">Departmanlar</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Stations') ? 'nav-link active' : 'nav-link' } to="/Stations">İstasyonlar</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Patients') ? 'nav-link active' : 'nav-link' } to="/Patients">Tanımlı Hastalar</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Stocks') ? 'nav-link active' : 'nav-link' } to="/Stocks">Tanımlı Ürünler</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Files') ? 'nav-link active' : 'nav-link' } to="/Files">Dosyalar</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Patienttypes') ? 'nav-link active' : 'nav-link' } to="/Patienttypes">Hasta Türleri</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Cases') ? 'nav-link active' : 'nav-link' } to="/Cases">Durumlar</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Units') ? 'nav-link active' : 'nav-link' } to="/Units">Birimler</Link></li>
                 </ul>
               </div>
             </Collapse>

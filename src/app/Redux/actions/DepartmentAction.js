@@ -35,12 +35,12 @@ export const GetAllDepartments = () => async dispatch => {
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => {
-                response.data.forEach((item, index) => {
-                    var text = item.stations.map((item) => {
-                        return item.name;
-                    }).join(", ")
-                    item.stationstxt = text;
-                })
+            response.data.forEach((item, index) => {
+                var text = item.stations.map((item) => {
+                    return item.name;
+                }).join(", ")
+                item.stationstxt = text;
+            })
             dispatch({ type: ACTION_TYPES.GET_ALLDEPARTMENTS_SUCCESS, payload: response.data })
         })
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_ALLDEPARTMENTS_ERROR, payload: error }) })

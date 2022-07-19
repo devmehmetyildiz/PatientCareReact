@@ -24,9 +24,8 @@ export default class Forminput extends Component {
             default:
                 break;
         }
-
-
-        this.state = { rowclass }
+        const readonly = this.props.readonly || false
+        this.state = { rowclass, readonly }
     }
     render() {
         return (
@@ -34,14 +33,28 @@ export default class Forminput extends Component {
                 <div className='row'>
                     <label style={{ fontSize: "12px" }} className="col-form-label">{this.props.itemname}</label>
                 </div>
-                <Form.Group className="row" >
-                    <Form.Control
-                        id={this.props.itemid}
-                        value={this.props.itemvalue}
-                        type={this.props.itemtype}
-                        placeholder={this.props.itemplaceholder}
-                        onChange={this.props.itemchange} />
-                </Form.Group>
+                {this.state.readonly ?
+                    <Form.Group className="row" >
+                        <Form.Control
+                            id={this.props.itemid}
+                            value={this.props.itemvalue}
+                            type={this.props.itemtype}
+                            placeholder={this.props.itemplaceholder}
+                            onChange={this.props.itemchange}
+                            readOnly
+                        />
+                    </Form.Group> :
+                    <Form.Group className="row" >
+                        <Form.Control
+                            id={this.props.itemid}
+                            value={this.props.itemvalue}
+                            type={this.props.itemtype}
+                            placeholder={this.props.itemplaceholder}
+                            onChange={this.props.itemchange}
+                        />
+                    </Form.Group>
+
+                }
             </div>
         )
     }
