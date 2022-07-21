@@ -42,6 +42,7 @@ class Sidebar extends Component {
       {path:'/Files', state: 'SettingsMenuOpen'},
       {path:'/Cases', state: 'SettingsMenuOpen'},
       {path:'/Units', state: 'SettingsMenuOpen'},
+      {path:'/Costumertypes', state: 'SettingsMenuOpen'},
     ];
 
     dropdownPaths.forEach((obj => {
@@ -103,6 +104,7 @@ class Sidebar extends Component {
                   <li className="nav-item"> <Link className={ this.isPathActive('/Stocks') ? 'nav-link active' : 'nav-link' } to="/Stocks">Tanımlı Ürünler</Link></li>
                   <li className="nav-item"> <Link className={ this.isPathActive('/Files') ? 'nav-link active' : 'nav-link' } to="/Files">Dosyalar</Link></li>
                   <li className="nav-item"> <Link className={ this.isPathActive('/Patienttypes') ? 'nav-link active' : 'nav-link' } to="/Patienttypes">Hasta Türleri</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/Costumertypes') ? 'nav-link active' : 'nav-link' } to="/Costumertypes">Müşteri Türleri</Link></li>
                   <li className="nav-item"> <Link className={ this.isPathActive('/Cases') ? 'nav-link active' : 'nav-link' } to="/Cases">Durumlar</Link></li>
                   <li className="nav-item"> <Link className={ this.isPathActive('/Units') ? 'nav-link active' : 'nav-link' } to="/Units">Birimler</Link></li>
                 </ul>

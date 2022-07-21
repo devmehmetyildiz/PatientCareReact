@@ -245,7 +245,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = { GetAllCostumertypes, GetSelectedCostumertype, OpenDeleteModal, CloseDeleteModal,ClearSelectedCostumertype }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Costumertypes))
 
 
 

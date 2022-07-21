@@ -36,6 +36,10 @@ export class Stocks extends Component {
         text: 'Ürün Açıklaması',
         sort: true
       },{
+        dataField: 'amount',
+        text: 'Aktif Stok Miktarı',
+        sort: true
+      },{
         dataField: 'unittxt',
         text: 'Birim',
         sort: true
@@ -196,11 +200,11 @@ export class Stocks extends Component {
                 <div className="card-body">
                   <div className='row'>
                     <div className='col-6 d-flex justify-content-start'>
-                      <h4 className="card-title">Tanımlı Hastalar</h4>
+                      <h4 className="card-title">Tanımlı Ürünler</h4>
                     </div>
                     <div className='col-6 d-flex justify-content-end'>
                       {/*   <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
-                      <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Hasta</button>
+                      <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Ürün Tanımı</button>
                     </div>
                   </div>
                   <div className="row">

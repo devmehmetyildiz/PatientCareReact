@@ -55,16 +55,12 @@ export class Create extends Component {
   }
 
   componentDidUpdate() {
-    console.log('this.props.Stations.list: ', this.props.Stations.list);
-    console.log('this.props.Stations: ', this.props.Stations);
-    console.log('this.state.stations: ', this.state.stations);
     if (this.props.Stations.list.length > 0 &&
-      this.state.stations.length === 0 &&
+      this.props.Departments.list.length > 0 &&
       this.props.Units.list.length > 0 &&
-      this.state.units.length === 0 &&
-      this.props.Departmens.list.length > 0 &&
-      this.state.departments.length === 0
-    ) {
+      this.state.stations.length === 0 &&
+      this.state.departments.length === 0 &&
+      this.state.units.length === 0) {
       const stationlist = this.props.Stations.list.map((item, index) => {
         return { value: item.concurrencyStamp, label: item.name }
       })
@@ -122,7 +118,7 @@ export class Create extends Component {
             <div className="col-12 grid-margin">
               <div className="card">
                 <div className="card-body">
-                  <h4 className="card-title">Tanımlı Hastalar > Yeni</h4>
+                  <h4 className="card-title">Tanımlı Ürünler > Yeni</h4>
                   <form className="form-sample" onSubmit={this.handlesubmit}>
                     <div className="row">
                       <InputItem
@@ -166,9 +162,9 @@ export class Create extends Component {
                       <div style={{ marginRight: '-5px' }} className='col-6 pr-5 mb-3'>
                         <label style={{ fontSize: "12px" }} className="col-form-label">Departman</label>
                         <Select
-                          value={selected_station}
+                          value={selected_department}
                           onChange={this.handleselectdepartment}
-                          options={stations}
+                          options={departments}
                         />
                       </div>
                     </div>

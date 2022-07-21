@@ -6,6 +6,7 @@ const INITIAL_STATE = {
     id: 0,
     name: "",
     description: "",
+    amount : 0,
     unitid: "",
     unittxt :"",
     unit: {},
@@ -23,8 +24,6 @@ const INITIAL_STATE = {
     updateTime: null,
     deleteTime: null,
     isActive: true,
-    departmentstxt : "",
-    departments : []
   },
   errmsg: "",
   isLoading: false,
