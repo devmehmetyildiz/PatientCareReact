@@ -10,6 +10,7 @@ import { PatienttypeReducer } from "./PatienttypeReducer";
 import { UnitReducer } from "./UnitReducer";
 import { StockReducer } from "./StockReducer";
 import { FileReducer} from "./FileReducer";
+import { CostumertypeReducer} from "./CostumertypeReducer";
 
 const reducers = combineReducers({
     ActiveUser: loginReducer,
@@ -22,7 +23,8 @@ const reducers = combineReducers({
     Patienttypes: PatienttypeReducer,
     Units: UnitReducer,
     Stocks: StockReducer,
-    Files: FileReducer
+    Files: FileReducer,
+    Costumertypes:CostumertypeReducer
 });
 
 export default reducers;

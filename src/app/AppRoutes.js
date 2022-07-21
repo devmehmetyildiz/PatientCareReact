@@ -45,6 +45,10 @@ const Units = lazy(() => import('./Pages/Units'));
 const UnitsCreate = lazy(() => import('./Pages/Units/Create'));
 const UnitsEdit = lazy(() => import('./Pages/Units/Edit'));
 
+const Costumertypes = lazy(() => import('./Pages/Costumertypes'));
+const CostumertypesCreate = lazy(() => import('./Pages/Costumertypes/Create'));
+const CostumertypesEdit = lazy(() => import('./Pages/Costumertypes/Edit'));
+
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
 const Login = lazy(() => import('./User/Login'));
@@ -97,6 +101,10 @@ class AppRoutes extends Component {
           <ProtectedRoute exact path="/Units" component={ Units } />
           <ProtectedRoute exact path="/Units/Create" component={ UnitsCreate } />
           <ProtectedRoute exact path="/Units/:UnitId" component={ UnitsEdit } />
+
+          <ProtectedRoute exact path="/Costumertypes" component={ Costumertypes } />
+          <ProtectedRoute exact path="/Costumertypes/Create" component={CostumertypesCreate } />
+          <ProtectedRoute exact path="/Costumertypes/:CostumertypeId" component={ CostumertypesEdit } />
 
           <ProtectedRoute exact path="/Users" component={ Users } />
           <ProtectedRoute exact path="/Users/Create" component={ UsersCreate } />
