@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { UpdateStock,GetSelectedStock,ClearSelectedStock } from "../../Redux/actions/StockActions"
+import { UpdateStock, GetSelectedStock, ClearSelectedStock } from "../../Redux/actions/StockActions"
 import { GetAllStations } from "../../Redux/actions/StationAction"
 import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
 import { GetAllUnits } from "../../Redux/actions/UnitActions"
@@ -15,27 +15,27 @@ export class Edit extends Component {
   constructor(props) {
     super(props)
     const currentitem = {
-        id: 0,
-        name: "",
-        description: "",
-        amount : 0,
-        unitid: "",
-        unittxt :"",
-        unit: {},
-        stationid: "",
-        stationtxt :"",
-        station: {},
-        departmentid: "",
-        departmenttxt :"",
-        department: {},
-        concurrencyStamp: null,
-        createdUser: "",
-        updatedUser: null,
-        deleteUser: null,
-        createTime: null,
-        updateTime: null,
-        deleteTime: null,
-        isActive: true,
+      id: 0,
+      name: "",
+      description: "",
+      amount: 0,
+      unitid: "",
+      unittxt: "",
+      unit: {},
+      stationid: "",
+      stationtxt: "",
+      station: {},
+      departmentid: "",
+      departmenttxt: "",
+      department: {},
+      concurrencyStamp: null,
+      createdUser: "",
+      updatedUser: null,
+      deleteUser: null,
+      createTime: null,
+      updateTime: null,
+      deleteTime: null,
+      isActive: true,
     }
     const stations = []
     const selected_station = {}
@@ -54,6 +54,10 @@ export class Edit extends Component {
     this.props.GetAllUnits();
   }
 
+  componentWillUnmount() {
+    this.props.ClearSelectedStock()
+  }
+
   componentDidUpdate() {
     if (this.props.Stations.list.length > 0 &&
       this.props.Departments.list.length > 0 &&
@@ -62,16 +66,16 @@ export class Edit extends Component {
       this.state.departments.length === 0 &&
       this.state.units.length === 0 &&
       this.props.Stocks.selected_stock.id !== 0 &&
-      this.state.currentitem.id === 0 
-      ) {
-      
-        const newdata = { ...this.props.Stocks.selected_stock }
+      this.state.currentitem.id === 0
+    ) {
 
-        const currentstations = {  label: this.props.Stocks.selected_stock.station.name, value :this.props.Stocks.selected_stock.station.concurrencyStamp}
+      const newdata = { ...this.props.Stocks.selected_stock }
 
-        const currentdepartments = {  label: this.props.Stocks.selected_stock.department.name, value : this.props.Stocks.selected_stock.station.concurrencyStamp }
+      const currentstations = { label: this.props.Stocks.selected_stock.station.name, value: this.props.Stocks.selected_stock.station.concurrencyStamp }
 
-        const currentunit ={ label:  this.props.Stocks.selected_stock.unit.name, value : this.props.Stocks.selected_stock.station.concurrencyStamp }
+      const currentdepartments = { label: this.props.Stocks.selected_stock.department.name, value: this.props.Stocks.selected_stock.department.concurrencyStamp }
+
+      const currentunit = { label: this.props.Stocks.selected_stock.unit.name, value: this.props.Stocks.selected_stock.unit.concurrencyStamp }
 
 
       const stationlist = this.props.Stations.list.map((item, index) => {
@@ -83,7 +87,7 @@ export class Edit extends Component {
       const unitlist = this.props.Units.list.map((item, index) => {
         return { value: item.concurrencyStamp, label: item.name }
       })
-      this.setState({ stations: stationlist, departments: departmentlist, units: unitlist,selected_department:currentdepartments,selected_station:currentstations,selected_unit:currentunit,currentitem:newdata })
+      this.setState({ stations: stationlist, departments: departmentlist, units: unitlist, selected_department: currentdepartments, selected_station: currentstations, selected_unit: currentunit, currentitem: newdata })
     }
   }
 
@@ -101,7 +105,8 @@ export class Edit extends Component {
 
   goBack = (e) => {
     e.preventDefault()
-    this.props.history.push("/Patients")
+
+    this.props.history.push("/Stocks")
   }
 
   handleonchange = (e) => {
@@ -203,6 +208,6 @@ const mapStateToProps = (state) => ({
   Units: state.Units
 })
 
-const mapDispatchToProps = { UpdateStock,GetSelectedStock,ClearSelectedStock, GetAllDepartments, GetAllStations, GetAllUnits }
+const mapDispatchToProps = { UpdateStock, GetSelectedStock, ClearSelectedStock, GetAllDepartments, GetAllStations, GetAllUnits }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Edit))

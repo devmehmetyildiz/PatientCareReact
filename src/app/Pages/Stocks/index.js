@@ -36,10 +36,6 @@ export class Stocks extends Component {
         text: 'Ürün Açıklaması',
         sort: true
       },{
-        dataField: 'amount',
-        text: 'Aktif Stok Miktarı',
-        sort: true
-      },{
         dataField: 'unittxt',
         text: 'Birim',
         sort: true

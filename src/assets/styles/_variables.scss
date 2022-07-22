@@ -214,7 +214,7 @@ $popover-header-bg: $popover-bg;
 $input-bg: #2A3038;
 $input-border-radius: 2px;
 $input-border-color: $border-color;
-$input-placeholder-color: lighten($input-bg, 15%);
+$input-placeholder-color: #90b953;
 $input-placeholder-font-size: 0.875rem;
 $input-font-size: 0.875rem;
 
@@ -406,3 +406,14 @@ $form-focus-bg: $white;
 $bullet-line-list-shape-bg: color(white) !default;
 
 $buy-nowbanner-padding-top:62px;
+
+input {
+color:#ffeeee !important;
+}
+
+input:focus {
+  color: #ffeeee90 !important;
+}
+.css-1uccc91-singleValue{
+color:#ffeeee !important;
+}

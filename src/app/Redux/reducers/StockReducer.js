@@ -45,9 +45,9 @@ export const StockReducer = (state = INITIAL_STATE, { type, payload }) => {
     case ACTION_TYPES.GET_SELECTEDSTOCK_SUCCESS:
       return { ...state, selected_stock: payload, isSelected: true, isLoading: false }
     case ACTION_TYPES.GET_SELECTEDSTOCK_ERROR:
-      return { ...state, errmsg: payload, isLoading: true }
+      return { ...state, errmsg: payload, isLoading: false }
     case ACTION_TYPES.REMOVE_SELECTEDSTOCK:
-      return { ...state, selected_stock: {}, isSelected: false }
+      return { ...state, selected_stock: INITIAL_STATE.selected_stock, isSelected: false }
     case ACTION_TYPES.EDIT_STOCK_INIT:
       return { ...state, isLoading: true }
     case ACTION_TYPES.EDIT_STOCK_SUCCESS:

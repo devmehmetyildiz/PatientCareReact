@@ -86,7 +86,7 @@ export const UpdateStock = (Item, historypusher) => dispatch => {
         })
 }
 
-export const DeleteStock = (Item) => dispatch => {
+export const DeleteStock = (Item) =>async dispatch => {
     dispatch({ type: ACTION_TYPES.DELETE_STOCK_INIT })
     axios({
         method: 'delete',
@@ -96,6 +96,16 @@ export const DeleteStock = (Item) => dispatch => {
     })
         .then(() => {
             dispatch({ type: ACTION_TYPES.DELETE_STOCK_SUCCESS })
+            dispatch({ type: ACTION_TYPES.GET_ALLSTOCKS_INIT })
+            axios({
+                method: 'get',
+                url: process.env.REACT_APP_BACKEND_URL + '/Stock/GetAll',
+                headers: { Authorization: `Bearer ${GetToken()}` }
+            })
+                .then(response => 
+                    { dispatch({ type: ACTION_TYPES.GET_ALLSTOCKS_SUCCESS, payload: response.data }) }
+                )
+                .catch(error => { dispatch({ type: ACTION_TYPES.GET_ALLSTOCKS_ERROR, payload: error }) })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.DELETE_STOCK_ERROR, payload: error })

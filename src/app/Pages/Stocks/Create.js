@@ -81,14 +81,14 @@ export class Create extends Component {
     newdata.department = this.props.Departments.list.find(item => item.concurrencyStamp === this.state.selected_department.value)
     newdata.station = this.props.Stations.list.find(item => item.concurrencyStamp === this.state.selected_station.value)
     this.setState({ currentitem: newdata }, () => {
-      this.props.CreateStock(this.state.currentitem, this.props.history)
+       this.props.CreateStock(this.state.currentitem, this.props.history)
     })
 
   }
 
   goBack = (e) => {
     e.preventDefault()
-    this.props.history.push("/Patients")
+    this.props.history.push("/Stocks")
   }
 
   handleonchange = (e) => {
