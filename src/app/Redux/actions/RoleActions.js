@@ -1,5 +1,7 @@
 import axios from "axios"
-import { GetToken } from "../../Utils/TokenValidChecker";
+import { ROUTES } from "../../Utils/Constants";
+import Popup from "../../Utils/Popup";
+import { AxiosErrorHandle, GetToken } from "../../Utils/TokenValidChecker";
 
 export const ACTION_TYPES = {
     GET_ROLES_INIT: "GET_ROLES_INIT",
@@ -35,20 +37,23 @@ export const ACTION_TYPES = {
 export const GetAuthories = () => dispatch => {
     dispatch({ type: ACTION_TYPES.GET_AUTHORY_INIT });
     axios({
-        method: 'get',
-        url: process.env.REACT_APP_BACKEND_URL + '/Roles/GetAllAuthories',
+        method: `get`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ROLE}/GetAllAuthories`,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => { dispatch({ type: ACTION_TYPES.GET_AUTHORY_SUCCESS, payload: response.data }) })
-        .catch(error => { dispatch({ type: ACTION_TYPES.GET_AUTHORY_ERROR, payload: error }) })
+        .catch(error => { 
+            dispatch({ type: ACTION_TYPES.GET_AUTHORY_ERROR, payload: error }) 
+            AxiosErrorHandle(error,ROUTES.ROLE,"GetAllAuthories")
+        })
 }
 
 export const GetAllRoles = () => async dispatch => {
 
     dispatch({ type: ACTION_TYPES.GET_ROLES_INIT })
     await axios({
-        method: 'get',
-        url: process.env.REACT_APP_BACKEND_URL + '/Roles/GetAll',
+        method: `get`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ROLE}/GetAll`,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => {
@@ -61,85 +66,80 @@ export const GetAllRoles = () => async dispatch => {
             dispatch({ type: ACTION_TYPES.GET_ROLES_SUCCESS, payload: response.data })
 
         })
-        .catch(error => { dispatch({ type: ACTION_TYPES.GET_ROLES_ERROR, payload: error }) })
+        .catch(error => { 
+            dispatch({ type: ACTION_TYPES.GET_ROLES_ERROR, payload: error }) 
+            AxiosErrorHandle(error,ROUTES.ROLE,"GetAll")
+        })
 }
 
 export const GetSelectedRole = (ItemId) => async dispatch => {
     dispatch({ type: ACTION_TYPES.GET_SELECTEDROLE_INIT })
     await axios({
-        method: 'get',
-        url: `${process.env.REACT_APP_BACKEND_URL}/Roles/GetSelectedRole?ID=${ItemId}`,
+        method: `get`,
+        url: `${process.env.REACT_APP_BACKEND_URL}/${ROUTES.ROLE}/GetSelectedRole?ID=${ItemId}`,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => dispatch({ type: ACTION_TYPES.GET_SELECTEDROLE_SUCCESS, payload: response.data }))
-        .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDROLE_ERROR, payload: error }) })
+        .catch(error => { 
+            dispatch({ type: ACTION_TYPES.GET_SELECTEDROLE_ERROR, payload: error }) 
+            AxiosErrorHandle(error,ROUTES.ROLE,"GetSelectedRole")
+        })
 };
 
 export const CreateRole = (Item, historypusher) => dispatch => {
     dispatch({ type: ACTION_TYPES.ADD_ROLE_INIT })
     axios({
-        method: 'post',
-        url: process.env.REACT_APP_BACKEND_URL + '/Roles/Add',
+        method: `post`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ROLE}/Add`,
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })
         .then(() => {
             dispatch({ type: ACTION_TYPES.ADD_ROLE_SUCCESS })
+            Popup("Success","Roller","Rol Oluşturuldu")
             historypusher.push("/Roles")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.ADD_ROLE_ERROR, payload: error })
+            AxiosErrorHandle(error,ROUTES.ROLE,"Add")
         })
 }
 
 export const UpdateRole = (Item, historypusher) => dispatch => {
     dispatch({ type: ACTION_TYPES.EDIT_ROLE_INIT })
     axios({
-        method: 'post',
-        url: process.env.REACT_APP_BACKEND_URL + '/Roles/Update',
+        method: `post`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ROLE}/Update`,
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })
         .then(() => {
             dispatch({ type: ACTION_TYPES.EDIT_ROLE_SUCCESS })
             dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDROLE })
+            Popup("Success","Roller","Rol Güncellendi")
             historypusher.push("/Roles")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.EDIT_ROLE_ERROR, payload: error })
-            switch (error.response.status) {
-                case 400:
-                    alert("Invalid data")
-                    break;
-                case 401:
-                    alert("Unauthorized")
-                    break;
-                case 404:
-                    alert("Not found")
-                    break;
-                case 500:
-                    alert("Internal server error")
-                    break;
-                default:
-                    alert("Unknown error")
-                    break;
-            }
+            AxiosErrorHandle(error,ROUTES.ROLE,"Update")
         })
 }
 
 export const DeleteRole = (Item) => async dispatch => {
     dispatch({ type: ACTION_TYPES.DELETE_ROLE_INIT })
     await axios({
-        method: 'delete',
-        url: process.env.REACT_APP_BACKEND_URL + '/Roles/Delete',
+        method: `delete`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ROLE}/Delete`,
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })
         .then(() => {
             dispatch({ type: ACTION_TYPES.DELETE_ROLE_SUCCESS })
+            Popup("Success","Roller","Rol Silindi")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.DELETE_ROLE_ERROR, payload: error })
+            AxiosErrorHandle(error,ROUTES.ROLE,"Delete")
         })
 }
 

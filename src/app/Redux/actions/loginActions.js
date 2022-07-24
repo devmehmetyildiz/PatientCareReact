@@ -1,8 +1,8 @@
 import axios from "axios";
-import { GetToken } from "../../Utils/TokenValidChecker";
+import { GetToken,AxiosErrorHandle } from "../../Utils/TokenValidChecker";
 import Cookies from 'universal-cookie';
+import { ROUTES } from "../../Utils/Constants";
 import Popup from "../../Utils/Popup";
-
 
 export const ACTION_TYPES = {
     GET_CURRENTUSER_INIT: 'GET_CURRENTUSER_INIT',
@@ -23,18 +23,21 @@ export const GetCurrentUser = () => dispatch => {
     dispatch({ type: ACTION_TYPES.GET_CURRENTUSER_INIT })
     axios({
         method: 'get',
-        url: process.env.REACT_APP_BACKEND_URL + '/Auth/GetActiveuser',
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.AUTH}/GetActiveuser`,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => dispatch({ type: ACTION_TYPES.GET_CURRENTUSER_SUCCESS, payload: response.data }))
-        .catch(error => { dispatch({ type: ACTION_TYPES.GET_CURRENTUSER_ERROR, payload: error }) })
+        .catch(error => { 
+            dispatch({ type: ACTION_TYPES.GET_CURRENTUSER_ERROR, payload: error }) 
+            AxiosErrorHandle(error,ROUTES.AUTH,"GetActiveuser")
+        })
 };
 
 export const SetLogin = (logindata, historypusher) => dispatch => {
     dispatch({ type: ACTION_TYPES.LOGIN_INIT })
     axios({
         method: 'post',
-        url: process.env.REACT_APP_BACKEND_URL + '/Auth/Login',
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.AUTH}/Login`,
         data: logindata
     })
         .then(response => {
@@ -42,21 +45,12 @@ export const SetLogin = (logindata, historypusher) => dispatch => {
             const cookies = new Cookies();
             cookies.set('X-Access-Token', response.data.token, { path: '/' });
             cookies.set('X-Username', response.data.user, { path: '/' });
+            Popup("Success","Patient Care","Giriş Başarılı")
             historypusher.push("/Dashboard")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.LOGIN_ERROR, payload: error })
-            switch (error.response.status) {
-                case 401:
-                    Popup("Error", "Giriş Başarısız", "Kullanıcı Adı veya Şifre Yanlış")
-                    break;
-                case 404:
-                    Popup("Error", "Giriş Başarısız", "Kullanıcı Adı veya Şifre Yanlış")
-                    break;
-                default:
-                    Popup("Error", "Giriş Başarısız", "Bilinmeyen Hata")
-                    break;
-            }
+            AxiosErrorHandle(error,ROUTES.AUTH,"Login")
         })
 }
 
@@ -67,6 +61,7 @@ export const SetLogout = (historypusher) => dispatch => {
         cookies.remove('X-Access-Token')
         cookies.remove('X-Username')
         dispatch({ type: ACTION_TYPES.LOGOUT_SUCCESS })
+        Popup("Success","Patient Care","Çıkış Yapıldı")
         historypusher.push("/Login")
     } catch (error) {
         dispatch({ type: ACTION_TYPES.LOGOUT_ERROR })

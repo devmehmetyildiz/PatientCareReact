@@ -42,9 +42,8 @@ class Sidebar extends Component {
       {path:'/Files', state: 'SettingsMenuOpen'},
       {path:'/Cases', state: 'SettingsMenuOpen'},
       {path:'/Units', state: 'SettingsMenuOpen'},
-      {path:'/Costumertypes', state: 'StocksMenuOpen'},
-      {path:'/Costumertypes', state: 'StocksMenuOpen'},
-      {path:'/Costumertypes', state: 'StocksMenuOpen'},
+      {path:'/Costumertypes', state: 'SettingsMenuOpen'},
+      {path:'/ActiveStocks', state: 'StockPagesMenuOpen'},
     ];
 
     dropdownPaths.forEach((obj => {
@@ -71,18 +70,17 @@ class Sidebar extends Component {
             </Link>
           </li>  
           <li className={ this.isPathActive('/ActiveStocks') ? 'nav-item menu-items active' : 'nav-item menu-items' }>
-            <div className={ this.state.errorPagesMenuOpen ? 'nav-link menu-expanded' : 'nav-link' } onClick={ () => this.toggleMenuState('errorPagesMenuOpen') } data-toggle="collapse">
+            <div className={ this.state.StockPagesMenuOpen ? 'nav-link menu-expanded' : 'nav-link' } onClick={ () => this.toggleMenuState('StockPagesMenuOpen') } data-toggle="collapse">
               <span className="menu-icon">
                 <i className="mdi mdi-lock"></i>
               </span>
-              <span className="menu-title"><Trans>Error Pages</Trans></span>
+              <span className="menu-title"><Trans>Aktif Stoklar</Trans></span>
               <i className="menu-arrow"></i>
             </div>
-            <Collapse in={ this.state.errorPagesMenuOpen }>
+            <Collapse in={ this.state.StockPagesMenuOpen }>
               <div>
                 <ul className="nav flex-column sub-menu">
-                  <li className="nav-item"> <Link className={ this.isPathActive('/error-pages/error-404') ? 'nav-link active' : 'nav-link' } to="/error-pages/error-404">404</Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/error-pages/error-500') ? 'nav-link active' : 'nav-link' } to="/error-pages/error-500">500</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/ActiveStocks') ? 'nav-link active' : 'nav-link' } to="/ActiveStocks">Stoklar</Link></li>
                 </ul>
               </div>
             </Collapse>

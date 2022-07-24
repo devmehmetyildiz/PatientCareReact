@@ -57,9 +57,10 @@ export class Create extends Component {
         const roles = []
         const stations = []
         const departments = []
+        const errors = []
         this.state = {
             currentitem, selected_departments, selected_stations, selected_roles,
-            departments, stations, roles, language, passswordHashConfirm, currentlanguage
+            departments, stations, roles, language, passswordHashConfirm, currentlanguage, errors
         };
     }
 
@@ -95,33 +96,58 @@ export class Create extends Component {
 
     handlesubmit = (e) => {
         e.preventDefault()
-
-        if (this.state.currentitem.passwordHash === this.state.passswordHashConfirm) {
-
-            let stations = [];
-            let roles = [];
-            let departments = [];
-            (this.state.selected_stations || []).map(element => {
-                stations.push(this.props.Stations.list.find(station => station.concurrencyStamp === element.value))
-            });
-            (this.state.selected_roles || []).map(element => {
-                roles.push(this.props.Roles.list.find(roles => roles.concurrencyStamp === element.value))
-            });
-            (this.state.selected_departments || []).map(element => {
-                departments.push(this.props.Departments.list.find(department => department.concurrencyStamp === element.value))
-            });
-
-            const newdata = { ...this.state.currentitem }
-            newdata.stations = stations
-            newdata.departments = departments
-            newdata.roles = roles
-            newdata.language = this.state.currentlanguage.value
-            this.setState({ currentitem: newdata }, () => {
-                this.props.CreateUser(this.state.currentitem, this.props.history)
-            })
+        const data = this.state.currentitem
+        let error = []
+        if ((data.name || '') === '') {
+            error.push({ type: "name", showerrror: true, description: "İsim Gereklidir" })
+        }
+        if ((data.surname || '') === '') {
+            error.push({ type: "surname", showerrror: true, description: "Soyisim Gereklidir" })
+        }
+        if ((data.password || '') === '') {
+            error.push({ type: "password", showerrror: true, description: "Şifre Gereklidir" })
+        }
+        if ((data.username || '') === '') {
+            error.push({ type: "username", showerrror: true, description: "Kullanıcı Gereklidir" })
+        }
+        if ((data.stations || []).length === 0) {
+            error.push({ type: "stations", showerrror: true, description: "İstasyon Gereklidir" })
+        }
+        if ((data.departments || []).length === 0) {
+            error.push({ type: "departments", showerrror: true, description: "Departman Gereklidir" })
+        }
+        if ((data.roles || []).length === 0) {
+            error.push({ type: "roles", showerrror: true, description: "Rol Gereklidir" })
+        }
+        if (error.length) {
+            this.setState({ errors: error })
         } else {
-            Popup("Error", "Kullanıcı Ekleme", "Lütfen Parolaları Doğru Giriniz")
+            if (this.state.currentitem.passwordHash === this.state.passswordHashConfirm) {
+                let stations = [];
+                let roles = [];
+                let departments = [];
+                (this.state.selected_stations || []).map(element => {
+                    stations.push(this.props.Stations.list.find(station => station.concurrencyStamp === element.value))
+                });
+                (this.state.selected_roles || []).map(element => {
+                    roles.push(this.props.Roles.list.find(roles => roles.concurrencyStamp === element.value))
+                });
+                (this.state.selected_departments || []).map(element => {
+                    departments.push(this.props.Departments.list.find(department => department.concurrencyStamp === element.value))
+                });
 
+                const newdata = { ...this.state.currentitem }
+                newdata.stations = stations
+                newdata.departments = departments
+                newdata.roles = roles
+                newdata.language = this.state.currentlanguage.value
+                this.setState({ currentitem: newdata }, () => {
+                    this.props.CreateUser(this.state.currentitem, this.props.history)
+                })
+            } else {
+                Popup("Error", "Kullanıcı Ekleme", "Lütfen Parolaları Doğru Giriniz")
+
+            }
         }
     }
 
