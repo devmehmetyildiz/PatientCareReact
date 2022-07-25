@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import { GetAllStocks, GetSelectedStock, CloseDeleteModal, DeleteStock,ClearSelectedStock } from '../../Redux/actions/StockActions'
+import { GetAllStocksSettings, GetSelectedStock, CloseDeleteModal, DeleteStock,ClearSelectedStock } from '../../Redux/actions/StockActions'
 
 export class Delete extends Component {
 
@@ -10,7 +10,7 @@ export class Delete extends Component {
          this.props.DeleteStock(this.props.Stocks.selected_stock)
          this.props.ClearSelectedStock()
          this.props.CloseDeleteModal()
-        //await this.props.GetAllStocks()
+         this.props.GetAllStocksSettings()
       }
       
       componentWillUnmount() {
@@ -48,7 +48,7 @@ const mapStateToProps = (state) => ({
     Stocks: state.Stocks,
 })
 
-const mapDispatchToProps = { GetAllStocks, GetSelectedStock, CloseDeleteModal, DeleteStock, ClearSelectedStock }
+const mapDispatchToProps = { GetAllStocksSettings, GetSelectedStock, CloseDeleteModal, DeleteStock, ClearSelectedStock }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Delete))
 

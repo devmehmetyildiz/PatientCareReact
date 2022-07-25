@@ -8,6 +8,10 @@ export const ACTION_TYPES = {
     GET_ALLSTOCKS_SUCCESS: `GET_ALLSTOCKS_SUCCESS`,
     GET_ALLSTOCKS_ERROR: `GET_ALLSTOCKS_ERROR`,
 
+    GET_ALLSTOCKSSETTINGS_INIT: `GET_ALLSTOCKSSETTINGS_INIT`,
+    GET_ALLSTOCKSSETTINGS_SUCCESS: `GET_ALLSTOCKSSETTINGS_SUCCESS`,
+    GET_ALLSTOCKSSETTINGS_ERROR: `GET_ALLSTOCKSSETTINGS_ERROR`,
+
     GET_SELECTEDSTOCK_INIT: `GET_SELECTEDSTOCK_INIT`,
     GET_SELECTEDSTOCK_SUCCESS: `GET_SELECTEDSTOCK_SUCCESS`,
     GET_SELECTEDSTOCK_ERROR: `GET_SELECTEDSTOCK_ERROR`,
@@ -41,6 +45,21 @@ export const GetAllStocks = () => async dispatch => {
         .catch(error => {
             dispatch({ type: ACTION_TYPES.GET_ALLSTOCKS_ERROR, payload: error })
             AxiosErrorHandle(error, ROUTES.STOCK, "GetAll")
+        })
+}
+
+export const GetAllStocksSettings = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.GET_ALLSTOCKSSETTINGS_INIT })
+    await axios({
+        method: `get`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.STOCK}/GetAllSettings`,
+        headers: { Authorization: `Bearer ${GetToken()}` }
+    })
+        .then(response => { dispatch({ type: ACTION_TYPES.GET_ALLSTOCKSSETTINGS_SUCCESS, payload: response.data }) }
+        )
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.GET_ALLSTOCKSSETTINGS_ERROR, payload: error })
+            AxiosErrorHandle(error, ROUTES.STOCK, "GetAllSettings")
         })
 }
 

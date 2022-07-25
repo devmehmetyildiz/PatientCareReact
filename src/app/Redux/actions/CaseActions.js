@@ -8,6 +8,10 @@ export const ACTION_TYPES = {
     GET_ALLCASES_SUCCESS: `GET_ALLCASES_SUCCESS`,
     GET_ALLCASES_ERROR: `GET_ALLCASES_ERROR`,
 
+    GET_ALLCASESSETTINGS_INIT: `GET_ALLCASESSETTINGS_INIT`,
+    GET_ALLCASESSETTINGS_SUCCESS: `GET_ALLCASESSETTINGS_SUCCESS`,
+    GET_ALLCASESSETTINGS_ERROR: `GET_ALLCASESSETTINGS_ERROR`,
+
     GET_SELECTEDCASE_INIT: `GET_SELECTEDCASE_INIT`,
     GET_SELECTEDCASE_SUCCESS: `GET_SELECTEDCASE_SUCCESS`,
     GET_SELECTEDCASE_ERROR: `GET_SELECTEDCASE_ERROR`,
@@ -48,6 +52,28 @@ export const GetAllCases = () => async dispatch => {
         .catch(error => {
             dispatch({ type: ACTION_TYPES.GET_ALLCASES_ERROR, payload: error })
             AxiosErrorHandle(error, ROUTES.CASE, "GetAll")
+        })
+}
+
+export const GetAllCasesSettings = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.GET_ALLCASESSETTINGS_INIT })
+    await axios({
+        method: `get`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.CASE}/GetAllSettings`,
+        headers: { Authorization: `Bearer ${GetToken()}` }
+    })
+        .then(response => {
+            response.data.forEach((item, index) => {
+                var text = item.departments.map((item) => {
+                    return item.name;
+                }).join(", ")
+                item.departmentstxt = text;
+            })
+            dispatch({ type: ACTION_TYPES.GET_ALLCASESSETTINGS_SUCCESS, payload: response.data }) 
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.GET_ALLCASESSETTINGS_ERROR, payload: error })
+            AxiosErrorHandle(error, ROUTES.CASE, "GetAllSettings")
         })
 }
 

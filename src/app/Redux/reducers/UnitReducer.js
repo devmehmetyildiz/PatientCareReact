@@ -14,8 +14,8 @@ const INITIAL_STATE = {
     updateTime: null,
     deleteTime: null,
     isActive: true,
-    departmentstxt : "",
-    departments : []
+    departmentstxt: "",
+    departments: []
   },
   errmsg: "",
   isLoading: false,
@@ -32,12 +32,18 @@ export const UnitReducer = (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, list: payload, isLoading: false }
     case ACTION_TYPES.GET_ALLUNITS_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
+    case ACTION_TYPES.GET_ALLUNITSETTINGS_INIT:
+      return { ...state, isLoading: true };
+    case ACTION_TYPES.GET_ALLUNITSETTINGS_SUCCESS:
+      return { ...state, list: payload, isLoading: false }
+    case ACTION_TYPES.GET_ALLUNITSETTINGS_ERROR:
+      return { ...state, errmsg: payload, isLoading: false }
     case ACTION_TYPES.GET_SELECTEDUNIT_INIT:
       return { ...state, isLoading: true }
     case ACTION_TYPES.GET_SELECTEDUNIT_SUCCESS:
       return { ...state, selected_unit: payload, isSelected: true, isLoading: false }
     case ACTION_TYPES.GET_SELECTEDUNIT_ERROR:
-      return { ...state, errmsg: payload, isLoading: true }
+      return { ...state, errmsg: payload, isLoading: false }
     case ACTION_TYPES.REMOVE_SELECTEDUNIT:
       return { ...state, selected_unit: {}, isSelected: false }
     case ACTION_TYPES.EDIT_UNIT_INIT:

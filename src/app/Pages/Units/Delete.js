@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import { GetAllUnits, CloseDeleteModal,DeleteUnit, ClearSelectedUnit } from '../../Redux/actions/UnitActions'
+import { GetAllUnitsSettings, CloseDeleteModal,DeleteUnit, ClearSelectedUnit } from '../../Redux/actions/UnitActions'
 
 export class Delete extends Component {
 
     DeleteHandle = async () => {
         await this.props.DeleteUnit(this.props.Units.selected_units)
-        await this.props.GetAllUnits()
+        await this.props.GetAllUnitsSettings()
         await this.props.CloseDeleteModal()
     }
 
@@ -47,7 +47,7 @@ const mapStateToProps = (state) => ({
     Units: state.Units,
 })
 
-const mapDispatchToProps = { GetAllUnits, CloseDeleteModal,DeleteUnit,ClearSelectedUnit }
+const mapDispatchToProps = { GetAllUnitsSettings, CloseDeleteModal,DeleteUnit,ClearSelectedUnit }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Delete))
 

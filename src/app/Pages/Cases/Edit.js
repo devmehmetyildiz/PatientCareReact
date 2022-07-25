@@ -31,6 +31,10 @@ export class Edit extends Component {
         this.state = { currentitem, selecteddepartments, departments };
     }
 
+    componentWillUnmount() {
+        this.props.ClearSelectedCase()
+    }
+
     handlesubmit = (e) => {
         e.preventDefault()
         let departments = []

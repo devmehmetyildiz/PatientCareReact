@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import { Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import { GetAllCases, GetSelectedCase, CloseDeleteModal, DeleteCase, ClearSelectedCase } from '../../Redux/actions/CaseActions'
+import { GetAllCasesSettings, GetSelectedCase, CloseDeleteModal, DeleteCase, ClearSelectedCase } from '../../Redux/actions/CaseActions'
 
 export class Delete extends Component {
 
     DeleteHandle = async () => {
         await this.props.DeleteCase(this.props.Cases.selected_case)
         await this.props.ClearSelectedCase()
-        await this.props.GetAllCases()
+        await this.props.GetAllCasesSettings()
         await this.props.CloseDeleteModal()
     }
 
@@ -48,7 +48,7 @@ const mapStateToProps = (state) => ({
     Cases: state.Cases,
 })
 
-const mapDispatchToProps = { GetAllCases, GetSelectedCase, CloseDeleteModal, DeleteCase, ClearSelectedCase }
+const mapDispatchToProps = { GetAllCasesSettings, GetSelectedCase, CloseDeleteModal, DeleteCase, ClearSelectedCase }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Delete))
 

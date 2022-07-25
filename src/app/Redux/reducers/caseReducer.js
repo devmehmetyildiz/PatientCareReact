@@ -14,8 +14,8 @@ const INITIAL_STATE = {
     updateTime: null,
     deleteTime: null,
     isActive: true,
-    departmentstxt : "",
-    departments : []
+    departmentstxt: "",
+    departments: []
   },
   errmsg: "",
   isLoading: false,
@@ -32,12 +32,18 @@ export const caseReducer = (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, list: payload, isLoading: false }
     case ACTION_TYPES.GET_ALLCASES_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
+    case ACTION_TYPES.GET_ALLCASESSETTINGS_INIT:
+      return { ...state, isLoading: true }
+    case ACTION_TYPES.GET_ALLCASESSETTINGS_SUCCESS:
+      return { ...state, list: payload, isLoading: false }
+    case ACTION_TYPES.GET_ALLCASESSETTINGS_ERROR:
+      return { ...state, errmsg: payload, isLoading: false }
     case ACTION_TYPES.GET_SELECTEDCASE_INIT:
       return { ...state, isLoading: true }
     case ACTION_TYPES.GET_SELECTEDCASE_SUCCESS:
       return { ...state, selected_case: payload, isSelected: true, isLoading: false }
     case ACTION_TYPES.GET_SELECTEDCASE_ERROR:
-      return { ...state, errmsg: payload, isLoading: true }
+      return { ...state, errmsg: payload, isLoading: false }
     case ACTION_TYPES.REMOVE_SELECTEDCASE:
       return { ...state, selected_case: {}, isSelected: false }
     case ACTION_TYPES.EDIT_CASE_INIT:

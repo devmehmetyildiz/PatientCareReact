@@ -6,15 +6,15 @@ const INITIAL_STATE = {
     id: 0,
     name: "",
     description: "",
-    amount : 0,
+    amount: 0,
     unitid: "",
-    unittxt :"",
+    unittxt: "",
     unit: {},
     stationid: "",
-    stationtxt :"",
+    stationtxt: "",
     station: {},
     departmentid: "",
-    departmenttxt :"",
+    departmenttxt: "",
     department: {},
     concurrencyStamp: null,
     createdUser: "",
@@ -39,6 +39,12 @@ export const StockReducer = (state = INITIAL_STATE, { type, payload }) => {
     case ACTION_TYPES.GET_ALLSTOCKS_SUCCESS:
       return { ...state, list: payload, isLoading: false }
     case ACTION_TYPES.GET_ALLSTOCKS_ERROR:
+      return { ...state, errmsg: payload, isLoading: false }
+    case ACTION_TYPES.GET_ALLSTOCKSSETTINGS_INIT:
+      return { ...state, isLoading: true };
+    case ACTION_TYPES.GET_ALLSTOCKSSETTINGS_SUCCESS:
+      return { ...state, list: payload, isLoading: false }
+    case ACTION_TYPES.GET_ALLSTOCKSSETTINGS_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
     case ACTION_TYPES.GET_SELECTEDSTOCK_INIT:
       return { ...state, isLoading: true }

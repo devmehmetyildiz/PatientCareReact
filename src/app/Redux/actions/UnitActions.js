@@ -8,6 +8,10 @@ export const ACTION_TYPES = {
     GET_ALLUNITS_SUCCESS: `GET_ALLUNITS_SUCCESS`,
     GET_ALLUNITS_ERROR: `GET_ALLUNITS_ERROR`,
 
+    GET_ALLUNITSETTINGS_INIT: `GET_ALLUNITSETTINGS_INIT`,
+    GET_ALLUNITSETTINGS_SUCCESS: `GET_ALLUNITSETTINGS_SUCCESS`,
+    GET_ALLUNITSETTINGS_ERROR: `GET_ALLUNITSETTINGS_ERROR`,
+
     GET_SELECTEDUNIT_INIT: `GET_SELECTEDUNIT_INIT`,
     GET_SELECTEDUNIT_SUCCESS: `GET_SELECTEDUNIT_SUCCESS`,
     GET_SELECTEDUNIT_ERROR: `GET_SELECTEDUNIT_ERROR`,
@@ -45,9 +49,31 @@ export const GetAllUnits = () => async dispatch => {
             })
             { dispatch({ type: ACTION_TYPES.GET_ALLUNITS_SUCCESS, payload: response.data }) }
         })
-        .catch(error => { 
-            dispatch({ type: ACTION_TYPES.GET_ALLUNITS_ERROR, payload: error }) 
-            AxiosErrorHandle(error,ROUTES.UNIT,"GetAll")
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.GET_ALLUNITS_ERROR, payload: error })
+            AxiosErrorHandle(error, ROUTES.UNIT, "GetAll")
+        })
+}
+
+export const GetAllUnitsSettings = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.GET_ALLUNITSETTINGS_INIT })
+    await axios({
+        method: `get`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.UNIT}/GetAllSettings`,
+        headers: { Authorization: `Bearer ${GetToken()}` }
+    })
+        .then(response => {
+            response.data.forEach((item, index) => {
+                var text = item.departments.map((item) => {
+                    return item.name;
+                }).join(", ")
+                item.departmentstxt = text;
+            })
+            { dispatch({ type: ACTION_TYPES.GET_ALLUNITSETTINGS_SUCCESS, payload: response.data }) }
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.GET_ALLUNITSETTINGS_ERROR, payload: error })
+            AxiosErrorHandle(error, ROUTES.UNIT, "GetAllSettings")
         })
 }
 
@@ -59,9 +85,9 @@ export const GetSelectedUnit = (ItemId) => async dispatch => {
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => dispatch({ type: ACTION_TYPES.GET_SELECTEDUNIT_SUCCESS, payload: response.data }))
-        .catch(error => { 
-            dispatch({ type: ACTION_TYPES.GET_SELECTEDUNIT_ERROR, payload: error }) 
-            AxiosErrorHandle(error,ROUTES.UNIT,"GetSelectedUnit")
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.GET_SELECTEDUNIT_ERROR, payload: error })
+            AxiosErrorHandle(error, ROUTES.UNIT, "GetSelectedUnit")
         })
 };
 
@@ -80,7 +106,7 @@ export const CreateUnit = (Item, historypusher) => dispatch => {
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.CREATE_UNIT_ERROR, payload: error })
-            AxiosErrorHandle(error,ROUTES.UNIT,"Add")
+            AxiosErrorHandle(error, ROUTES.UNIT, "Add")
         })
 }
 
@@ -100,7 +126,7 @@ export const UpdateUnit = (Item, historypusher) => dispatch => {
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.EDIT_UNIT_ERROR, payload: error })
-            AxiosErrorHandle(error,ROUTES.UNIT,"Update")
+            AxiosErrorHandle(error, ROUTES.UNIT, "Update")
         })
 }
 
@@ -118,7 +144,7 @@ export const DeleteUnit = (Item) => dispatch => {
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.DELETE_UNIT_ERROR, payload: error })
-            AxiosErrorHandle(error,ROUTES.UNIT,"Delete")
+            AxiosErrorHandle(error, ROUTES.UNIT, "Delete")
         })
 }
 

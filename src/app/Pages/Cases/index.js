@@ -4,7 +4,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import { withRouter } from 'react-router-dom';
-import { GetAllCases, GetSelectedCase, OpenDeleteModal, CloseDeleteModal , ClearSelectedCase } from '../../Redux/actions/CaseActions'
+import { GetAllCasesSettings, GetSelectedCase, OpenDeleteModal, CloseDeleteModal , ClearSelectedCase } from '../../Redux/actions/CaseActions'
 import Spinner from '../../shared/Spinner'
 import DeleteCaseModal from "./Delete"
 import { Form } from "react-bootstrap";
@@ -168,14 +168,8 @@ export class Cases extends Component {
     }
 
     componentDidMount() {
-        this.getData()
+        this.props.GetAllCasesSettings();
     }
-
-    getData = async () => {
-        console.log("index basladı")
-        await this.props.GetAllCases();
-        console.log("index bitti")
-    };
 
     componentWillUnmount() {
         this.props.ClearSelectedCase()
@@ -253,7 +247,7 @@ const mapStateToProps = (state) => ({
     Cases: state.Cases,
 })
 
-const mapDispatchToProps = { GetAllCases, GetSelectedCase, OpenDeleteModal, CloseDeleteModal,ClearSelectedCase }
+const mapDispatchToProps = { GetAllCasesSettings, GetSelectedCase, OpenDeleteModal, CloseDeleteModal,ClearSelectedCase }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))
 

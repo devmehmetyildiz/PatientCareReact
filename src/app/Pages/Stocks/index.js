@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import { GetAllStocks,GetSelectedStock, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/StockActions'
+import { GetAllStocksSettings,GetSelectedStock, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/StockActions'
 import { withRouter } from 'react-router-dom';
 import Spinner from "../../shared/Spinner"
 import DeleteModal from "./Delete"
@@ -178,7 +178,7 @@ export class Stocks extends Component {
   }
 
   componentDidMount() {
-    this.props.GetAllStocks();
+    this.props.GetAllStocksSettings();
   }
 
   render() {
@@ -253,6 +253,6 @@ const mapStateToProps = (state) => ({
   Stocks: state.Stocks
 })
 
-const mapDispatchToProps = { GetAllStocks,GetSelectedStock, OpenDeleteModal, CloseDeleteModal }
+const mapDispatchToProps = { GetAllStocksSettings,GetSelectedStock, OpenDeleteModal, CloseDeleteModal }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Stocks))
