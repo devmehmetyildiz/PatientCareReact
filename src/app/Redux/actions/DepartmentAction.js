@@ -8,6 +8,10 @@ export const ACTION_TYPES = {
     GET_ALLDEPARTMENTS_SUCCESS: `GET_ALLDEPARTMENTS_SUCCESS`,
     GET_ALLDEPARTMENTS_ERROR: `GET_ALLDEPARTMENTS_ERROR`,
 
+    GET_ALLDEPARTMENTSSETTINGS_INIT: `GET_ALLDEPARTMENTSSETTINGS_INIT`,
+    GET_ALLDEPARTMENTSSETTINGS_SUCCESS: `GET_ALLDEPARTMENTSSETTINGS_SUCCESS`,
+    GET_ALLDEPARTMENTSSETTINGS_ERROR: `GET_ALLDEPARTMENTSSETTINGS_ERROR`,
+
     GET_SELECTEDDEPARTMENT_INIT: `GET_SELECTEDDEPARTMENT_INIT`,
     GET_SELECTEDDEPARTMENT_SUCCESS: `GET_SELECTEDDEPARTMENT_SUCCESS`,
     GET_SELECTEDDEPARTMENT_ERROR: `GET_SELECTEDDEPARTMENT_ERROR`,
@@ -48,6 +52,28 @@ export const GetAllDepartments = () => async dispatch => {
         .catch(error => { 
             dispatch({ type: ACTION_TYPES.GET_ALLDEPARTMENTS_ERROR, payload: error }) 
             AxiosErrorHandle(error,ROUTES.DEPARTMENT,"GetAll")
+        })
+}
+
+export const GetAllDepartmentsSettings = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.GET_ALLDEPARTMENTSSETTINGS_INIT })
+    await axios({
+        method: `get`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.DEPARTMENT}/GetAllSettings`,
+        headers: { Authorization: `Bearer ${GetToken()}` }
+    })
+        .then(response => {
+            response.data.forEach((item, index) => {
+                var text = item.stations.map((item) => {
+                    return item.name;
+                }).join(", ")
+                item.stationstxt = text;
+            })
+            dispatch({ type: ACTION_TYPES.GET_ALLDEPARTMENTSSETTINGS_SUCCESS, payload: response.data })
+        })
+        .catch(error => { 
+            dispatch({ type: ACTION_TYPES.GET_ALLDEPARTMENTSSETTINGS_ERROR, payload: error }) 
+            AxiosErrorHandle(error,ROUTES.DEPARTMENT,"GetAllSettings")
         })
 }
 

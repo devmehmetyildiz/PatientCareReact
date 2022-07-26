@@ -6,7 +6,7 @@ import "../../../assets/styles/Pages/Create.scss"
 import { EditUser, GetSelectedUser, ClearSelectedUser } from "../../Redux/actions/UserAction"
 import { GetStationByDepartments, GetStationsByUser, ClearfilteredStation, GetAllStations } from "../../Redux/actions/StationAction"
 import { GetAllRoles } from "../../Redux/actions/RoleActions"
-import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
+import { GetAllDepartmentsSettings } from "../../Redux/actions/DepartmentAction"
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
 import { Form } from 'react-bootstrap'
@@ -69,7 +69,7 @@ export class Edit extends Component {
 
     getData = async () => {
         this.props.GetSelectedUser(this.props.match.params.UserId);
-        this.props.GetAllDepartments();
+        this.props.GetAllDepartmentsSettings();
         this.props.GetAllRoles();
         this.props.GetAllStations();
     }
@@ -80,7 +80,8 @@ export class Edit extends Component {
             this.props.Roles.list.length > 0 &&
             this.state.stations.length === 0 &&
             this.state.departments.length === 0 &&
-            Object.keys(this.props.Users.selected_user).length !== 0 &&
+            this.props.Users.selected_user.id !== 0 &&
+            this.state.currentitem.id === 0 &&
             this.state.roles.length === 0) {
 
             const newdata = { ...this.props.Users.selected_user }
@@ -391,7 +392,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-    EditUser, GetAllRoles, GetStationByDepartments, GetStationsByUser, GetAllDepartments, ClearfilteredStation, GetAllStations,
+    EditUser, GetAllRoles, GetStationByDepartments, GetStationsByUser, GetAllDepartmentsSettings, ClearfilteredStation, GetAllStations,
     GetSelectedUser, ClearSelectedUser
 }
 

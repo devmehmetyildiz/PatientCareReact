@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import { GetAllUnits, GetSelectedUnit, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/UnitActions'
+import { GetAllActivestocks, GetSelectedActivestock, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/Activestock'
+import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
 import { withRouter } from 'react-router-dom';
 import Spinner from "../../shared/Spinner"
 
@@ -55,7 +56,7 @@ export class Units extends Component {
         dataField: 'skt',
         text: 'SKT Durumu',
         formatter: (cellContent, row) => {
-          if (row.inStock) {
+          /* if (row.inStock) {
             return (
               <h5>
                 <span className="label label-success"> Available</span>
@@ -66,27 +67,9 @@ export class Units extends Component {
             <h5>
               <span className="label label-danger"> Backordered</span>
             </h5>
-          );
-        }
-      }, {
-        dataField: 'delete',
-        text: 'Sil',
-        formatter: () => {
-          return (
-            <div>
-              <button className="btn btn-dark">
-                <i className="mdi mdi-trash-can text-primary"></i>
-              </button>
-            </div>
-          );
-        },
-        events: {
-          onClick: (e, column, columnIndex, row, rowIndex) => {
-            this.handleDeleteRole(e, row)
-          }
+          ); */
         }
       }
-
     ];
 
     this.state = { columnvisiblebar, currentitem, defaultSorted, columns, SearchBar, isLoading };
@@ -109,24 +92,29 @@ export class Units extends Component {
   }
 
   componentDidMount() {
-    this.props.GetAllUnits();
+    this.props.GetAllActivestocks();
+    this.props.GetAllDepartments();
   }
 
   render() {
-    const Data = this.props.Units.list
+    const isloading = (this.props.Departments.isLoading || this.props.Activestocks.isLoading)
+    const Departments = this.props.Departments.list
+    const list = this.props.Activestocks.list
     const Columns = this.state.columns
     return (
       <>
-        <div className="row datatable">
-          <div className="col-12">
+        {isloading ? <Spinner /> :
+          <div className="row datatable">
+            {Departments.map(item=>
+            <div className="col-12 m-2">
             <div className="card">
               <div className="card-body">
                 <div className='row'>
                   <div className='col-6 d-flex justify-content-start'>
-                    <h4 className="card-title">Aktif Stoklar</h4>
+                    <h4 className="card-title">{item.name}</h4>
                   </div>
                   <div className='col-6 d-flex justify-content-end'>
-                    <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Birim</button>
+                    <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Stok Girişi</button>
                   </div>
                 </div>
                 <div className="row">
@@ -134,7 +122,7 @@ export class Units extends Component {
                     <ToolkitProvider
                       keyField="id"
                       bootstrap4
-                      data={Data}
+                      data={list.filter(listitem=>listitem.departmentid===item.concurrencyStamp)}
                       columns={Columns}
                       search
                       columnToggle
@@ -146,6 +134,7 @@ export class Units extends Component {
                               defaultSorted={this.state.defaultSorted}
                               hover
                               condensed
+                              bordered={false}
                               pagination={paginationFactory()}
                               {...props.baseProps}
                               wrapperClasses="table-responsive"
@@ -159,16 +148,19 @@ export class Units extends Component {
               </div>
             </div>
           </div>
-        </div>
+            )}
+          </div>
+        }
       </>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  Units: state.Units
+  Activestocks: state.Activestocks,
+  Departments: state.Departments
 })
 
-const mapDispatchToProps = { GetAllUnits, GetSelectedUnit, OpenDeleteModal, CloseDeleteModal }
+const mapDispatchToProps = { GetAllActivestocks, GetSelectedActivestock, GetAllDepartments, OpenDeleteModal, CloseDeleteModal }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Units))

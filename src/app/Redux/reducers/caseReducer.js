@@ -23,7 +23,7 @@ const INITIAL_STATE = {
   isModalOpen: false
 }
 
-export const caseReducer = (state = INITIAL_STATE, { type, payload }) => {
+export const CaseReducer = (state = INITIAL_STATE, { type, payload }) => {
 
   switch (type) {
     case ACTION_TYPES.GET_ALLCASES_INIT:

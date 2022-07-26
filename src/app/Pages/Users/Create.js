@@ -6,7 +6,7 @@ import "../../../assets/styles/Pages/Create.scss"
 import { CreateUser } from "../../Redux/actions/UserAction"
 import { GetStationByDepartments, GetStationsByUser, ClearfilteredStation, GetAllStations } from "../../Redux/actions/StationAction"
 import { GetAllRoles } from "../../Redux/actions/RoleActions"
-import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
+import { GetAllDepartmentsSettings } from "../../Redux/actions/DepartmentAction"
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
 import { Form } from 'react-bootstrap'
@@ -69,7 +69,7 @@ export class Create extends Component {
     }
 
     getData = async () => {
-        this.props.GetAllDepartments();
+        this.props.GetAllDepartmentsSettings();
         this.props.GetAllRoles();
         this.props.GetAllStations();
     }
@@ -424,6 +424,6 @@ const mapStateToProps = (state) => ({
     Departments: state.Departments
 })
 
-const mapDispatchToProps = { CreateUser, GetAllRoles, GetStationByDepartments, GetStationsByUser, GetAllDepartments, ClearfilteredStation, GetAllStations }
+const mapDispatchToProps = { CreateUser, GetAllRoles, GetStationByDepartments, GetStationsByUser, GetAllDepartmentsSettings, ClearfilteredStation, GetAllStations }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))

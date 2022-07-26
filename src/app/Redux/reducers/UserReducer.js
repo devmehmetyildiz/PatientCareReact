@@ -52,7 +52,7 @@ export const UserReducer = (state = INITIAL_STATE, { type, payload }) => {
         case ACTION_TYPES.GET_SELECTEDUSER_ERROR:
             return { ...state, errmsg: payload, isLoading: true }
         case ACTION_TYPES.REMOVE_SELECTEDUSER:
-            return { ...state, selected_user: {}, isSelected: false }
+            return { ...state, selected_user: INITIAL_STATE.selected_user, isSelected: false }
         case ACTION_TYPES.EDIT_USER_INIT:
             return { ...state, isLoading: true }
         case ACTION_TYPES.EDIT_USER_SUCCESS:

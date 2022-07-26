@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import { GetAllDepartments, GetSelectedDepartment, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/DepartmentAction'
+import { GetAllDepartmentsSettings, GetSelectedDepartment, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/DepartmentAction'
 import { withRouter } from 'react-router-dom';
 import Spinner from "../../shared/Spinner"
 import DeleteModal from "./Delete"
@@ -178,7 +178,7 @@ export class Departments extends Component {
     }
 
     componentDidMount() {
-        this.props.GetAllDepartments();
+        this.props.GetAllDepartmentsSettings();
     }
 
     render() {
@@ -253,6 +253,6 @@ const mapStateToProps = (state) => ({
     Departments: state.Departments
 })
 
-const mapDispatchToProps = { GetAllDepartments, GetSelectedDepartment, OpenDeleteModal, CloseDeleteModal  }
+const mapDispatchToProps = { GetAllDepartmentsSettings, GetSelectedDepartment, OpenDeleteModal, CloseDeleteModal  }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Departments))

@@ -1,51 +1,57 @@
 import { ACTION_TYPES } from "../actions/DepartmentAction"
 
 const INITIAL_STATE = {
-  list: [],
-  selected_department: {
-    id: 0,
-    name: "",
-    concurrencyStamp: null,
-    createdUser: "",
-    updatedUser: null,
-    deleteUser: null,
-    createTime: null,
-    updateTime: null,
-    deleteTime: null,
-    isActive: true,
-    isAdded:false,
-    stationstxt:"",
-    stations : []
-  },
-  errmsg: "",
-  isLoading: false,
-  isSelected: false,
-  isModalOpen: false
+    list: [],
+    selected_department: {
+        id: 0,
+        name: "",
+        concurrencyStamp: null,
+        createdUser: "",
+        updatedUser: null,
+        deleteUser: null,
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true,
+        isAdded: false,
+        stationstxt: "",
+        stations: []
+    },
+    errmsg: "",
+    isLoading: false,
+    isSelected: false,
+    isModalOpen: false
 }
 
 export const DepartmentReducer = (state = INITIAL_STATE, { type, payload }) => {
     switch (type) {
         case ACTION_TYPES.GET_ALLDEPARTMENTS_INIT:
-            return { ...state, isLoading: true };
+            return { ...state, isLoading: true }
         case ACTION_TYPES.GET_ALLDEPARTMENTS_SUCCESS:
             return { ...state, list: payload, isLoading: false }
         case ACTION_TYPES.GET_ALLDEPARTMENTS_ERROR:
+            return { ...state, errmsg: payload, isLoading: false }
+        case ACTION_TYPES.GET_ALLDEPARTMENTSSETTINGS_INIT:
+            return { ...state, isLoading: true }
+        case ACTION_TYPES.GET_ALLDEPARTMENTSSETTINGS_SUCCESS:
+            return { ...state, list: payload, isLoading: false }
+        case ACTION_TYPES.GET_ALLDEPARTMENTSSETTINGS_ERROR:
             return { ...state, errmsg: payload, isLoading: false }
         case ACTION_TYPES.GET_SELECTEDDEPARTMENT_INIT:
             return { ...state, isLoading: true }
         case ACTION_TYPES.GET_SELECTEDDEPARTMENT_SUCCESS:
             return { ...state, selected_department: payload, isSelected: true, isLoading: false }
         case ACTION_TYPES.GET_SELECTEDDEPARTMENT_ERROR:
-            return { ...state, errmsg: payload, isLoading: true }
+            return { ...state, errmsg: payload, isLoading: false }
         case ACTION_TYPES.REMOVE_SELECTEDDEPARTMENT:
             return { ...state, selected_department: {}, isSelected: false }
         case ACTION_TYPES.EDIT_DEPARTMENT_INIT:
             return { ...state, isLoading: true }
         case ACTION_TYPES.EDIT_DEPARTMENT_SUCCESS:
-            return { ...state, isLoading: false }   
+            return { ...state, isLoading: false }
         case ACTION_TYPES.EDIT_DEPARTMENT_ERROR:
             return { ...state, errmsg: payload, isLoading: false }
-        case ACTION_TYPES.CREATE_DEPARTMENT_INIT: 
+        case ACTION_TYPES.CREATE_DEPARTMENT_INIT:
             return { ...state, isLoading: true }
         case ACTION_TYPES.CREATE_DEPARTMENT_SUCCESS:
             return { ...state, isLoading: false }
