@@ -14,6 +14,9 @@ export const ACTION_TYPES = {
     DELETE_MODAL_OPEN: 'DELETE_MODAL_OPEN',
     DELETE_MODAL_CLOSE: 'DELETE_MODAL_CLOSE',
 
+    CREATESTOCK_MODAL_OPEN: 'CREATESTOCK_MODAL_OPEN',
+    CREATESTOCK_MODAL_CLOSE: 'CREATESTOCK_MODAL_CLOSE',
+
     CREATE_ACTIVESTOCK_INIT: 'CREATE_ACTIVESTOCK_INIT',
     CREATE_ACTIVESTOCK_SUCCESS: 'CREATE_ACTIVESTOCK_SUCCESS',
     CREATE_ACTIVESTOCK_ERROR: 'CREATE_ACTIVESTOCK_ERROR',
@@ -110,4 +113,12 @@ export const OpenDeleteModal = () => dispatch => {
 
 export const CloseDeleteModal = () => dispatch => {
     dispatch({ type: ACTION_TYPES.DELETE_MODAL_CLOSE })
+}
+
+export const OpenStockModal = () => dispatch => {
+    dispatch({ type: ACTION_TYPES.CREATESTOCK_MODAL_OPEN })
+}
+
+export const CloseStockModal = () => dispatch => {
+    dispatch({ type: ACTION_TYPES.CREATESTOCK_MODAL_CLOSE })
 }

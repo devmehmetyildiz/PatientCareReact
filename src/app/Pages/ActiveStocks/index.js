@@ -88,7 +88,7 @@ export class Units extends Component {
   }
 
   handleonaddnew = (e) => {
-    this.props.history.push("/Units/Create")
+    this.props.history.push("/ActiveStocks/Create")
   }
 
   componentDidMount() {

@@ -23,6 +23,7 @@ const INITIAL_STATE = {
         isActive: true,
     },
     errmsg: "",
+    isStockModalOpen:false,
     isLoading: false,
     isSelected: false,
     isModalOpen: false
@@ -67,6 +68,10 @@ export const ActivestockReducer = (state = INITIAL_STATE, { type, payload }) => 
           return { ...state, isModalOpen: true }
         case ACTION_TYPES.DELETE_MODAL_CLOSE:
           return { ...state, isModalOpen: false }
+          case ACTION_TYPES.CREATESTOCK_MODAL_OPEN:
+          return { ...state, isStockModalOpen: true }
+        case ACTION_TYPES.CREATESTOCK_MODAL_CLOSE:
+          return { ...state, isStockModalOpen: false }
         default:
           return state;
     }

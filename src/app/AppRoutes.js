@@ -50,6 +50,7 @@ const CostumertypesCreate = lazy(() => import('./Pages/Costumertypes/Create'));
 const CostumertypesEdit = lazy(() => import('./Pages/Costumertypes/Edit'));
 
 const ActiveStocks = lazy(() => import('./Pages/ActiveStocks'));
+const ActiveStocksCreate = lazy(() => import('./Pages/ActiveStocks/Create'));
 
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
@@ -113,6 +114,7 @@ class AppRoutes extends Component {
           <ProtectedRoute exact path="/Users/:UserId" component={ UsersEdit } />
 
           <ProtectedRoute exact path="/ActiveStocks" component={ ActiveStocks } />
+          <ProtectedRoute exact path="/ActiveStocks/Create" component={ ActiveStocksCreate } />
 
           <Route exact path="/Login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />
