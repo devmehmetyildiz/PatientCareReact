@@ -3,12 +3,15 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { CreateActivestock, OpenStockModal } from "../../Redux/actions/Activestock"
+import { CreateActivestock, OpenStockModal, CloseStockModal } from "../../Redux/actions/Activestock"
 import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
 import { GetAllStocks } from '../../Redux/actions/StockActions';
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
 import Createstockmodal from './Createstockmodal';
+import { Form } from 'react-bootstrap'
+
+
 export class Create extends Component {
 
     constructor(props) {
@@ -30,7 +33,10 @@ export class Create extends Component {
         }
         const selecteddepartments = []
         const departments = []
-        this.state = { currentitem, selecteddepartments, departments };
+        const stocks = []
+        const selectedstock = {}
+        const dataFetched = false
+        this.state = { currentitem, selecteddepartments, departments, stocks, selectedstock, dataFetched };
     }
 
     handlesubmit = (e) => {
@@ -48,15 +54,20 @@ export class Create extends Component {
 
     componentDidMount() {
         this.props.OpenStockModal()
-        //   this.props.GetAllDepartments();
+        this.props.GetAllDepartments();
+        this.props.GetAllStocks()
     }
+
     componentDidUpdate() {
-        /*   if (this.props.Departments.list.length > 0 && this.state.departments.length === 0) {
-              const list = this.props.Departments.list.map((item, index) => {
-                  return { value: item.concurrencyStamp, label: item.name }
-              })
-              this.setState({ departments: list })
-          } */
+        if (!this.state.dataFetched && !this.props.Stocks.isLoading && !this.props.Departments.isLoading) {
+            const departmentlist = this.props.Departments.list.map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+            const stockslist = this.props.Stocks.list.map((item, index) => {
+                return { value: item.concurrencyStamp, label: item.name }
+            })
+            this.setState({ departments: departmentlist, stocks: stockslist, dataFetched: true })
+        }
     }
 
     goBack = (e) => {
@@ -70,45 +81,68 @@ export class Create extends Component {
         this.setState({ currentitem: newdata })
     }
 
-    handleselect = (e) => {
-        this.setState({ selecteddepartments: e })
+    handleselectstock = (e) => {
+        this.setState({ selectedstock: e })
     }
 
     render() {
-        /*    const list = this.state.departments
-           const isLoading = (this.props.Departments.isLoading || this.props.Cases.isLoading) */
+        const stocks = this.state.stocks
+        const departments = this.state.departments
+        const isLoading = (this.props.Departments.isLoading || this.props.Stocks.isLoading)
         return (
             <>
                 <Createstockmodal
                     show={this.props.Activestocks.isStockModalOpen}
+                    onHide={() => this.props.CloseStockModal()}
                 />
-                {true ? <Spinner /> :
+                {isLoading ? <Spinner /> :
                     <div className='Page'>
                         <div className="col-12 grid-margin">
                             <div className="card">
                                 <div className="card-body">
-                                    <h4 className="card-title">Durumlar > Yeni</h4>
+                                    <h4 className="card-title">Ürün Girişi > Yeni</h4>
                                     <form className="form-sample" onSubmit={this.handlesubmit}>
-                                        <div className="row">
-                                            <InputItem
-                                                itemrowspan="1"
-                                                itemname="isim"
-                                                itemid="name"
-                                                itemvalue={this.state.currentitem.name}
-                                                itemtype="text"
-                                                itemplaceholder="İsim"
-                                                itemchange={this.handleonchange}
-                                            />
-                                            <InputItem
-                                                itemrowspan="1"
-                                                itemname="Durum Değeri"
-                                                itemid="caseStatus"
-                                                itemvalue={this.state.currentitem.caseStatus}
-                                                itemtype="number"
-                                                itemplaceholder="Durum Değeri"
-                                                itemchange={this.handleonchange}
-                                            />
+                                        <div className='row'>
+                                            <label style={{ fontSize: "12px" }} className="col-form-label">Tanımlı Ürün</label>
                                         </div>
+                                        <div className='row'>
+                                            <div style={{ marginRight: '-5px' }} className='col-12 pr-5 mb-3'>
+                                                <Select
+                                                    value={this.state.selectedstock}
+                                                    onChange={this.handleselectstock}
+                                                    options={stocks}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className='row'>
+                                            <div className="pr-5 col-6">
+                                                <div className='row'>
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">SKT</label>
+                                                </div>
+                                                <Form.Group className="row" >
+                                                    <Form.Control
+                                                        id="skt"
+                                                        value={this.state.currentitem.stk}
+                                                        type="date"
+                                                        placeholder="Skt"
+                                                        onChange={this.handleonchange}
+                                                    />
+                                                </Form.Group>
+                                            </div>
+                                            <div className="pr-5 col-6">
+                                                <div className='row'>
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Barkod Numarası</label>
+                                                </div>
+                                                <Form.Group className="row" >
+                                                    <Form.Control
+                                                        id="barcodeno"
+                                                        value={this.state.currentitem.barcodeno}
+                                                        type="number"
+                                                        placeholder="Barkod numarası"
+                                                        onChange={this.handleonchange}
+                                                    />
+                                                </Form.Group>
+                                            </div>
                                         <div className='row'>
                                             <label style={{ fontSize: "12px" }} className="col-form-label">Departmanlar</label>
                                         </div>
@@ -116,7 +150,7 @@ export class Create extends Component {
                                             <div style={{ marginRight: '-5px' }} className='col-12 pr-5 mb-3'>
                                                 <Select
                                                     value={this.state.selecteddepartments}
-                                                    onChange={this.handleselect}
+                                                    onChange={(e) => { this.setState({ selectedstock: e }) }}
                                                     isMulti={true}
                                                     options={[]}
                                                 />
@@ -126,6 +160,7 @@ export class Create extends Component {
                                             <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
                                             <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
                                         </div>
+                                    </div>
                                     </form>
                                 </div>
                             </div>
@@ -143,6 +178,6 @@ const mapStateToProps = (state) => ({
     Stocks: state.Stocks
 })
 
-const mapDispatchToProps = { CreateActivestock, GetAllDepartments, GetAllStocks, OpenStockModal }
+const mapDispatchToProps = { CreateActivestock, GetAllDepartments, GetAllStocks, OpenStockModal, CloseStockModal }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))
