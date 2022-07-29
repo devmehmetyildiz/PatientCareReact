@@ -53,7 +53,7 @@ export class Create extends Component {
     }
 
     componentDidMount() {
-        this.props.OpenStockModal()
+        //  this.props.OpenStockModal()
         this.props.GetAllDepartments();
         this.props.GetAllStocks()
     }
@@ -143,24 +143,14 @@ export class Create extends Component {
                                                     />
                                                 </Form.Group>
                                             </div>
-                                        <div className='row'>
-                                            <label style={{ fontSize: "12px" }} className="col-form-label">Departmanlar</label>
                                         </div>
-                                        <div className='row'>
-                                            <div style={{ marginRight: '-5px' }} className='col-12 pr-5 mb-3'>
-                                                <Select
-                                                    value={this.state.selecteddepartments}
-                                                    onChange={(e) => { this.setState({ selectedstock: e }) }}
-                                                    isMulti={true}
-                                                    options={[]}
-                                                />
-                                            </div>
+                                        <div className="row d-flex justify-content-center align-items-center">
+                                            <FormRepeater />
                                         </div>
                                         <div className='row d-flex pr-5 justify-content-end align-items-right'>
                                             <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
                                             <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
                                         </div>
-                                    </div>
                                     </form>
                                 </div>
                             </div>
@@ -181,3 +171,75 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = { CreateActivestock, GetAllDepartments, GetAllStocks, OpenStockModal, CloseStockModal }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))
+
+
+
+class FormRepeater extends Component {
+    constructor() {
+        super();
+        this.state = {
+            items: [{ id: 1, skt: '',barcodeno:'' }]
+        }
+        this.inputChangeskt = this.inputChangeskt.bind(this);
+        this.inputChangebarcode = this.inputChangebarcode.bind(this);
+    }
+
+    inputChangeskt(event, index) {
+        const items = this.state.items;
+        items[index].skt = event.target.value;
+        this.setState(items);;
+    }
+
+    inputChangebarcode(event, index) {
+        const items = this.state.items;
+        items[index].barcodeno = event.target.value;
+        this.setState(items);;
+    }
+
+    addItem = () => {
+        const items = [...this.state.items];
+        items.push({ id: this.state.items[this.state.items.length - 1].id + 1, skt: '',barcodeno:'' });
+        this.setState({ items: items });
+    }
+
+    deleteItem(index) {
+        const items = [...this.state.items];
+        items.splice(index, 1);
+        this.setState({ items: items });
+    }
+
+    render() {
+        return (
+            <form className="form-inline" onSubmit={(event) => { event.preventDefault(); }}>
+                <div className="d-flex flex-column">
+                    {this.state.items.map((item, index) => {
+                        return (
+                            <div key={item.id} className="d-flex mb-2">
+                                <div className="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="SKT"
+                                        value={item.skt}
+                                        onChange={(event) => this.inputChangeskt(event, index)}
+                                    />
+                                </div>
+                                <div className="input-group mb-2 mr-sm-2 mb-sm-0">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="BARKOD"
+                                        value={item.barcodeno}
+                                        onChange={(event) => this.inputChangebarcode(event, index)}
+                                    />
+                                </div>
+                                {(index > 0) ? <button className="btn btn-danger btn-sm icon-btn ml-2" onClick={() => this.deleteItem(index)}><i className="mdi mdi-delete"></i></button> : null}
+                            </div>
+                        )
+                    })}
+                </div>
+                <button className="btn btn-info btn-sm icon-btn ml-2 mb-2" onClick={this.addItem} ><i className="mdi mdi-plus"></i></button>
+            </form>
+        )
+    }
+}
