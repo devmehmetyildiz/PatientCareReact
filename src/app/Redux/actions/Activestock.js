@@ -28,6 +28,9 @@ export const ACTION_TYPES = {
     DELETE_ACTIVESTOCK_INIT: 'DELETE_ACTIVESTOCK_INIT',
     DELETE_ACTIVESTOCK_SUCCESS: 'DELETE_ACTIVESTOCK_SUCCESS',
     DELETE_ACTIVESTOCK_ERROR: 'DELETE_ACTIVESTOCK_ERROR',
+
+    UPDATE_DETAILS: "UPDATE_DETAILS",
+    UPDATE_DEPARTMENT: "UPDATE_DEPARTMENT"
 }
 
 export const GetAllActivestocks = () => async dispatch => {
@@ -37,7 +40,14 @@ export const GetAllActivestocks = () => async dispatch => {
         url: process.env.REACT_APP_BACKEND_URL + '/Activestock/GetAll',
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
-        .then(response => dispatch({ type: ACTION_TYPES.GET_ALLACTIVESTOCKS_SUCCESS, payload: response.data }) )
+        .then(response => {
+            console.log(' response.data: ',  response.data);
+            response.data.forEach(element => {
+                element.stockname = element.stock.name
+                element.departmentname = element.department.name
+            })
+            dispatch({ type: ACTION_TYPES.GET_ALLACTIVESTOCKS_SUCCESS, payload: response.data })
+        })
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_ALLACTIVESTOCKS_ERROR, payload: error }) })
 }
 
@@ -65,6 +75,25 @@ export const CreateActivestock = (Item, historypusher) => dispatch => {
             historypusher.push("/Activestocks")
         })
         .catch(error => {
+            dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_ERROR, payload: error })
+        })
+}
+
+export const CreateActivestocks = (Item, historypusher) => dispatch => {
+    console.log('Item: ', Item);
+    dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_INIT })
+    axios({
+        method: 'post',
+        url: process.env.REACT_APP_BACKEND_URL + '/Activestock/AddRange',
+        headers: { Authorization: `Bearer ${GetToken()}` },
+        data: Item
+    })
+        .then(() => {
+            dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_SUCCESS })
+            historypusher.push("/Activestocks")
+        })
+        .catch(error => {
+            console.log('error: ', error);
             dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_ERROR, payload: error })
         })
 }
@@ -121,4 +150,12 @@ export const OpenStockModal = () => dispatch => {
 
 export const CloseStockModal = () => dispatch => {
     dispatch({ type: ACTION_TYPES.CREATESTOCK_MODAL_CLOSE })
+}
+
+export const UpdateDetails = (Item) => dispatch => {
+    dispatch({ type: ACTION_TYPES.UPDATE_DETAILS, payload: Item })
+}
+
+export const UpdateDepartment = (Item) => dispatch => {
+    dispatch({ type: ACTION_TYPES.UPDATE_DEPARTMENT, payload: Item })
 }

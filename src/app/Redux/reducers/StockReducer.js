@@ -6,7 +6,6 @@ const INITIAL_STATE = {
     id: 0,
     name: "",
     description: "",
-    amount: 0,
     unitid: "",
     unittxt: "",
     unit: {},
