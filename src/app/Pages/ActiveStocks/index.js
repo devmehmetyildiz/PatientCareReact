@@ -33,7 +33,15 @@ export class Units extends Component {
       }, {
         dataField: 'skt',
         text: 'SKT',
-        sort: true
+        sort: true,
+        /* formatter: (cellContent, row) => {
+          if (row.skt !== null && row.skt !== undefined) {
+            console.log('row.skt: ', row.skt);
+            return row.skt.toDateString()
+          }
+          else
+            return row.skt
+        } */
       }, {
         dataField: 'barcodeno',
         text: 'Barkod Numarası',
@@ -45,34 +53,37 @@ export class Units extends Component {
       }, {
         dataField: 'purchaseprice',
         text: 'Alış Fiyatı',
-        sort: true,
-        hidden: true
+        sort: true
       },
       {
         dataField: 'purchasedate',
         text: 'Alış Tarihi',
         sort: true,
-        type: 'date',
-        hidden: true
+       /*  formatter: (cellContent, row) => {
+          if (row.purchasedatedate !== null && row.purchasedatedate !== undefined) {
+            console.log('row.purchasedatedate: ', row.purchasedatedate);
+            return row.purchasedatedate.toDateString()
+          }
+          else
+            return row.purchasedatedate
+        } */
       }, {
         dataField: 'skt',
         text: 'SKT Durumu',
         formatter: (cellContent, row) => {
 
-          let datenow =  new Date().toISOString().slice(0, 10)
-          console.log('datenow: ', datenow);
-          console.log('this.addDays(row.skt, 0): ', this.addDays(row.skt, 0));
-          if ((this.addDays(row.skt, 0).toISOString().slice(0, 10))  < datenow) {
+          let datenow = new Date().toISOString().slice(0, 10)
+          if ((this.addDays(row.skt, 0).toISOString().slice(0, 10)) < datenow) {
             return (
               <div className="badge badge-outline-danger">GEÇMİŞ TARİHLİ</div>
             );
           }
-          if ((this.addDays(row.skt, 0).toISOString().slice(0, 10))  ===  datenow) {
+          if ((this.addDays(row.skt, 0).toISOString().slice(0, 10)) === datenow) {
             return (
               <div className="badge badge-outline-warning">SON GÜN</div>
             );
           }
-          if ((this.addDays(row.skt, 0).toISOString().slice(0, 10))  >  datenow) {
+          if ((this.addDays(row.skt, 0).toISOString().slice(0, 10)) > datenow) {
             return (
               <div className="badge badge-outline-success">OLUMLU</div>
             );
@@ -82,6 +93,63 @@ export class Units extends Component {
               <span className="label label-danger"> BELİRLENEMEDİ</span>
             </h5>
           );
+        }
+      }, {
+        dataField: 'watch',
+        text: 'Hareket İzle',
+        headerStyle: { margin: '-3px' },
+        Style: { margin: '-3px' },
+        formatter: () => {
+          return (
+            <div>
+              <button className="btn btn-dark">
+                <i className="mdi mdi-arrange-bring-to-front text-primary"></i>
+              </button>
+            </div>
+          );
+        },
+        events: {
+          onClick: (e, column, columnIndex, row, rowIndex) => {
+            this.props.history.push('/Activestocks/' + row.id)
+          }
+        }
+      }, {
+        dataField: 'update',
+        text: 'Güncelle',
+        headerStyle: { maxWidht: '10px' },
+        Style: { maxWidht: '10px' },
+        formatter: () => {
+          return (
+            <div>
+              <button className="btn btn-dark">
+                <i className="mdi mdi-tooltip-edit text-primary"></i>
+              </button>
+            </div>
+          );
+        },
+        events: {
+          onClick: (e, column, columnIndex, row, rowIndex) => {
+            this.props.history.push('/Activestocks/' + row.id)
+          }
+        }
+      }, {
+        dataField: 'kill',
+        text: 'İtlaf Et',
+        headerStyle: { maxWidht: '10px' },
+        Style: { maxWidht: '10px' },
+        formatter: () => {
+          return (
+            <div>
+              <button className="btn btn-dark">
+                <i className="mdi mdi-backspace text-primary"></i>
+              </button>
+            </div>
+          );
+        },
+        events: {
+          onClick: (e, column, columnIndex, row, rowIndex) => {
+            this.props.history.push('/Activestocks/' + row.id)
+          }
         }
       }
     ];
@@ -95,6 +163,13 @@ export class Units extends Component {
     return result;
   }
 
+  removeTime = (date = new Date()) => {
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+  }
 
   handleDeleteRole = async (e, row) => {
     await this.props.GetSelectedUnit(row.id)
@@ -153,7 +228,7 @@ export class Units extends Component {
                                   defaultSorted={this.state.defaultSorted}
                                   hover
                                   condensed
-                                  bordered={false}
+                                  bordered={true}
                                   pagination={paginationFactory()}
                                   {...props.baseProps}
                                   wrapperClasses="table-responsive"

@@ -41,7 +41,7 @@ export const GetAllActivestocks = () => async dispatch => {
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => {
-            console.log(' response.data: ',  response.data);
+            console.log(' response.data: ', response.data);
             response.data.forEach(element => {
                 element.stockname = element.stock.name
                 element.departmentname = element.department.name
@@ -58,7 +58,11 @@ export const GetSelectedActivestock = (ItemId) => async dispatch => {
         url: `${process.env.REACT_APP_BACKEND_URL}/Activestock/GetSelectedActivestock?ID=${ItemId}`,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
-        .then(response => dispatch({ type: ACTION_TYPES.GET_SELECTEDACTIVESTOCK_SUCCESS, payload: response.data }))
+        .then(response => {
+            response.data.stockname = response.data.stock.name
+            response.data.departmentname = response.data.department.name
+            dispatch({ type: ACTION_TYPES.GET_SELECTEDACTIVESTOCK_SUCCESS, payload: response.data })
+        })
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDACTIVESTOCK_ERROR, payload: error }) })
 };
 
