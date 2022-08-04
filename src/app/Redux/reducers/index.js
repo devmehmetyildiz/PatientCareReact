@@ -12,6 +12,10 @@ import { StockReducer } from "./StockReducer";
 import { FileReducer } from "./FileReducer";
 import { CostumertypeReducer } from "./CostumertypeReducer";
 import { ActivestockReducer } from "./Activestock";
+import { DeactivestockReducer } from "./DeactivestockReducer";
+import { StockmovementReducer } from "./StockmovementReducer";
+import { DatatableReducer } from "./DatatableReducer";
+
 const reducers = combineReducers({
     ActiveUser: loginReducer,
     Cases: CaseReducer,
@@ -25,7 +29,10 @@ const reducers = combineReducers({
     Stocks: StockReducer,
     Files: FileReducer,
     Costumertypes: CostumertypeReducer,
-    Activestocks: ActivestockReducer
+    Activestocks: ActivestockReducer,
+    Stockmovements : StockmovementReducer,
+    Deactivestocks : DeactivestockReducer,
+    Datatables : DatatableReducer
 });
 
 export default reducers;

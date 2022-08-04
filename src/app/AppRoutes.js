@@ -53,6 +53,11 @@ const ActiveStocks = lazy(() => import('./Pages/ActiveStocks'));
 const ActiveStocksCreate = lazy(() => import('./Pages/ActiveStocks/Create'));
 const ActiveStocksEdit = lazy(() => import('./Pages/ActiveStocks/Edit'));
 
+const Stockmovements = lazy(() => import('./Pages/Stockmovements'));
+const Stockmovement = lazy(() => import('./Pages/Stockmovements/stockmovement'));
+
+const Deactivestocks = lazy(() => import('./Pages/Deactivestocks'));
+
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
 const Login = lazy(() => import('./User/Login'));
@@ -117,6 +122,11 @@ class AppRoutes extends Component {
           <ProtectedRoute exact path="/ActiveStocks" component={ ActiveStocks } />
           <ProtectedRoute exact path="/ActiveStocks/Create" component={ ActiveStocksCreate } />
           <ProtectedRoute exact path="/ActiveStocks/:ActivestockId" component={ ActiveStocksEdit } />
+
+          <ProtectedRoute exact path="/Deactivestocks" component={ Deactivestocks } />
+        
+          <ProtectedRoute exact path="/Stockmovements" component={ Stockmovements } />
+          <ProtectedRoute exact path="/Stockmovement/:StockGuid" component={ Stockmovement } />
 
           <Route exact path="/Login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />

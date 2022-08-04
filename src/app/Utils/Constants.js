@@ -13,7 +13,8 @@ export const ROUTES = {
     USER: 'Users',
     DEACTIVESTOCK: 'Deactivestock',
     STOCKMOVEMENT: 'Stockmovement',
-    ACTIVESTOCK: 'Activestock'
+    ACTIVESTOCK: 'Activestock',
+    DATATABLE: 'Datatable'
 }
 
 export const MOVEMENTTYPES = [
@@ -23,5 +24,5 @@ export const MOVEMENTTYPES = [
     { value: 3, label: "Güncellendi" },
     { value: 4, label: "Transfer Edildi" },
     { value: 5, label: "İtlaf Edildi" },
-    { value: 6, label: "Silindi" },
+    { value: 6, label: "Silindi" }
 ]

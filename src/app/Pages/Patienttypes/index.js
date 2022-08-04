@@ -5,9 +5,11 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import { withRouter } from 'react-router-dom';
 import { GetAllPatienttype, GetSelectedPatienttype, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/PatienttypeActions'
+import { GetAllDatatables, CreateDatatable } from '../../Redux/actions/DatatableActions';
 import Spinner from '../../shared/Spinner'
 import DeleteCaseModal from "./Delete"
 import { Form } from "react-bootstrap";
+import { ROUTES } from '../../Utils/Constants';
 
 export class Patienttypes extends React.Component {
 
@@ -26,7 +28,7 @@ export class Patienttypes extends React.Component {
                 sort: true,
                 type: 'number',
                 hidden: true
-            },  {
+            }, {
                 dataField: 'name',
                 text: 'Hasta Tür Adı',
                 sort: true
@@ -50,28 +52,28 @@ export class Patienttypes extends React.Component {
                 sort: true,
                 hidden: true
             },
-             {
+            {
                 dataField: 'createTime',
                 text: 'Oluşturma Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-             {
+            {
                 dataField: 'updateTime',
                 text: 'Güncelleme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-             {
+            {
                 dataField: 'deletetime',
                 text: 'Silme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-             {
+            {
                 dataField: 'isActive',
                 text: 'Aktiflik Durumu',
                 sort: true,
@@ -116,7 +118,8 @@ export class Patienttypes extends React.Component {
             }
 
         ];
-        this.state = { columnvisiblebar, defaultSorted, columns, modalShow };
+        const dataFetched = false
+        this.state = { columnvisiblebar, defaultSorted, columns, modalShow, dataFetched };
 
     }
 
@@ -127,7 +130,7 @@ export class Patienttypes extends React.Component {
         onColumnToggle,
         toggles
     }) => (
-        <div className="text-center">
+        <div className="text-center d-flex ">
             {columns
                 .map(column => ({
                     ...column,
@@ -160,7 +163,44 @@ export class Patienttypes extends React.Component {
     }
 
     componentDidMount() {
-      this.props.GetAllPatienttype();
+        this.props.GetAllPatienttype()
+        this.props.GetAllDatatables()
+    }
+
+    componentDidUpdate() {
+        if (!this.state.dataFetched &&
+            this.props.Patienttypes.list.lenght!==0 &&
+            !this.props.Patienttypes.isLoading &&
+            !this.props.Datatables.isLoading) {
+            this.setState({ dataFetched: true }, () => {
+                console.log('this.props.Datatables: ', this.props.Datatables);
+                this.props.Datatables.list.forEach((item, index) => {
+                    console.log('item: ', item)
+                    if (item.tablename === ROUTES.PATIENTTYPE) {
+                        console.log("buldum")
+                        console.log('dbcolumn: ', item);
+                        this.setState({ columns: item.json })
+                    } else {
+                        console.log("bulamadım")
+
+                        /*   this.props.CreateDatatable({
+                              id: 0,
+                              tablename: ROUTES.PATIENTTYPE,
+                              json: JSON.stringify(this.state.columns),
+                              concurrencyStamp: null,
+                              createdUser: "",
+                              updatedUser: null,
+                              deleteUser: null,
+                              createTime: null,
+                              updateTime: null,
+                              deleteTime: null,
+                              isActive: true,
+                          }) */
+                    }
+                })
+
+            })
+        }
     }
 
     render() {
@@ -183,7 +223,7 @@ export class Patienttypes extends React.Component {
                                             <h4 className="card-title">Hasta Türleri</h4>
                                         </div>
                                         <div className='col-6 d-flex justify-content-end'>
-                                           {/*  <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
+                                            <button style={{ minWidth: '30px', height: '30px' }} className="btn btn-primary mr-2" onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Görünüm</button>
                                             <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Hasta Türü</button>
                                         </div>
                                     </div>
@@ -232,10 +272,11 @@ export class Patienttypes extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    Patienttypes: state.Patienttypes
+    Patienttypes: state.Patienttypes,
+    Datatables: state.Datatables
 })
 
-const mapDispatchToProps = { GetAllPatienttype, GetSelectedPatienttype, OpenDeleteModal, CloseDeleteModal }
+const mapDispatchToProps = { GetAllPatienttype, GetSelectedPatienttype, OpenDeleteModal, CloseDeleteModal, GetAllDatatables, CreateDatatable }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Patienttypes))
 

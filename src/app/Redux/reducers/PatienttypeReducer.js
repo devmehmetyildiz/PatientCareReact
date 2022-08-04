@@ -35,7 +35,7 @@ export const PatienttypeReducer = (state = INITIAL_STATE, { type, payload }) => 
         case ACTION_TYPES.GET_SELECTEDPATIENTTYPE_ERROR:
             return { ...state, errmsg: payload, isLoading: false }
         case ACTION_TYPES.REMOVE_SELECTEDPATIENTTYPE:
-            return { ...state, selected_patienttype: {}, isSelected: false }
+            return { ...state, selected_patienttype: INITIAL_STATE.selected_patienttype, isSelected: false }
         case ACTION_TYPES.EDIT_PATIENTTYPE_INIT:
             return { ...state, isLoading: true }
         case ACTION_TYPES.EDIT_PATIENTTYPE_SUCCESS:
