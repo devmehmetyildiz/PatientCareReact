@@ -120,7 +120,7 @@ class AppRoutes extends Component {
           <ProtectedRoute exact path="/Users/:UserId" component={ UsersEdit } />
 
           <ProtectedRoute exact path="/ActiveStocks" component={ ActiveStocks } />
-          <ProtectedRoute exact path="/ActiveStocks/Create" component={ ActiveStocksCreate } />
+          <ProtectedRoute exact path="/ActiveStocks/Create/:DepartmentId" component={ ActiveStocksCreate } />
           <ProtectedRoute exact path="/ActiveStocks/:ActivestockId" component={ ActiveStocksEdit } />
 
           <ProtectedRoute exact path="/Deactivestocks" component={ Deactivestocks } />

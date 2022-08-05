@@ -50,7 +50,7 @@ export class Create extends Component {
     componentDidMount() {
         //  this.props.OpenStockModal()
         this.props.GetAllDepartments();
-        this.props.GetAllStocks()
+      
     }
 
     componentDidUpdate() {
@@ -95,7 +95,10 @@ export class Create extends Component {
                         <div className="col-12 grid-margin">
                             <div className="card">
                                 <div className="card-body">
-                                    <h4 className="card-title">Ürün Girişi > Yeni</h4>
+                                    <div className='d-flex'>
+                                    <h4 className="card-title justify-content-end">Ürün Girişi > Yeni</h4>
+
+                                    </div>
                                     <form className="form-sample" >
                                         <div className='row'>
                                             <label style={{ fontSize: "12px" }} className="pr-5 col-form-label">Tanımlı Ürün</label>

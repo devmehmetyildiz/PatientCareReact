@@ -26,7 +26,7 @@ const INITIAL_STATE = {
     isActive: true,
   },
   details: [],
-  department:{},
+  department: {},
   errmsg: "",
   isStockModalOpen: false,
   isLoading: false,
@@ -77,11 +77,13 @@ export const ActivestockReducer = (state = INITIAL_STATE, { type, payload }) => 
       return { ...state, isStockModalOpen: true }
     case ACTION_TYPES.CREATESTOCK_MODAL_CLOSE:
       return { ...state, isStockModalOpen: false }
-      case ACTION_TYPES.UPDATE_DETAILS:
-        return { ...state,  details: payload }
-      case ACTION_TYPES.UPDATE_DEPARTMENT:
-        return { ...state,  department: payload }
-      default:
+    case ACTION_TYPES.UPDATE_DETAILS:
+      return { ...state, details: payload }
+    case ACTION_TYPES.UPDATE_DEPARTMENT:
+      return { ...state, department: payload }
+    case ACTION_TYPES.UPDATE_DEPARTMENT:
+      return { ...state, department.: payload }
+    default:
       return state;
   }
 }

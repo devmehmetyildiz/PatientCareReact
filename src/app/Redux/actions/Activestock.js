@@ -31,6 +31,7 @@ export const ACTION_TYPES = {
 
     UPDATE_DETAILS: "UPDATE_DETAILS",
     UPDATE_DEPARTMENT: "UPDATE_DEPARTMENT"
+    UPDATE_DEPARTMENTUUI: "UPDATE_DEPARTMENTUUI"
 }
 
 export const GetAllActivestocks = () => async dispatch => {
@@ -161,4 +162,8 @@ export const UpdateDetails = (Item) => dispatch => {
 
 export const UpdateDepartment = (Item) => dispatch => {
     dispatch({ type: ACTION_TYPES.UPDATE_DEPARTMENT, payload: Item })
+}
+
+export const UpdateDepartmentguid = (Item) => dispatch => {
+    dispatch({ type: ACTION_TYPES.UPDATE_DEPARTMENTUUI, payload: Item })
 }

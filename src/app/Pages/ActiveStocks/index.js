@@ -182,7 +182,7 @@ export class Units extends Component {
 
   handleonaddnew = (e) => {
     this.props.UpdateDepartment(this.props.Departments.list.find(element => element.concurrencyStamp === e.target.id))
-    this.props.history.push("/ActiveStocks/Create")
+    this.props.history.push(`/ActiveStocks/Create/${e.target.id}`)
   }
 
   componentDidMount() {
