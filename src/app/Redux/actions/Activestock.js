@@ -41,7 +41,6 @@ export const GetAllActivestocks = () => async dispatch => {
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => {
-            console.log(' response.data: ', response.data);
             response.data.forEach(element => {
                 element.stockname = element.stock.name
                 element.departmentname = element.department.name

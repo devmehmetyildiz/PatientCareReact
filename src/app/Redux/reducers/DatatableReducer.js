@@ -2,8 +2,11 @@ import { ACTION_TYPES } from "../actions/DatatableActions"
 
 const INITIAL_STATE = {
     list: [],
+    selecteditem: [],
     errmsg: "",
-    isLoading: false
+    isLoading: false,
+    isModalOpen: false
+
 }
 
 export const DatatableReducer = (state = INITIAL_STATE, { type, payload }) => {
@@ -27,6 +30,12 @@ export const DatatableReducer = (state = INITIAL_STATE, { type, payload }) => {
             return { ...state, isLoading: false }
         case ACTION_TYPES.CREATE_DATATABLE_ERROR:
             return { ...state, errmsg: payload, isLoading: false }
+        case ACTION_TYPES.UPDATE_ITEM:
+            return { ...state, selecteditem: payload }
+        case ACTION_TYPES.MODAL_OPEN:
+            return { ...state, isModalOpen: true }
+        case ACTION_TYPES.MODAL_CLOSE:
+            return { ...state, isModalOpen: false }
         default:
             return state;
     }
