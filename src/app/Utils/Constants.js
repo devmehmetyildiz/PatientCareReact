@@ -18,11 +18,11 @@ export const ROUTES = {
 }
 
 export const MOVEMENTTYPES = [
-    { value: 0, label: "Oluşturuldu" },
-    { value: 1, label: "Eklendi" },
-    { value: 2, label: "Kullanıldı" },
-    { value: 3, label: "Güncellendi" },
-    { value: 4, label: "Transfer Edildi" },
-    { value: 5, label: "İtlaf Edildi" },
-    { value: 6, label: "Silindi" }
+    { value: 0, label: "Oluşturma", timelineclass: "timeline-wrapper-success" },
+    { value: 1, label: "Ekleme", timelineclass: "timeline-wrapper-success" },
+    { value: 2, label: "Tüketim", timelineclass: "timeline-wrapper-danger" },
+    { value: 3, label: "Güncelleme", timelineclass: "timeline-wrapper-success" },
+    { value: 4, label: "Transfer", timelineclass: "timeline-wrapper-success" },
+    { value: 5, label: "İtlaf Edilme", timelineclass: "timeline-wrapper-warning" },
+    { value: 6, label: "Silinme", timelineclass: "timeline-wrapper-warning" }
 ]

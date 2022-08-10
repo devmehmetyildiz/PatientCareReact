@@ -24,9 +24,25 @@ const INITIAL_STATE = {
     updateTime: null,
     deleteTime: null,
     isActive: true,
+    isdeactive: true,
+    deactivetime: null
   },
   details: [],
-  department: {},
+  department: {
+    id: 0,
+    name: "",
+    concurrencyStamp: null,
+    createdUser: "",
+    updatedUser: null,
+    deleteUser: null,
+    createTime: null,
+    updateTime: null,
+    deleteTime: null,
+    isActive: true,
+    isAdded: false,
+    stationstxt: "",
+    stations: []
+  },
   errmsg: "",
   isStockModalOpen: false,
   isLoading: false,
@@ -69,6 +85,12 @@ export const ActivestockReducer = (state = INITIAL_STATE, { type, payload }) => 
       return { ...state, isLoading: false, isModalOpen: false }
     case ACTION_TYPES.DELETE_ACTIVESTOCK_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
+    case ACTION_TYPES.KILL_ACTIVESTOCK_INIT:
+      return { ...state, isLoading: true }
+    case ACTION_TYPES.KILL_ACTIVESTOCK_SUCCESS:
+      return { ...state, isLoading: false, isModalOpen: false }
+    case ACTION_TYPES.KILL_ACTIVESTOCK_ERROR:
+      return { ...state, errmsg: payload, isLoading: false }
     case ACTION_TYPES.DELETE_MODAL_OPEN:
       return { ...state, isModalOpen: true }
     case ACTION_TYPES.DELETE_MODAL_CLOSE:
@@ -81,8 +103,12 @@ export const ActivestockReducer = (state = INITIAL_STATE, { type, payload }) => 
       return { ...state, details: payload }
     case ACTION_TYPES.UPDATE_DEPARTMENT:
       return { ...state, department: payload }
-    case ACTION_TYPES.UPDATE_DEPARTMENT:
-      return { ...state, department.: payload }
+    case ACTION_TYPES.UPDATE_DEPARTMENTUUI_INIT:
+      return { ...state }
+    case ACTION_TYPES.UPDATE_DEPARTMENTUUI_SUCCESS:
+      return { ...state, department: payload }
+    case ACTION_TYPES.UPDATE_DEPARTMENTUUI_ERROR:
+      return { ...state, errmsg: payload }
     default:
       return state;
   }

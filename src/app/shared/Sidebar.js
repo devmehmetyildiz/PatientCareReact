@@ -83,7 +83,7 @@ class Sidebar extends Component {
                   <li className="nav-item"> <Link className={ this.isPathActive('/ActiveStocks') ? 'nav-link active' : 'nav-link' } to="/ActiveStocks">Stoklar</Link></li>
                   <li className="nav-item"> <Link className={ this.isPathActive('/DeactiveStocks') ? 'nav-link active' : 'nav-link' } to="/DeactiveStocks">İtlaf Edilenler</Link></li>
                   <li className="nav-item"> <Link className={ this.isPathActive('/Stockmovements') ? 'nav-link active' : 'nav-link' } to="/Stockmovements">Genel Hareketlerim</Link></li>
-                  <li className="nav-item"> <Link className={ this.isPathActive('/Stockmovement') ? 'nav-link active' : 'nav-link' } to="/Stockmovement">Ürün Hareketi</Link></li>
+                  <li className="nav-item"> <Link className={ this.isPathActive('/StockmovementNewSelect') ? 'nav-link active' : 'nav-link' } to="/StockmovementNewSelect">Ürün Hareketi</Link></li>
                 </ul>
               </div>
             </Collapse>

@@ -1,5 +1,7 @@
 import axios from "axios"
-import { GetToken } from "../../Utils/TokenValidChecker";
+import { ROUTES } from "../../Utils/Constants";
+import Popup from "../../Utils/Popup";
+import { AxiosErrorHandle, GetToken } from "../../Utils/TokenValidChecker";
 
 export const ACTION_TYPES = {
     GET_ALLACTIVESTOCKS_INIT: 'GET_ALLACTIVESTOCKS_INIT',
@@ -29,9 +31,16 @@ export const ACTION_TYPES = {
     DELETE_ACTIVESTOCK_SUCCESS: 'DELETE_ACTIVESTOCK_SUCCESS',
     DELETE_ACTIVESTOCK_ERROR: 'DELETE_ACTIVESTOCK_ERROR',
 
+    KILL_ACTIVESTOCK_INIT: 'KILL_ACTIVESTOCK_INIT',
+    KILL_ACTIVESTOCK_SUCCESS: 'KILL_ACTIVESTOCK_SUCCESS',
+    KILL_ACTIVESTOCK_ERROR: 'KILL_ACTIVESTOCK_ERROR',
+
     UPDATE_DETAILS: "UPDATE_DETAILS",
-    UPDATE_DEPARTMENT: "UPDATE_DEPARTMENT"
-    UPDATE_DEPARTMENTUUI: "UPDATE_DEPARTMENTUUI"
+    UPDATE_DEPARTMENT: "UPDATE_DEPARTMENT",
+
+    UPDATE_DEPARTMENTUUI_INIT: "UPDATE_DEPARTMENTUUI_INIT",
+    UPDATE_DEPARTMENTUUI_SUCCESS: "UPDATE_DEPARTMENTUUI_SUCCESS",
+    UPDATE_DEPARTMENTUUI_ERROR: "UPDATE_DEPARTMENTUUI_ERROR"
 }
 
 export const GetAllActivestocks = () => async dispatch => {
@@ -66,7 +75,7 @@ export const GetSelectedActivestock = (ItemId) => async dispatch => {
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDACTIVESTOCK_ERROR, payload: error }) })
 };
 
-export const CreateActivestock = (Item, historypusher) => dispatch => {
+export const CreateActivestock = (Item, historypusher) => async dispatch => {
     dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_INIT })
     axios({
         method: 'post',
@@ -83,7 +92,7 @@ export const CreateActivestock = (Item, historypusher) => dispatch => {
         })
 }
 
-export const CreateActivestocks = (Item, historypusher) => dispatch => {
+export const CreateActivestocks = (Item, historypusher) => async dispatch => {
     console.log('Item: ', Item);
     dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_INIT })
     axios({
@@ -102,7 +111,7 @@ export const CreateActivestocks = (Item, historypusher) => dispatch => {
         })
 }
 
-export const UpdateActivestock = (Item, historypusher) => dispatch => {
+export const UpdateActivestock = (Item, historypusher) => async dispatch => {
     dispatch({ type: ACTION_TYPES.EDIT_ACTIVESTOCK_INIT })
     axios({
         method: 'post',
@@ -120,7 +129,7 @@ export const UpdateActivestock = (Item, historypusher) => dispatch => {
         })
 }
 
-export const DeleteActivestock = (Item) => dispatch => {
+export const DeleteActivestock = (Item) => async dispatch => {
     dispatch({ type: ACTION_TYPES.DELETE_ACTIVESTOCK_INIT })
     axios({
         method: 'delete',
@@ -133,6 +142,22 @@ export const DeleteActivestock = (Item) => dispatch => {
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.DELETE_ACTIVESTOCK_ERROR, payload: error })
+        })
+}
+
+export const KillActivestock = (Item) => async dispatch => {
+    dispatch({ type: ACTION_TYPES.KILL_ACTIVESTOCK_INIT })
+    axios({
+        method: 'post',
+        url: process.env.REACT_APP_BACKEND_URL + '/Activestock/Deactivestock',
+        headers: { Authorization: `Bearer ${GetToken()}` },
+        data: Item
+    })
+        .then(() => {
+            dispatch({ type: ACTION_TYPES.KILL_ACTIVESTOCK_SUCCESS })
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.KILL_ACTIVESTOCK_ERROR, payload: error })
         })
 }
 
@@ -164,6 +189,16 @@ export const UpdateDepartment = (Item) => dispatch => {
     dispatch({ type: ACTION_TYPES.UPDATE_DEPARTMENT, payload: Item })
 }
 
-export const UpdateDepartmentguid = (Item) => dispatch => {
-    dispatch({ type: ACTION_TYPES.UPDATE_DEPARTMENTUUI, payload: Item })
+export const UpdateDepartmentguid = (ItemId) => async dispatch => {
+    dispatch({ type: ACTION_TYPES.UPDATE_DEPARTMENTUUI_INIT })
+    await axios({
+        method: `get`,
+        url: `${process.env.REACT_APP_BACKEND_URL}/${ROUTES.DEPARTMENT}/GetSelectedDepartmentbyguid?guid=${ItemId}`,
+        headers: { Authorization: `Bearer ${GetToken()}` }
+    })
+        .then(response => dispatch({ type: ACTION_TYPES.UPDATE_DEPARTMENTUUI_SUCCESS, payload: response.data }))
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.UPDATE_DEPARTMENTUUI_ERROR, payload: error })
+            AxiosErrorHandle(error, ROUTES.DEPARTMENT, "GetSelectedDepartmentbyguid")
+        })
 }

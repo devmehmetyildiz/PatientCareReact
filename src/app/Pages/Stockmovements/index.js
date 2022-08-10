@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { GetAllStockmovements } from '../../Redux/actions/StockmovementActions'
 import Spinner from '../../shared/Spinner'
 import { Form } from "react-bootstrap";
-export class Cases extends Component {
+export class Stockmovements extends Component {
 
   constructor(props) {
     super(props)
@@ -23,102 +23,47 @@ export class Cases extends Component {
         text: 'id',
         sort: true,
         type: 'number',
-        hidden: true
       }, {
-        dataField: 'name',
-        text: 'İsim',
+        dataField: 'stockname',
+        text: 'Ürün Adı',
         sort: true
       }, {
-        dataField: 'caseStatus',
-        text: 'Durum Değeri',
+        dataField: 'departmentname',
+        text: 'Departman',
         sort: true
       }, {
-        dataField: 'departmentstxt',
-        text: 'Geçerli Departmanlar',
+        dataField: 'username',
+        text: 'İşlem yapan kullanıcı',
         sort: true
       }
       , {
-        dataField: 'concurrencyStamp',
-        text: 'Unik ID',
+        dataField: 'movementtypename',
+        text: 'Hareket türü',
         sort: true
       }, {
-        dataField: 'createdUser',
-        text: 'Oluşturan Kullanıcı',
+        dataField: 'amount',
+        text: 'Miktar',
         sort: true,
-        hidden: true
       }, {
-        dataField: 'updatedUser',
-        text: 'Güncelleyen Kullanıcı',
+        dataField: 'prevvalue',
+        text: 'Önceki Değer',
         sort: true,
-        hidden: true
       }, {
-        dataField: 'deleteUser',
-        text: 'Silen Kullanıcı',
+        dataField: 'newvalue',
+        text: 'Sonraki değer',
         sort: true,
-        hidden: true
       },
       {
-        dataField: 'createTime',
-        text: 'Oluşturma Tarihi',
+        dataField: 'movementdate',
+        text: 'Hareket Tarihi',
         sort: true,
         type: 'date',
-        hidden: true
-      },
-      {
-        dataField: 'updateTime',
-        text: 'Güncelleme Tarihi',
-        sort: true,
-        type: 'date',
-        hidden: true
-      },
-      {
-        dataField: 'deletetime',
-        text: 'Silme Tarihi',
-        sort: true,
-        type: 'date',
-        hidden: true
-      },
-      {
-        dataField: 'isActive',
-        text: 'Aktiflik Durumu',
-        sort: true,
-        type: 'bool'
-      }, {
-        dataField: 'update',
-        text: 'Güncelle',
-        sort: true,
-        formatter: () => {
-          return (
-            <div>
-              <button className="btn btn-dark">
-                <i className="mdi mdi-tooltip-edit text-primary"></i>Güncelle
-              </button>
-            </div>
-          );
-        },
-        events: {
-          onClick: (e, column, columnIndex, row, rowIndex) => {
-            this.props.history.push('/Cases/' + row.id)
+        formatter: (cellContent, row) => {
+          if (row.movementdate !== null && row.movementdate !== undefined) {
+            return row.movementdate.split('T')[0]
           }
-        }
-      }
-      , {
-        dataField: 'delete',
-        text: 'Sil',
-        sort: true,
-        formatter: () => {
-          return (
-            <div>
-              <button className="btn btn-dark">
-                <i className="mdi mdi-trash-can text-primary"></i>Sil
-              </button>
-            </div>
-          );
-        },
-        events: {
-          onClick: (e, column, columnIndex, row, rowIndex) => {
-            this.handleDeleteCase(e, row)
-          }
+          else
+            return row.movementdate
         }
       }
 
@@ -145,7 +90,7 @@ export class Cases extends Component {
                 <div className="card-body">
                   <div className='row'>
                     <div className='col-6 d-flex justify-content-start'>
-                      <h4 className="card-title">Stok Hreketleri</h4>
+                      <h4 className="card-title">Stok Hareketleri</h4>
                     </div>
                   </div>
                   <div className="row">
@@ -192,7 +137,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = { GetAllStockmovements }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Cases))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Stockmovements))
 
 
 

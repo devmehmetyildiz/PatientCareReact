@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import { GetAllActivestocks, GetSelectedActivestock, OpenDeleteModal, CloseDeleteModal, UpdateDepartment } from '../../Redux/actions/Activestock'
+import { GetAllActivestocks, GetSelectedActivestock, OpenDeleteModal, CloseDeleteModal, UpdateDepartmentguid, KillActivestock } from '../../Redux/actions/Activestock'
 import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
 import { withRouter } from 'react-router-dom';
 import Spinner from "../../shared/Spinner"
+import SweetAlert from 'sweetalert2-react';
 
 export class Units extends Component {
   constructor(props) {
@@ -32,16 +33,18 @@ export class Units extends Component {
         sort: true
       }, {
         dataField: 'skt',
+        style: {
+          minWidth: '120px'
+        },
         text: 'SKT',
         sort: true,
-        /* formatter: (cellContent, row) => {
+        formatter: (cellContent, row) => {
           if (row.skt !== null && row.skt !== undefined) {
-            console.log('row.skt: ', row.skt);
-            return row.skt.toDateString()
+            return row.skt.split('T')[0]
           }
           else
             return row.skt
-        } */
+        }
       }, {
         dataField: 'barcodeno',
         text: 'Barkod Numarası',
@@ -59,16 +62,15 @@ export class Units extends Component {
         dataField: 'purchasedate',
         text: 'Alış Tarihi',
         sort: true,
-       /*  formatter: (cellContent, row) => {
-          if (row.purchasedatedate !== null && row.purchasedatedate !== undefined) {
-            console.log('row.purchasedatedate: ', row.purchasedatedate);
-            return row.purchasedatedate.toDateString()
+        formatter: (cellContent, row) => {
+          if (row.purchasedate !== null && row.purchasedate !== undefined) {
+            return row.purchasedate.split('T')[0]
           }
           else
-            return row.purchasedatedate
-        } */
+            return row.purchasedate
+        }
       }, {
-        dataField: 'skt',
+        dataField: 'sktinfo',
         text: 'SKT Durumu',
         formatter: (cellContent, row) => {
 
@@ -95,10 +97,9 @@ export class Units extends Component {
           );
         }
       }, {
-        dataField: 'watch',
+        dataField: 'process',
         text: 'Hareket İzle',
-        headerStyle: { margin: '-3px' },
-        Style: { margin: '-3px' },
+        style: { maxWidht: '30px' },
         formatter: () => {
           return (
             <div>
@@ -110,7 +111,7 @@ export class Units extends Component {
         },
         events: {
           onClick: (e, column, columnIndex, row, rowIndex) => {
-            this.props.history.push('/Activestocks/' + row.id)
+            this.props.history.push('/Stockmovement/' + row.concurrencyStamp)
           }
         }
       }, {
@@ -143,18 +144,24 @@ export class Units extends Component {
               <button className="btn btn-dark">
                 <i className="mdi mdi-backspace text-primary"></i>
               </button>
+
             </div>
           );
         },
         events: {
           onClick: (e, column, columnIndex, row, rowIndex) => {
-            this.props.history.push('/Activestocks/' + row.id)
+            this.setState({ itemkillID: row.concurrencyStamp, show4: true })
           }
         }
       }
     ];
+    const show4 = false
+    const itemkillID = ""
+    this.state = { columnvisiblebar, currentitem, defaultSorted, columns, SearchBar, isLoading, itemkillID };
+  }
 
-    this.state = { columnvisiblebar, currentitem, defaultSorted, columns, SearchBar, isLoading };
+  handlekill = () => {
+    this.props.KillActivestock(this.state.itemkillID)
   }
 
   addDays = (date, days) => {
@@ -181,7 +188,6 @@ export class Units extends Component {
   }
 
   handleonaddnew = (e) => {
-    this.props.UpdateDepartment(this.props.Departments.list.find(element => element.concurrencyStamp === e.target.id))
     this.props.history.push(`/ActiveStocks/Create/${e.target.id}`)
   }
 
@@ -197,6 +203,14 @@ export class Units extends Component {
     const Columns = this.state.columns
     return (
       <>
+        <SweetAlert
+          show={this.state.show4}
+          title="Eminmisiniz?"
+          text="Ürün İtlaf Edilecek!"
+          type="warning"
+          showCancelButton
+          onConfirm={this.handlekill}
+        />
         {isloading ? <Spinner /> :
           <div className="row datatable">
             {Departments.map(item =>
@@ -208,7 +222,7 @@ export class Units extends Component {
                         <h4 className="card-title">{item.name}</h4>
                       </div>
                       <div className='col-6 d-flex justify-content-end'>
-                        <button style={{ minWidth: '120px', height: '30px' }} id={item.concurrencyStamp} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Stok Girişi</button>
+                        <button style={{ minWidth: '120px', height: '30px' }} key={item.concurrencyStamp} id={item.concurrencyStamp} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Stok Girişi</button>
                       </div>
                     </div>
                     <div className="row">
@@ -255,6 +269,6 @@ const mapStateToProps = (state) => ({
   Departments: state.Departments
 })
 
-const mapDispatchToProps = { GetAllActivestocks, GetSelectedActivestock, GetAllDepartments, OpenDeleteModal, CloseDeleteModal, UpdateDepartment }
+const mapDispatchToProps = { GetAllActivestocks, GetSelectedActivestock, GetAllDepartments, OpenDeleteModal, CloseDeleteModal, UpdateDepartmentguid, KillActivestock }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Units))

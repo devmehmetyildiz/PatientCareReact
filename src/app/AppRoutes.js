@@ -55,6 +55,7 @@ const ActiveStocksEdit = lazy(() => import('./Pages/ActiveStocks/Edit'));
 
 const Stockmovements = lazy(() => import('./Pages/Stockmovements'));
 const Stockmovement = lazy(() => import('./Pages/Stockmovements/stockmovement'));
+const Stockmovementselect = lazy(() => import('./Pages/Stockmovements/stockmovementselect'));
 
 const Deactivestocks = lazy(() => import('./Pages/Deactivestocks'));
 
@@ -127,6 +128,7 @@ class AppRoutes extends Component {
         
           <ProtectedRoute exact path="/Stockmovements" component={ Stockmovements } />
           <ProtectedRoute exact path="/Stockmovement/:StockGuid" component={ Stockmovement } />
+          <ProtectedRoute exact path="/StockmovementNewSelect" component={ Stockmovementselect } />
 
           <Route exact path="/Login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />

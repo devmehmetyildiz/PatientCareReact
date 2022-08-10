@@ -66,7 +66,8 @@ export class Edit extends Component {
             !this.state.dataFetched
         ) {
             const currentvalue = this.props.Activestocks.selected_activestock
-            currentvalue.skt = currentvalue.skt.toISOString().split('T')[0]
+            currentvalue.skt = (currentvalue.skt || '').split('T')[0]
+            currentvalue.purchasedate = (currentvalue.purchasedate || '').split('T')[0]
             console.log('currentvalue: ', currentvalue);
             const prevData = {
                 value: this.props.Activestocks.selected_activestock.stock.concurrencyStamp,
@@ -76,7 +77,7 @@ export class Edit extends Component {
             const list = this.props.Stocks.list.map((item, index) => {
                 return { value: item.concurrencyStamp, label: item.name }
             })
-            this.setState({ stocks: list, selectedstock: prevData, currentitem:currentvalue , dataFetched: true })
+            this.setState({ stocks: list, selectedstock: prevData, currentitem: currentvalue, dataFetched: true })
         }
     }
 
