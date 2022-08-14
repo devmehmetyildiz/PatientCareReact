@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { UpdateDepartment, GetSelectedDepartment,ClearSelectedDepartment } from "../../Redux/actions/DepartmentAction"
+import { UpdateDepartment, GetSelectedDepartment, ClearSelectedDepartment } from "../../Redux/actions/DepartmentAction"
 import { GetAllStations } from "../../Redux/actions/StationAction"
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
@@ -15,6 +15,7 @@ export class Edit extends Component {
         const currentitem = {
             id: 0,
             name: "",
+            ishavepatients: false,
             createdUser: "",
             updatedUser: null,
             deleteUser: null,
@@ -24,6 +25,7 @@ export class Edit extends Component {
             isActive: true,
             stations: []
         }
+        this.checkbox = {}
         const stations = []
         const selected_stations = []
         this.state = { currentitem, selected_stations, stations };
@@ -34,8 +36,8 @@ export class Edit extends Component {
     }
 
     GetData = async () => {
-         this.props.GetSelectedDepartment(this.props.match.params.DepartmentId);
-         this.props.GetAllStations();
+        this.props.GetSelectedDepartment(this.props.match.params.DepartmentId);
+        this.props.GetAllStations();
     }
 
     componentWillUnmount() {
@@ -56,24 +58,31 @@ export class Edit extends Component {
             })
 
             this.setState({ stations: list, selected_stations: prevData, currentitem: this.props.Departments.selected_department }, () => {
-                console.log('currentitem: ', this.state.currentitem);
-
+                if (this.state.currentitem.ishavepatients) {
+                    this.checkbox.checked = true
+                }
             })
         }
     }
+
+    handleonpatienthange = (e) => {
+        const data = this.state.currentitem
+        data.ishavepatients = e.target.value
+        this.setState({ currentitem: data })
+    };
 
     handlesubmit = (e) => {
         e.preventDefault()
         let stations = []
         this.state.selected_stations.forEach(element => {
-            stations.push(this.props.Stations.list.find(station => station.concurrencyStamp===element.value))
+            stations.push(this.props.Stations.list.find(station => station.concurrencyStamp === element.value))
         });
         const newdata = { ...this.state.currentitem }
         newdata.stations = stations
         this.setState({ currentitem: newdata }, () => {
             this.props.UpdateDepartment(this.state.currentitem, this.props.history)
         })
-       
+
     }
 
     goBack = (e) => {
@@ -128,6 +137,24 @@ export class Edit extends Component {
                                                 />
                                             </div>
                                         </div>
+                                        <div className='row'>
+                                            <div className="form-check">
+                                                <label className="form-check-label">
+                                                    <input
+                                                        onChange={(e) => {
+                                                            this.handleonpatienthange({
+                                                                target: {
+                                                                    name: this.state.currentitem.ishavepatients,
+                                                                    value: e.target.checked,
+                                                                },
+                                                            });
+                                                        }}
+                                                        type="checkbox" className="form-check-input" name="ishavepatients" value={this.state.currentitem.ishavepatients} ref={checkbox => this.checkbox = checkbox} />
+                                                    <i className="input-helper"></i>
+                                                    Hastalar tutulacak mı?
+                                                </label>
+                                            </div>
+                                        </div>
                                         <div className='row d-flex pr-5 justify-content-end align-items-right'>
                                             <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
                                             <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Güncelle</button>
@@ -148,6 +175,6 @@ const mapStateToProps = (state) => ({
     Departments: state.Departments
 })
 
-const mapDispatchToProps = { UpdateDepartment, GetAllStations, GetSelectedDepartment,ClearSelectedDepartment }
+const mapDispatchToProps = { UpdateDepartment, GetAllStations, GetSelectedDepartment, ClearSelectedDepartment }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Edit))

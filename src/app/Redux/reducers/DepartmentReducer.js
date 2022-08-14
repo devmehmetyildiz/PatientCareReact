@@ -5,6 +5,7 @@ const INITIAL_STATE = {
     selected_department: {
         id: 0,
         name: "",
+        ishavepatients:false,
         concurrencyStamp: null,
         createdUser: "",
         updatedUser: null,

@@ -33,6 +33,25 @@ export class Departments extends Component {
                 text: 'Departman Adı',
                 sort: true
             }, {
+                dataField: 'ishavepatients',
+                text: 'Hastalar Tutulacak mı?',
+                sort: true,
+                formatter: (row, cell) => {
+                    if (cell.ishavepatients === true) {
+                        return (
+                            <div>
+                                <p>EVET</p>
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <div>
+                                <p>HAYIR</p>
+                            </div>
+                        );
+                    }
+                }
+            }, {
                 dataField: 'normalizedName',
                 text: 'Normalize İsim',
                 sort: true,
@@ -58,28 +77,28 @@ export class Departments extends Component {
                 sort: true,
                 hidden: true
             },
-             {
+            {
                 dataField: 'createTime',
                 text: 'Oluşturma Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-             {
+            {
                 dataField: 'updateTime',
                 text: 'Güncelleme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-             {
+            {
                 dataField: 'deletetime',
                 text: 'Silme Tarihi',
                 sort: true,
                 type: 'date',
                 hidden: true
             },
-             {
+            {
                 dataField: 'stationstxt',
                 text: 'İstasyonlar',
                 sort: false,
@@ -253,6 +272,6 @@ const mapStateToProps = (state) => ({
     Departments: state.Departments
 })
 
-const mapDispatchToProps = { GetAllDepartmentsSettings, GetSelectedDepartment, OpenDeleteModal, CloseDeleteModal  }
+const mapDispatchToProps = { GetAllDepartmentsSettings, GetSelectedDepartment, OpenDeleteModal, CloseDeleteModal }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Departments))

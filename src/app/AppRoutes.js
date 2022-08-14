@@ -59,6 +59,9 @@ const Stockmovementselect = lazy(() => import('./Pages/Stockmovements/stockmovem
 
 const Deactivestocks = lazy(() => import('./Pages/Deactivestocks'));
 
+const Activepatients = lazy(() => import('./Pages/ActivePatients'));
+const ActivepatientsCreate = lazy(() => import('./Pages/ActivePatients/Create'));
+
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
 const Login = lazy(() => import('./User/Login'));
@@ -129,6 +132,9 @@ class AppRoutes extends Component {
           <ProtectedRoute exact path="/Stockmovements" component={ Stockmovements } />
           <ProtectedRoute exact path="/Stockmovement/:StockGuid" component={ Stockmovement } />
           <ProtectedRoute exact path="/StockmovementNewSelect" component={ Stockmovementselect } />
+
+          <ProtectedRoute exact path="/Activepatients" component={ Activepatients } />
+          <ProtectedRoute exact path="/Activepatients/Create/:DepartmentId" component={ ActivepatientsCreate } />
 
           <Route exact path="/Login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import InputItem from '../../Components/Common/Forminput'
 import "../../../assets/styles/Pages/Create.scss"
-import { CreateDepartment  } from "../../Redux/actions/DepartmentAction"
+import { CreateDepartment } from "../../Redux/actions/DepartmentAction"
 import { GetAllStations } from "../../Redux/actions/StationAction"
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
@@ -14,6 +14,7 @@ export class Create extends Component {
         const currentitem = {
             Id: 0,
             Name: "",
+            ishavepatients: false,
             ConcurrencyStamp: null,
             CreatedUser: "",
             UpdatedUser: null,
@@ -51,15 +52,21 @@ export class Create extends Component {
         e.preventDefault()
         let stations = []
         this.state.selected_stations.forEach(element => {
-            stations.push(this.props.Stations.list.find(station => station.concurrencyStamp===element.value))
+            stations.push(this.props.Stations.list.find(station => station.concurrencyStamp === element.value))
         });
         const newdata = { ...this.state.currentitem }
         newdata.Stations = stations
         this.setState({ currentitem: newdata }, () => {
             this.props.CreateDepartment(this.state.currentitem, this.props.history)
         })
-       
+
     }
+
+    handleonpatienthange = (e) => {
+        const data = this.state.currentitem
+        data.ishavepatients = e.target.value
+        this.setState({ currentitem: data })
+    };
 
     goBack = (e) => {
         e.preventDefault()
@@ -113,6 +120,24 @@ export class Create extends Component {
                                                 />
                                             </div>
                                         </div>
+                                        <div className='row'>
+                                            <div className="form-check">
+                                                <label className="form-check-label">
+                                                    <input
+                                                        onChange={(e) => {
+                                                            this.handleonpatienthange({
+                                                                target: {
+                                                                    name: this.state.currentitem.ishavepatients,
+                                                                    value: e.target.checked,
+                                                                },
+                                                            });
+                                                        }}
+                                                        type="checkbox" className="form-check-input" name="ishavepatients" value={this.state.currentitem.ishavepatients} />
+                                                    <i className="input-helper"></i>
+                                                    Hastalar tutulacak mı?
+                                                </label>
+                                            </div>
+                                        </div>
                                         <div className='row d-flex pr-5 justify-content-end align-items-right'>
                                             <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
                                             <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
@@ -121,7 +146,7 @@ export class Create extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div >
                 }
             </>
         )

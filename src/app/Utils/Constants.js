@@ -14,7 +14,9 @@ export const ROUTES = {
     DEACTIVESTOCK: 'Deactivestock',
     STOCKMOVEMENT: 'Stockmovement',
     ACTIVESTOCK: 'Activestock',
-    DATATABLE: 'Datatable'
+    DATATABLE: 'Datatable',
+    ACTIVEPATIENT : 'Activepatient',
+    PATIENTREPORT : 'Patientreport'
 }
 
 export const MOVEMENTTYPES = [

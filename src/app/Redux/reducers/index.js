@@ -15,7 +15,7 @@ import { ActivestockReducer } from "./Activestock";
 import { DeactivestockReducer } from "./DeactivestockReducer";
 import { StockmovementReducer } from "./StockmovementReducer";
 import { DatatableReducer } from "./DatatableReducer";
-
+import { ActivepatientReducer } from "./ActivepatientReducer";
 const reducers = combineReducers({
     ActiveUser: loginReducer,
     Cases: CaseReducer,
@@ -30,9 +30,10 @@ const reducers = combineReducers({
     Files: FileReducer,
     Costumertypes: CostumertypeReducer,
     Activestocks: ActivestockReducer,
-    Stockmovements : StockmovementReducer,
-    Deactivestocks : DeactivestockReducer,
-    Datatables : DatatableReducer
+    Stockmovements: StockmovementReducer,
+    Deactivestocks: DeactivestockReducer,
+    Datatables: DatatableReducer,
+    Activepatients: ActivepatientReducer
 });
 
 export default reducers;
