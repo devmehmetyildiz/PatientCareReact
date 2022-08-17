@@ -1,150 +1,160 @@
-import axios from 'axios'
-import React, { useState, useEffect } from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom';
+import InputItem from '../../Components/Common/Forminput'
+import "../../../assets/styles/Pages/Create.scss"
+import { CreateFile } from "../../Redux/actions/FileActions"
+import Spinner from '../../shared/Spinner'
+import Select from 'react-select';
 
-const defaultImageSrc = '/img/user.png'
+export class Create extends Component {
+    constructor(props) {
+        super(props)
+        const defaultImageSrc = '/img/user.png'
 
-const initialfieldvalues = {
-    id: 0,
-    name: "",
-    filefolder: ' ',
-    filetype: ' ',
-    downloadedcount: 0,
-    lastdownloadeduser: ' ',
-    lastdownloadedip: ' ',
-    filepath: defaultImageSrc,
-    imageFile: null,
-    concurrencyStamp: '',
-    createdUser: '',
-    updatedUser: '',
-    deleteUser: '',
-    createTime: null,
-    updateTime: null,
-    deleteTime: null,
-    isActive: false
-}
-
-export default function Employee(props) {
-    const [values, setValues] = useState(initialfieldvalues)
-
-    const [errors, setErrors] = useState({})
-    const handleInputChange = (e) => {
-        const { name, value } = e.target
-        setValues({ ...values, [name]: value })
+        const initialfieldvalues = {
+            id: 0,
+            name: "",
+            filename:'',
+            filefolder: ' ',
+            filetype: ' ',
+            downloadedcount: 0,
+            lastdownloadeduser: ' ',
+            lastdownloadedip: ' ',
+            filepath: defaultImageSrc,
+            imageFile: null,
+            concurrencyStamp: '',
+            createdUser: '',
+            updatedUser: '',
+            deleteUser: '',
+            createTime: null,
+            updateTime: null,
+            deleteTime: null,
+            isActive: false
+        }
+        const values = initialfieldvalues
+        const errors = {}
+        this.state = { values, defaultImageSrc, errors }
     }
-    const showPreview = e => {
+    handleInputChange = (e) => {
+        const { name, value } = e.target
+        const newdata = { ...this.state.values }
+        newdata[name] = value
+        this.setState({ values: newdata })
+    }
+    showPreview = e => {
         if (e.target.files && e.target.files[0]) {
             let imageFile = e.target.files[0]
+            console.log(' e.target.files[0]: ', e.target.files[0]);
+            console.log('e.target.files[0]: ', e.target.files[0]);
             const reader = new FileReader()
             reader.onload = x => {
-                setValues({
-                    ...values,
-                    imageFile: imageFile,
-                    filepath: x.target.result
-                })
+                const newdata = { ...this.state.values }
+                newdata.imageFile = imageFile
+                newdata.filepath = x.target.result
+                this.setState({ values: newdata })
             }
             reader.readAsDataURL(imageFile)
         } else {
-            setValues({
-                ...values,
-                imageFile: null,
-                filepath: defaultImageSrc
-            })
+            const newdata = { ...this.state.values }
+            newdata.imageFile = null
+            newdata.filepath = this.state.defaultImageSrc
+            this.setState({ values: newdata })
         }
     }
-    const validate = () => {
+    validate = () => {
         let temp = {}
-        temp.name = values.name == "" ? false : true
-        temp.filepath = values.filepath == defaultImageSrc ? false : true
-        setErrors(temp)
+        temp.name = this.state.values.name == "" ? false : true
+        temp.filepath = this.state.values.filepath == this.state.defaultImageSrc ? false : true
+        this.setState({ errors: temp })
         return Object.values(temp).every(x => x == true)
     }
-
-    const employeeAPI = (url = "http://localhost:34891/api/File/Add") => {
-        return {
-            fetchAll: () => axios.get(url),
-            create: newRecord => axios.post(url, newRecord),
-            update: (id, updatedRecord) => axios.put(url + id, updatedRecord),
-            delete: id => axios.delete(url + id)
-        }
+    resetForm = () => {
+        this.setState({ values: this.state.initialfieldvalues })
     }
-    const addOrEdit = (formData) => {
-        employeeAPI().create(formData).then(response => {
-            console.log('response: ', response);
-            console.log("basarılı")
-        }).catch(error => {
-          console.log('erroraxios: ', error.response.data);
-        })
-    }
-
-    const resetForm = () => {
-        setValues(initialfieldvalues)
-    }
-
-    const handleSubmit = e => {
+    handleSubmit = e => {
         e.preventDefault()
-        if (validate()) {
-              const formData = new FormData();
-             /*  formData.append('name', "");
-              formData.append('filefolder', "");
-              formData.append('filepath', "");
-              formData.append('filetype', "");
-              formData.append('downloadedcount', 0);
-              formData.append('lastdownloadeduser', "");
-              formData.append('lastdownloadedip', ""); */
-              console.log('values.imageFile: ', values.imageFile);
-              formData.append('model', values.imageFile);
-              [...formData.entries()].forEach(e => console.log(e))
-              addOrEdit(formData)
-
-           /*  var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "multipart/form-data");
-
-            var formdata = new FormData();
-          
-            formdata.append('file', values.imageFile);
-
-            var requestOptions = {
-                method: 'PUT',
-                headers: myHeaders,
-                body: formdata,
-                redirect: 'follow'
-            };
-
-            fetch("http://localhost:34891/api/File/Add", requestOptions)
-                .then(response => response.text())
-                .then(result => console.log(result))
-                .catch(error => console.log('error', error)); */
-
+        if (this.validate()) {
+            const formData = new FormData();
+            formData.append('id', this.state.values.id);
+            formData.append('name', this.state.values.name);
+            formData.append('filefolder', this.state.values.filefolder);
+            formData.append('filetype', this.state.values.filetype);
+            formData.append('downloadedcount', this.state.values.downloadedcount);
+            formData.append('lastdownloadeduser', this.state.values.lastdownloadeduser);
+            formData.append('lastdownloadedip', this.state.values.lastdownloadedip);
+            formData.append('file', this.state.values.imageFile);
+            formData.append('concurrencyStamp', this.state.values.concurrencyStamp);
+            formData.append('createdUser', this.state.values.createdUser);
+            formData.append('updatedUser', this.state.values.updatedUser);
+            formData.append('deleteUser', this.state.values.deleteUser);
+        /*     formData.append('createTime', (this.state.values.createTime || "0000-00-00 00:00"));
+            formData.append('updateTime', (this.state.values.updateTime || "0000-00-00 00:00"));
+            formData.append('deleteTime', (this.state.values.deleteTime || "0000-00-00 00:00")); */
+            formData.append('isActive', this.state.values.isActive);
+            this.props.CreateFile(formData, this.props.history)
         }
-
     }
-    const applyerrorclass = field => ((field in errors && errors[field] == false) ? ' invalid-field' : '')
-    return (
-        <>
-            <div className='container text-center'>
-                <p className='lead'>empoyee form</p>
-            </div>
-            <form onSubmit={handleSubmit} autoComplete='off' noValidate>
-                <div className='card'>
-                    <div className='card-body'>
-                        <img style={{ margin: '10px', width: '200px', height: '200px' }} src={values.filepath} className="card-img-top" />
-                        <div className='form-group'>
-                            <input className={"form-control-file" + applyerrorclass('filepath')} accept='image/*' type="file"
-                                onChange={showPreview}
-                            />
-                        </div>
-                        <div className='form-group'>
-                            <input className={"form-control" + applyerrorclass('name')} placeholder=' Name' name='name'
-                                value={values.name}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className='form-group text-center'>
-                            <button type='submit' className='btn btn-light'>Submit</button>
+
+    applyerrorclass = field => ((field in this.state.errors && this.state.errors[field] == false) ? ' invalid-field' : '')
+
+    render() {
+        return (
+            <>
+                <div className='container text-center'>
+                    <p className='lead'>Dosya Yükleme Erkanı</p>
+                </div>
+                <form onSubmit={this.handleSubmit} autoComplete='off' noValidate>
+                    <div className='card'>
+                        <div className='card-body'>
+                            <div className='row'>
+                                <div className='col'>
+                                    <img style={{ margin: '10px', width: '200px', height: '200px' }} src={this.state.values.filepath} className="card-img-top" />
+                                    <div className='form-group'>
+                                        <input className={"form-control-file" + this.applyerrorclass('filepath')} accept='image/*' type="file"
+                                            onChange={this.showPreview}
+                                        />
+                                    </div>
+                                    <div className='form-group'>
+                                        <label>Dosya Adı</label>
+                                        <input className={"form-control" + this.applyerrorclass('name')} placeholder=' Name' name='name'
+                                            value={this.state.values.name}
+                                            onChange={this.handleInputChange}
+                                        />
+                                    </div>
+                                    <div className='form-group text-center'>
+                                        <button type='submit' className='btn btn-light'>Submit</button>
+                                    </div>
+                                </div>
+                                <div className='col mr-5'>
+                                    <div className='row'>
+                                        <label>Dosya Adı : {this.state.values.name}</label>
+                                    </div>
+                                    <div className='row'>
+                                        <label>İndirilme Sayısı : {this.state.values.downloadedcount}</label>
+                                    </div>
+                                    <div className='row'>
+                                        <label>En Son İndiren Kullanıcı: {this.state.values.lastdownloadeduser}</label>
+                                    </div>
+                                    <div className='row'>
+                                        <label>En Son İndiren ip Adresi: {this.state.values.lastdownloadedip}</label>
+                                    </div>
+                                    <div className='row'>
+                                        <label>En Son İndiren ip Adresi: {this.state.values.lastdownloadedip}</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
-        </>
-    )
+                </form>
+            </>
+        )
+    }
 }
+const mapStateToProps = (state) => ({
+    Files: state.Files,
+})
+
+const mapDispatchToProps = { CreateFile }
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))

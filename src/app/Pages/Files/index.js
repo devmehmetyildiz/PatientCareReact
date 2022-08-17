@@ -29,6 +29,11 @@ export class Files extends Component {
         type: 'number',
       }, {
         dataField: 'name',
+        text: 'İsim',
+        sort: true
+      }, 
+       {
+        dataField: 'filename',
         text: 'Dosya Adı',
         sort: true
       }, {

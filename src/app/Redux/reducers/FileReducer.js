@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   selected_file: {
     id: 0,
     name: "",
+    filename:'',
     filefolder: "",
     filepath: "",
     filetype: "",
