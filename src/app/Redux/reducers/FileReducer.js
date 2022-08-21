@@ -44,18 +44,18 @@ export const FileReducer = (state = INITIAL_STATE, { type, payload }) => {
     case ACTION_TYPES.GET_SELECTEDFILE_ERROR:
       return { ...state, errmsg: payload, isLoading: true }
     case ACTION_TYPES.REMOVE_SELECTEDFILE:
-      return { ...state, selected_file: {}, isSelected: false }
+      return { ...state, selected_file: INITIAL_STATE.selected_file, isSelected: false }
     case ACTION_TYPES.EDIT_FILE_INIT:
       return { ...state, isLoading: true }
     case ACTION_TYPES.EDIT_FILE_SUCCESS:
       return { ...state, isLoading: false }
     case ACTION_TYPES.EDIT_FILE_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
-    case ACTION_TYPES.ADD_FILE_INIT:
+    case ACTION_TYPES.CREATE_FILE_INIT:
       return { ...state, isLoading: true }
-    case ACTION_TYPES.ADD_FILE_SUCCESS:
+    case ACTION_TYPES.CREATE_FILE_SUCCESS:
       return { ...state, isLoading: false }
-    case ACTION_TYPES.ADD_FILE_ERROR:
+    case ACTION_TYPES.CREATE_FILE_ERROR:
       return { ...state, errmsg: payload, isLoading: false }
     case ACTION_TYPES.DELETE_FILE_INIT:
       return { ...state, isLoading: true }

@@ -36,12 +36,11 @@ export const GetAllFiles = () => async dispatch => {
         url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.FILE}/GetAll`,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
-        .then(response => 
-            { dispatch({ type: ACTION_TYPES.GET_ALLFILES_SUCCESS, payload: response.data }) }
+        .then(response => { dispatch({ type: ACTION_TYPES.GET_ALLFILES_SUCCESS, payload: response.data }) }
         )
-        .catch(error => { 
-            dispatch({ type: ACTION_TYPES.GET_ALLFILES_ERROR, payload: error }) 
-            AxiosErrorHandle(error,ROUTES.FILE,"GetAll")
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.GET_ALLFILES_ERROR, payload: error })
+            AxiosErrorHandle(error, ROUTES.FILE, "GetAll")
         })
 }
 
@@ -56,7 +55,7 @@ export const GetSelectedFile = (ItemId) => async dispatch => {
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDFILE_ERROR, payload: error }) })
 };
 
-export const CreateFile = (Item, historypusher) => dispatch => {
+export const CreateFile = (Item, historypusher,filename) => dispatch => {
     dispatch({ type: ACTION_TYPES.CREATE_FILE_INIT })
     axios({
         method: `post`,
@@ -64,14 +63,15 @@ export const CreateFile = (Item, historypusher) => dispatch => {
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })
-        .then(() => {
+    .then(() => {
+            console.log('Item: ', Item);
             dispatch({ type: ACTION_TYPES.CREATE_FILE_SUCCESS })
-            Popup("Success","Dosyalar","Dosya Yüklendi")
+            Popup("Success", "Dosyalar", `Dosya Yüklendi : ${filename}`)
             historypusher.push("/Files")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.CREATE_FILE_ERROR, payload: error })
-            AxiosErrorHandle(error,ROUTES.FILE,"Add")
+            AxiosErrorHandle(error, ROUTES.FILE, "Add")
         })
 }
 
@@ -86,12 +86,12 @@ export const UpdateFile = (Item, historypusher) => dispatch => {
         .then(() => {
             dispatch({ type: ACTION_TYPES.EDIT_FILE_SUCCESS })
             dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDFILE })
-            Popup("Success","Dosyalar","Dosya Güncellendi")
+            Popup("Success", "Dosyalar", "Dosya Güncellendi")
             historypusher.push("/Files")
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.EDIT_FILE_ERROR, payload: error })
-            AxiosErrorHandle(error,ROUTES.FILE,"Update")
+            AxiosErrorHandle(error, ROUTES.FILE, "Update")
         })
 }
 
@@ -105,13 +105,27 @@ export const DeleteFile = (Item) => dispatch => {
     })
         .then(() => {
             dispatch({ type: ACTION_TYPES.DELETE_FILE_SUCCESS })
-            Popup("Success","Dosyalar","Dosya Silindi")
+            Popup("Success", "Dosyalar", "Dosya Silindi")
+            dispatch({ type: ACTION_TYPES.GET_ALLFILES_INIT })
+            axios({
+                method: `get`,
+                url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.FILE}/GetAll`,
+                headers: { Authorization: `Bearer ${GetToken()}` }
+            })
+                .then(response => { dispatch({ type: ACTION_TYPES.GET_ALLFILES_SUCCESS, payload: response.data }) }
+                )
+                .catch(error => {
+                    dispatch({ type: ACTION_TYPES.GET_ALLFILES_ERROR, payload: error })
+                    AxiosErrorHandle(error, ROUTES.FILE, "GetAll")
+                })
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.DELETE_FILE_ERROR, payload: error })
-            AxiosErrorHandle(error,ROUTES.FILE,"Delete")
+            AxiosErrorHandle(error, ROUTES.FILE, "Delete")
         })
 }
+
+
 
 export const ClearSelectedFile = () => dispatch => {
     dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDFILE })
@@ -122,5 +136,6 @@ export const OpenDeleteModal = () => dispatch => {
 }
 
 export const CloseDeleteModal = () => dispatch => {
+    dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDFILE })
     dispatch({ type: ACTION_TYPES.DELETE_MODAL_CLOSE })
 }

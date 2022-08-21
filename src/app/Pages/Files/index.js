@@ -30,9 +30,12 @@ export class Files extends Component {
       }, {
         dataField: 'name',
         text: 'İsim',
-        sort: true
-      }, 
-       {
+        sort: true,
+        style: {
+          width: '300px'
+        }
+      },
+      {
         dataField: 'filename',
         text: 'Dosya Adı',
         sort: true
@@ -40,6 +43,14 @@ export class Files extends Component {
         dataField: 'filefolder',
         text: 'Bulut Klasör',
         sort: true,
+        style: {
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        },
+        headerStyle: (colum, colIndex) => {
+          return { 'white-space': 'nowrap', width: '10px' };
+      }
       }, {
         dataField: 'filepath',
         text: 'Klasör Dizini',
@@ -72,7 +83,7 @@ export class Files extends Component {
         },
         events: {
           onClick: (e, column, columnIndex, row, rowIndex) => {
-            this.props.history.push('/Files/' + row.id)
+            this.props.history.push('/Files/' + row.concurrencyStamp)
           }
         }
       }
@@ -131,7 +142,7 @@ export class Files extends Component {
 
 
   handleDeleteRole = async (e, row) => {
-    await this.props.GetSelectedFile(row.id)
+    await this.props.GetSelectedFile(row.concurrencyStamp)
     this.props.OpenDeleteModal()
   }
 
@@ -153,7 +164,9 @@ export class Files extends Component {
       <div>
         <DeleteModal
           show={this.props.Files.isModalOpen}
-          onHide={() => this.props.CloseDeleteModal()}
+          onHide={() => {
+            this.props.CloseDeleteModal()
+          }}
         />
         {isLoading ? <Spinner /> :
           <div className="row datatable">
