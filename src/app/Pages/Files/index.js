@@ -7,8 +7,9 @@ import { GetAllFiles, GetSelectedFile, OpenDeleteModal, CloseDeleteModal } from 
 import { withRouter } from 'react-router-dom';
 import Spinner from "../../shared/Spinner"
 import DeleteModal from "./Delete"
-
-
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import { OverlayTrigger, Tooltip, Button, ButtonToolbar, Popover } from 'react-bootstrap';
+import "../../../assets/styles/Pages/File.scss"
 export class Files extends Component {
 
   constructor(props) {
@@ -21,40 +22,88 @@ export class Files extends Component {
       dataField: 'Id',
       order: 'asc'
     }]
+
+    function columnFormatter(column, colIndex) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <div className='justify-content-start'>   {column.text} </div>
+          <div className='justify-content-end'>
+            <OverlayTrigger
+              trigger="click"
+              placement="right"
+              overlay={
+                <Popover id="popover-basic">
+                  <Popover.Title as="h3">Popover title</Popover.Title>
+                  <Popover.Content>
+                    <input style={{color:'black'}} />
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <i style={{ cursor: 'pointer' }} className="ti-arrows-vertical"> </i>
+            </OverlayTrigger>
+            <OverlayTrigger
+              trigger="click"
+              placement="right"
+              overlay={
+                <Popover id="popover-basic">
+                  <Popover.Title as="h3">Popover title</Popover.Title>
+                  <Popover.Content>
+                    Sed posuere consectetur est at lobortis. Aenean eu leo quam.
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <i style={{ cursor: 'pointer' }} className="ti-pin2"></i>
+            </OverlayTrigger>
+            <OverlayTrigger
+              trigger="click"
+              placement="right"
+              overlay={
+                <Popover id="popover-basic">
+                  <Popover.Title as="h3">Popover title</Popover.Title>
+                  <Popover.Content>
+                    Sed posuere consectetur est at lobortis. Aenean eu leo quam.
+                  </Popover.Content>
+                </Popover>
+              }
+            >
+              <i style={{ cursor: 'pointer' }} className="ti-pencil-alt"></i>
+            </OverlayTrigger>
+          </div>
+        </div>
+      );
+    }
+
     const columns = [
       {
         dataField: 'id',
         text: 'id',
         sort: true,
         type: 'number',
+        headerFormatter: columnFormatter,
       }, {
         dataField: 'name',
         text: 'İsim',
-        sort: true,
-        style: {
-          width: '300px'
-        }
+        headerFormatter: columnFormatter,
+        headerClasses: 'namecolumn'
       },
       {
         dataField: 'filename',
         text: 'Dosya Adı',
-        sort: true
+        sort: true,
+        headerClasses: 'namecolumn',
+        headerFormatter: columnFormatter,
       }, {
         dataField: 'filefolder',
         text: 'Bulut Klasör',
         sort: true,
-        style: {
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis'
-        },
-        headerStyle: (colum, colIndex) => {
-          return { 'white-space': 'nowrap', width: '10px' };
-      }
+        headerFormatter: columnFormatter,
       }, {
         dataField: 'filepath',
         text: 'Klasör Dizini',
         sort: true,
+        headerFormatter: columnFormatter,
       }, {
         dataField: 'downloadedcount',
         text: 'İndirilme Sayısı',
@@ -189,7 +238,6 @@ export class Files extends Component {
                         bootstrap4
                         data={list}
                         columns={this.state.columns}
-                        search
                         columnToggle
                       >
                         {
@@ -201,16 +249,14 @@ export class Files extends Component {
                                   <hr />
                                 </div>
                                 : <></>}
-                              <div className="d-flex align-items-center">
-                                <p className="mb-2 mr-2">Arama Yap:</p>
-                                <this.state.SearchBar {...props.searchProps} />
-                              </div>
                               <BootstrapTable
                                 expandRow={this.state.expandRow}
                                 defaultSorted={this.state.defaultSorted}
                                 pagination={paginationFactory()}
                                 {...props.baseProps}
+                                filter={filterFactory()}
                                 wrapperClasses="table-responsive"
+
                               />
                             </div>
                           )
