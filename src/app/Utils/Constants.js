@@ -15,8 +15,8 @@ export const ROUTES = {
     STOCKMOVEMENT: 'Stockmovement',
     ACTIVESTOCK: 'Activestock',
     DATATABLE: 'Datatable',
-    ACTIVEPATIENT : 'Activepatient',
-    PATIENTREPORT : 'Patientreport'
+    ACTIVEPATIENT: 'Activepatient',
+    PATIENTREPORT: 'Patientreport'
 }
 
 export const MOVEMENTTYPES = [
@@ -28,3 +28,9 @@ export const MOVEMENTTYPES = [
     { value: 5, label: "İtlaf Edilme", timelineclass: "timeline-wrapper-warning" },
     { value: 6, label: "Silinme", timelineclass: "timeline-wrapper-warning" }
 ]
+
+export const COLUMNTYPES = {
+    NUMBER: 1,
+    TEXT: 2,
+    DATE: 3
+}

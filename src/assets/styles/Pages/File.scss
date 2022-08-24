@@ -1,5 +1,19 @@
 
 
+.containerclasstext{
+    flex-wrap: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerclassicons{
+    flex-wrap: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .react-bootstrap-table th.sortable {
     cursor: auto;
 }

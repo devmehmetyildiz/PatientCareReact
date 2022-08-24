@@ -1,122 +1,65 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
+import { OverlayTrigger, Tooltip, Button, ButtonToolbar, Popover } from 'react-bootstrap';
+import { COLUMNTYPES } from '../../Utils/Constants';
 import { GetAllFiles, GetSelectedFile, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/FileActions'
 import { withRouter } from 'react-router-dom';
 import Spinner from "../../shared/Spinner"
 import DeleteModal from "./Delete"
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
-import { OverlayTrigger, Tooltip, Button, ButtonToolbar, Popover } from 'react-bootstrap';
 import "../../../assets/styles/Pages/File.scss"
+import Datatable from '../../Utils/Datatable';
 export class Files extends Component {
 
   constructor(props) {
     super(props)
     var currentitem = []
     const isLoading = true
-    const columnvisiblebar = false
-    const { SearchBar } = Search;
-    const defaultSorted = [{
-      dataField: 'Id',
-      order: 'asc'
-    }]
-
-    function columnFormatter(column, colIndex) {
-      return (
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <div className='justify-content-start'>   {column.text} </div>
-          <div className='justify-content-end'>
-            <OverlayTrigger
-              trigger="click"
-              placement="right"
-              overlay={
-                <Popover id="popover-basic">
-                  <Popover.Title as="h3">Popover title</Popover.Title>
-                  <Popover.Content>
-                    <input style={{color:'black'}} />
-                  </Popover.Content>
-                </Popover>
-              }
-            >
-              <i style={{ cursor: 'pointer' }} className="ti-arrows-vertical"> </i>
-            </OverlayTrigger>
-            <OverlayTrigger
-              trigger="click"
-              placement="right"
-              overlay={
-                <Popover id="popover-basic">
-                  <Popover.Title as="h3">Popover title</Popover.Title>
-                  <Popover.Content>
-                    Sed posuere consectetur est at lobortis. Aenean eu leo quam.
-                  </Popover.Content>
-                </Popover>
-              }
-            >
-              <i style={{ cursor: 'pointer' }} className="ti-pin2"></i>
-            </OverlayTrigger>
-            <OverlayTrigger
-              trigger="click"
-              placement="right"
-              overlay={
-                <Popover id="popover-basic">
-                  <Popover.Title as="h3">Popover title</Popover.Title>
-                  <Popover.Content>
-                    Sed posuere consectetur est at lobortis. Aenean eu leo quam.
-                  </Popover.Content>
-                </Popover>
-              }
-            >
-              <i style={{ cursor: 'pointer' }} className="ti-pencil-alt"></i>
-            </OverlayTrigger>
-          </div>
-        </div>
-      );
-    }
 
     const columns = [
       {
         dataField: 'id',
         text: 'id',
-        sort: true,
         type: 'number',
-        headerFormatter: columnFormatter,
+        Columntype: COLUMNTYPES.NUMBER,
+        Formatheader: true,
+
       }, {
         dataField: 'name',
         text: 'İsim',
-        headerFormatter: columnFormatter,
-        headerClasses: 'namecolumn'
+        Columntype: COLUMNTYPES.TEXT,
+        Formatheader: true,
       },
       {
         dataField: 'filename',
         text: 'Dosya Adı',
-        sort: true,
-        headerClasses: 'namecolumn',
-        headerFormatter: columnFormatter,
+        Columntype: COLUMNTYPES.TEXT,
+        Formatheader: true,
       }, {
         dataField: 'filefolder',
         text: 'Bulut Klasör',
-        sort: true,
-        headerFormatter: columnFormatter,
+        Columntype: COLUMNTYPES.TEXT,
+        Formatheader: true,
       }, {
         dataField: 'filepath',
         text: 'Klasör Dizini',
-        sort: true,
-        headerFormatter: columnFormatter,
+        Columntype: COLUMNTYPES.TEXT,
+        Formatheader: true,
       }, {
         dataField: 'downloadedcount',
         text: 'İndirilme Sayısı',
-        sort: true,
+        Columntype: COLUMNTYPES.NUMBER,
+        Formatheader: true,
       }, {
         dataField: 'lastdownloadeduser',
         text: 'En Son İndiren Kullanıcı',
-        sort: true,
+        Columntype: COLUMNTYPES.TEXT,
+        Formatheader: true,
       },
       {
         dataField: 'lastdownloadedip',
         text: 'En Son İndiren IP',
-        sort: true,
+        Columntype: COLUMNTYPES.TEXT,
+        Formatheader: true,
       }, {
         dataField: 'update',
         text: 'Güncelle',
@@ -158,36 +101,10 @@ export class Files extends Component {
 
     ];
 
-    this.state = { columnvisiblebar, currentitem, defaultSorted, columns, SearchBar, isLoading };
+    this.state = { currentitem, columns, isLoading };
   }
 
-  CustomToggleList = ({
-    columns,
-    onColumnToggle,
-    toggles
-  }) => (
-    <div className="btn-group btn-group-toggle btn-group-vertical" data-toggle="buttons">
-      {
-        columns
-          .map(column => ({
-            ...column,
-            toggle: toggles[column.dataField]
-          }))
-          .map(column => (
-            <button
-              type="button"
-              key={column.dataField}
-              className={`m-1 btn btn-warning ${column.toggle ? 'active' : ''}`}
-              data-toggle="button"
-              aria-pressed={column.toggle ? 'true' : 'false'}
-              onClick={() => onColumnToggle(column.dataField)}
-            >
-              {column.text}
-            </button>
-          ))
-      }
-    </div>
-  );
+
 
 
   handleDeleteRole = async (e, row) => {
@@ -195,9 +112,7 @@ export class Files extends Component {
     this.props.OpenDeleteModal()
   }
 
-  changecolumnvisiblebar = () => {
-    this.setState({ columnvisiblebar: !this.state.columnvisiblebar })
-  }
+
 
   handleonaddnew = (e) => {
     this.props.history.push("/Files/Create")
@@ -227,43 +142,10 @@ export class Files extends Component {
                       <h4 className="card-title">Dosyalar</h4>
                     </div>
                     <div className='col-6 d-flex justify-content-end'>
-                      {/*   <button style={{ minWidth: '30px', height: '30px' }} onClick={() => { this.setState({ columnvisiblebar: !this.state.columnvisiblebar }) }}>Toggle</button> */}
                       <button style={{ minWidth: '120px', height: '30px' }} onClick={this.handleonaddnew} className="btn btn-primary mr-2">Yeni Dosya Ekle</button>
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-12">
-                      <ToolkitProvider
-                        keyField="id"
-                        bootstrap4
-                        data={list}
-                        columns={this.state.columns}
-                        columnToggle
-                      >
-                        {
-                          props => (
-                            <div>
-                              {this.state.columnvisiblebar ?
-                                <div>
-                                  <this.CustomToggleList {...props.columnToggleProps} />
-                                  <hr />
-                                </div>
-                                : <></>}
-                              <BootstrapTable
-                                expandRow={this.state.expandRow}
-                                defaultSorted={this.state.defaultSorted}
-                                pagination={paginationFactory()}
-                                {...props.baseProps}
-                                filter={filterFactory()}
-                                wrapperClasses="table-responsive"
-
-                              />
-                            </div>
-                          )
-                        }
-                      </ToolkitProvider>
-                    </div>
-                  </div>
+                  <Datatable columns={this.state.columns} data={list} />
                 </div>
               </div>
             </div>
