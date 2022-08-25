@@ -6,85 +6,60 @@ import filterFactory, { textFilter, numberFilter } from 'react-bootstrap-table2-
 import { OverlayTrigger, Tooltip, Button, ButtonToolbar, Popover } from 'react-bootstrap';
 import { COLUMNTYPES } from './Constants';
 import "../../assets/styles/Pages/Datatable.scss"
+import { connect } from 'react-redux'
 
 export const Datatable = (props) => {
     const { columns, data } = props
     const [filters, setfilters] = useState([])
+    const [showFilter, setshowFilter] = useState(false)
     const defaultSorted = [{
         dataField: 'Id',
         order: 'asc'
     }]
 
+    const handleshowfilter = () => {
+        let isok = false
+        filters.forEach(element => {
+            if (element.filtertext !== '') {
+                isok = true
+            }
+        });
+        setshowFilter(isok)
+    }
+
     const Removefilter = (id) => {
         const filterdata = filters
         filterdata.forEach((element, index) => {
             if (element.id === id) {
-                filterdata.splice(index, 1)
+                element.filtertext = ''
+                element.func('')
             }
         }
         )
+        handleshowfilter()
+        setfilters([...filters], filterdata)
+    }
+
+    const Clearallfilter = () => {
+        const filterdata = filters
+        filterdata.forEach((element, index) => {
+            element.filtertext = ''
+            element.func('')
+        })
+        handleshowfilter()
         setfilters([...filters], filterdata)
     }
 
     const Addfilter = (id, filtertext, displaytext) => {
         const filterdata = filters
-        if (filtertext === '') {
-            filterdata.forEach((element, index) => {
-                if (element.id === id) {
-                    filterdata.splice(index, 1)
-                }
-            });
-        } else {
-            let ishave = false
-            filterdata.forEach(element => {
-                if (element.id === id) {
-                    ishave = true
-                    element.filtertext = filtertext
-                }
-            });
-            if (!ishave) {
-                filterdata.push({ id: id, filtertext: filtertext, displaytext: displaytext })
+        filterdata.forEach(element => {
+            if (element.id === id) {
+                element.filtertext = filtertext
+                element.func(filtertext)
             }
-        }
+        });
+        handleshowfilter()
         setfilters([...filters], filterdata)
-    }
-
-    function columnFormatter(column, colIndex) {
-        let filtervalue = ""
-        const item = filters.find(element => element.id === column.dataField)
-        if (item) {
-            filtervalue = item.filtertext
-        }
-        return (
-            <div className='row'>
-                <div className='col-6 containerclasstext'>
-                    <div > {column.text} </div>
-                </div>
-                <div className='col-6 containerclassicons'>
-                    <i style={{ cursor: 'pointer' }} className="ti-arrows-vertical"> </i>
-                    <i style={{ cursor: 'pointer' }} className="ti-pin2"></i>
-                    <OverlayTrigger
-                        trigger="click"
-                        placement="right"
-                        rootClose={true}
-                        overlay={
-                            <Popover id="popover-basic">
-                                <Popover.Title as="h3">Filtre</Popover.Title>
-                                <Popover.Content>
-                                    <input onChange={(e) => { Addfilter(column.dataField, e.target.value, column.text) }} className="form-control" placeholder='İlgili Kelimeyi Arayınız' name='name'
-                                        value={filtervalue}
-                                    />
-                                </Popover.Content>
-                            </Popover>
-                        }
-                    >
-                        <i style={{ cursor: 'pointer' }} className="ti-pencil-alt"></i>
-                    </OverlayTrigger>
-                </div>
-            </div>
-
-
-        );
     }
 
     columns.forEach(element => {
@@ -92,31 +67,34 @@ export const Datatable = (props) => {
             element.headerFormatter = columnFormatter
         }
         if (element.Columntype === COLUMNTYPES.TEXT) {
-            let filtervalue = ""
-            let value = filters.find(item => item.id === element.dataField)
-            if (value) {
-                filtervalue = value.filtertext
+            const filterdata = filters
+            if (!(filterdata.find(e => e.id === element.dataField))) {
+                filterdata.push({ id: element.dataField, filtertext: '', displaytext: '', func: undefined })
+                setfilters([...filters], filterdata)
             }
-            
             element.filter = textFilter({
-                onFilter: filtervalue => console.log(`Filter Value: ${filtervalue}`)
-              })
+                getFilter: (filter) => {
+                    filters.find(u => u.id === element.dataField).func = filter;
+                }
+            })
         }
     });
-    console.log('columns: ', columns);
+
     return (
         <div>
-            {filters.length > 0 ?
+            {showFilter ?
                 <div className='row' style={{ display: 'flex', flexWrap: 'nowrap', marginBottom: '10px' }}>
                     <h5 className='mr-5'> Filtreler </h5>
                     {filters.map(filter =>
-                        <div className='mr-2 d-flex filtereditem' style={{ flexWrap: 'nowrap' }}>
-                            {filter.displaytext} : {filter.filtertext}
-                            <i onClick={() => { Removefilter(filter.id) }} style={{ cursor: 'pointer' }} className="mdi mdi-bookmark-remove ml-4 "></i>
-                        </div>
+                        filter.filtertext.length > 0 ?
+                            <div className='mr-2 d-flex filtereditem' style={{ flexWrap: 'nowrap' }}>
+                                {filter.displaytext} : {filter.filtertext}
+                                <i onClick={() => { Removefilter(filter.id) }} style={{ cursor: 'pointer' }} className="mdi mdi-bookmark-remove ml-4 "></i>
+                            </div>
+                            : null
                     )
                     }
-                    <span onClick={() => setfilters([])} style={{ color: 'red', cursor: 'pointer', fontSize: '13px', marginTop: '4px' }}>Hepsini Temizle</span>
+                    <span onClick={() => Clearallfilter()} style={{ color: 'red', cursor: 'pointer', fontSize: '13px', marginTop: '4px' }}>Hepsini Temizle</span>
 
                 </div> : null
             }
@@ -149,6 +127,53 @@ export const Datatable = (props) => {
         </div>
 
     )
+
+
+    function columnFormatter(column, colIndex, { sortElement, filterElement }) {
+        let filtervalue = ""
+        const item = filters.find(element => element.id === column.dataField)
+        if (item) {
+            filtervalue = item.filtertext
+        }
+        return (
+            <div className='row'>
+                <div className='col-6 containerclasstext'>
+                    <div > {column.text} </div>
+                    <div style={{ display: 'none' }}>{filterElement}</div>
+                </div>
+                <div className='col-6 containerclassicons'>
+                    <i style={{ cursor: 'pointer' }} className="ti-arrows-vertical"> </i>
+                    <i style={{ cursor: 'pointer' }} className="ti-pin2"></i>
+                    <OverlayTrigger
+                        trigger="click"
+                        placement="right"
+                        rootClose={true}
+                        overlay={
+                            <Popover id="popover-basic">
+                                <Popover.Title as="h3">Filtre</Popover.Title>
+                                <Popover.Content>
+                                    <input autoFocus onChange={(e) => { Addfilter(column.dataField, e.target.value, column.text) }} className="form-control" placeholder='İlgili Kelimeyi Arayınız' name='name'
+                                        value={filtervalue}
+                                    />
+                                </Popover.Content>
+                            </Popover>
+                        }
+                    >
+                        <i style={{ cursor: 'pointer' }} className="ti-pencil-alt"></i>
+                    </OverlayTrigger>
+                </div>
+            </div>
+
+
+        );
+    }
+
 }
 
-export default Datatable
+const mapStateToProps = (state) => ({
+
+})
+
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Datatable)
