@@ -13,39 +13,21 @@ export class Create extends Component {
 
     constructor(props) {
         super(props)
-        const currentitem = []
-        const details = [{ id: 1, skt: '', barcodeno: '', amount: 1 }]
-        const selecteddepartments = []
-        const departments = []
-        const stocks = []
-        const selectedstock = {}
         const dataFetched = false
-        this.state = { currentitem, selecteddepartments, departments, stocks, selectedstock, dataFetched, details };
+        this.state = {};
     }
 
     handlesubmit = (e) => {
         e.preventDefault()
-        const item = []
-        const details = this.props.Activestocks.details
-        
 
     }
 
     componentDidMount() {
-        this.props.UpdateDepartmentguid(this.props.match.params.DepartmentId)
-        this.props.GetAllDepartments();
+
     }
 
     componentDidUpdate() {
-        if (!this.state.dataFetched && !this.props.Stocks.isLoading && !this.props.Departments.isLoading) {
-            const departmentlist = this.props.Departments.list.map((item, index) => {
-                return { value: item.concurrencyStamp, label: item.name }
-            })
-            const stockslist = this.props.Stocks.list.map((item, index) => {
-                return { value: item.concurrencyStamp, label: item.name }
-            })
-            this.setState({ departments: departmentlist, stocks: stockslist, dataFetched: true })
-        }
+
     }
 
     goBack = (e) => {
@@ -54,56 +36,99 @@ export class Create extends Component {
     }
 
     handleonchange = (e) => {
-        const newdata = { ...this.state.currentitem }
-        newdata[e.target.id] = e.target.value
-        this.setState({ currentitem: newdata })
+
     }
 
     handleselectstock = (e) => {
-        this.setState({ selectedstock: e })
+
     }
 
     render() {
-        const stocks = this.state.stocks
-        const departments = this.state.departments
-        const isLoading = (this.props.Departments.isLoading || this.props.Stocks.isLoading)
+
         return (
             <>
-                {isLoading ? <Spinner /> :
-                    <div className='Page'>
-                        <div className="col-12 grid-margin">
-                            <div className="card">
-                                <div className="card-body">
-                                    <div className='d-flex'>
-                                        <h4 className="card-title justify-content-end">Yeni Hasta Girişi</h4>
-                                    </div>
-                                    <form className="form-sample" >
-                                        <div className='row'>
-                                            <label style={{ fontSize: "12px" }} className="pr-5 col-form-label">Tanımlı Ürün</label>
-                                        </div>
-                                        <div className='row'>
-                                            <div style={{ marginRight: '-5px' }} className='col-12 pr-5 mb-3'>
-                                                <Select
-                                                    value={this.state.selectedstock}
-                                                    onChange={this.handleselectstock}
-                                                    options={stocks}
-                                                    placeholder="Tanımlı Ürün"
-                                                />
+                <div className='Page'>
+                    <div className="col-12 grid-margin">
+                        <div className="card">
+                            <div className="card-body">
+                                <h4 className="card-title">Hasta Türleri > Yeni</h4>
+                                <form className="form-sample" >
+                                    <div className="row">
+                                        <div className="col-9">
+                                            <div className='row'>
+                                                <div className='col-3'>
+
+                                                </div>
+                                                <div className='col-3'>
+                                                    <div className='form-group'>
+                                                        <label>İsim</label>
+                                                        <input className={"form-control"} placeholder='İsim' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Soyisim</label>
+                                                        <input className={"form-control"} placeholder='Soyisim' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Baba Adı</label>
+                                                        <input className={"form-control"} placeholder='Baba Adı' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Anne Adı</label>
+                                                        <input className={"form-control"} placeholder='Anne Adı' name='name'
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className='col-3'>
+                                                    <label>Hasta Fotoğrafı</label>
+                                                    <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px' }} className="card-img-top" />
+                                                    <div className='form-group'>
+                                                        <input className={"form-control-file"} type="file"
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Dosya Adı</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className='col-3'>
+                                                    <label>Hasta Fotoğrafı</label>
+                                                    <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px' }} className="card-img-top" />
+                                                    <div className='form-group'>
+                                                        <input className={"form-control-file"} style={{ width: '170px' }} type="file"
+                                                        />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className='row m-2'>
-                                            <Details dispatch={this.props.UpdateDetails} details={this.state.details} />
+                                        <div className="col-3 d-flex" style={{ flexDirection: 'column' }}>
+                                            <label>Hasta Fotoğrafı</label>
+                                            <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px' }} className="card-img-top" />
+                                            <div className='form-group'>
+                                                <input className={"form-control-file"} style={{ width: '230px' }} type="file"
+                                                />
+                                            </div>
+                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
+                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüş Ve Değerlendirme Formu</button>
+                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Teslim Alma Formu</button>
+                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Mülkiyet Teslim Alma Formu</button>
+                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Kabul Formu</button>
+                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Genel Vücut Kontrol Formu</button>
+                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli İzin Formu</button>
                                         </div>
-                                        <div className='row d-flex pr-5 justify-content-end align-items-right'>
-                                            <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
-                                            <button type="submit" style={{ minWidth: '150px' }} onClick={this.handlesubmit} className="btn btn-primary mr-2">Ekle</button>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                    <div className='row d-flex pr-5 justify-content-end align-items-right'>
+                                        <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
+                                        <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-                }
+                </div>
             </>
         )
     }
@@ -230,7 +255,7 @@ class Details extends Component {
                                     <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' }}>
                                         <div className='row'>
                                             {(index === 0) ?
-                                                <div className='col' style={{ flexFlow: 'row' ,whiteSpace: 'nowrap' }}>
+                                                <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
                                                     <label style={{ marginBottom: '2px' }} >SKT</label>
                                                     <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">SKT'leri Eşle</Tooltip>}>
                                                         <span className="d-inline-block">
@@ -254,7 +279,7 @@ class Details extends Component {
                                     <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' }}>
                                         <div className='row'>
                                             {(index === 0) ?
-                                                <div className='col' style={{ flexFlow: 'row' ,whiteSpace: 'nowrap' }}>
+                                                <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
                                                     <label style={{ marginBottom: '2px' }} >Barkod No</label>
                                                     <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Barkodlari Eşle</Tooltip>}>
                                                         <span className="d-inline-block">
@@ -278,7 +303,7 @@ class Details extends Component {
                                     <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' }}>
                                         <div className='row'>
                                             {(index === 0) ?
-                                                <div className='col' style={{ flexFlow: 'row' ,whiteSpace: 'nowrap' }}>
+                                                <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
                                                     <label style={{ marginBottom: '2px' }} >Adet</label>
                                                     <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Adetleri Eşle</Tooltip>}>
                                                         <span className="d-inline-block">
@@ -302,7 +327,7 @@ class Details extends Component {
                                     <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' }}>
                                         <div className='row'>
                                             {(index === 0) ?
-                                                <div className='col' style={{ flexFlow: 'row' ,whiteSpace: 'nowrap' }}>
+                                                <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
                                                     <label style={{ marginBottom: '2px' }} >Tarih</label>
                                                     <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Tarihleri Eşle</Tooltip>}>
                                                         <span className="d-inline-block">
@@ -323,7 +348,7 @@ class Details extends Component {
                                             onChange={(event) => this.inputChange(event, index)}
                                         />
                                     </div>
-                                    <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' ,whiteSpace: 'nowrap' }}>
+                                    <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column', whiteSpace: 'nowrap' }}>
                                         <div className='row'>
                                             {(index === 0) ?
                                                 <div className='col' style={{ flexFlow: 'row' }}>
@@ -351,7 +376,7 @@ class Details extends Component {
                                         <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' }}>
                                             <div className='row'>
                                                 {(index === 0) ?
-                                                    <div className='col' style={{ flexFlow: 'row' ,whiteSpace: 'nowrap' }}>
+                                                    <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
                                                         <label style={{ marginBottom: '2px' }} >Açıklama</label>
                                                         <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Açıklamaları Eşle</Tooltip>}>
                                                             <span className="d-inline-block">
@@ -376,7 +401,7 @@ class Details extends Component {
                                         <div className="col mb-2 mr-sm-2 mb-sm-0 firstrow" style={{ flexFlow: 'column' }}>
                                             <div className='row'>
                                                 {(index === 0) ?
-                                                    <div className='col' style={{ flexFlow: 'row' ,whiteSpace: 'nowrap' }}>
+                                                    <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
                                                         <label style={{ marginBottom: '2px' }} >Açıklama</label>
                                                         <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Açıklamaları Eşle</Tooltip>}>
                                                             <span className="d-inline-block">
@@ -403,7 +428,7 @@ class Details extends Component {
                             )
                         })}
                     </div>
-                    <div className='col' style={{ maxWidth: '30px',marginRight:'10px' }}>
+                    <div className='col' style={{ maxWidth: '30px', marginRight: '10px' }}>
                         <button className="btn btn-info btn-sm icon-btn ml-2 mb-2" style={{ verticalAlign: 'top' }} onClick={this.addItem} ><i className="mdi mdi-plus"></i></button>
                     </div>
                 </div >
