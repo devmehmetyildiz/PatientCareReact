@@ -56,10 +56,7 @@ export class Create extends Component {
                                     <div className="row">
                                         <div className="col-9">
                                             <div className='row'>
-                                                <div className='col-3'>
-
-                                                </div>
-                                                <div className='col-3'>
+                                                <div className='col-4'>
                                                     <div className='form-group'>
                                                         <label>İsim</label>
                                                         <input className={"form-control"} placeholder='İsim' name='name'
@@ -76,29 +73,116 @@ export class Create extends Component {
                                                         />
                                                     </div>
                                                     <div className='form-group'>
+                                                        <label>Baba Yakınlık Durumu</label>
+                                                        <input className={"form-control"} placeholder='Baba Adı' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
                                                         <label>Anne Adı</label>
+                                                        <input className={"form-control"} placeholder='Baba Adı' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Anne Yakınlık Durumu</label>
                                                         <input className={"form-control"} placeholder='Anne Adı' name='name'
                                                         />
                                                     </div>
-                                                </div>
-                                                <div className='col-3'>
-                                                    <label>Hasta Fotoğrafı</label>
-                                                    <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px' }} className="card-img-top" />
                                                     <div className='form-group'>
-                                                        <input className={"form-control-file"} type="file"
+                                                        <label>Anne Yakınlık Durumu</label>
+                                                        <input className={"form-control"} placeholder='Anne Adı' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className="form-check">
+                                                        <label className="form-check-label">
+                                                            <input type="checkbox" className="form-check-input" ref={checkbox => this.checkbox = checkbox} />
+                                                            <i className="input-helper"></i>
+                                                            Anne Yaşıyor mu?
+                                                        </label>
+                                                    </div>
+                                                    <div className="form-check">
+                                                        <label className="form-check-label">
+                                                            <input type="checkbox" className="form-check-input" ref={checkbox => this.checkbox = checkbox} />
+                                                            <i className="input-helper"></i>
+                                                            Baba Yaşıyor mu?
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div className='col-4'>
+                                                    <div className='form-group'>
+                                                        <label>TC Kimlik No</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
                                                         />
                                                     </div>
                                                     <div className='form-group'>
-                                                        <label>Dosya Adı</label>
+                                                        <label>Doğum Tarihi </label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Doğum Yeri</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Ölüm Tarihi"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Ölüm Yeri"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Ölüm Nedeni"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Cinsiyet"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Medeni Durumu"</label>
                                                         <input className={"form-control"} placeholder=' Name' name='name'
                                                         />
                                                     </div>
                                                 </div>
-                                                <div className='col-3'>
-                                                    <label>Hasta Fotoğrafı</label>
-                                                    <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px' }} className="card-img-top" />
+                                                <div className='col-4'>
                                                     <div className='form-group'>
-                                                        <input className={"form-control-file"} style={{ width: '170px' }} type="file"
+                                                        <label>Sabıka Kaydı"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Çocuk Sayısı"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Engelli Çocuk Sayısı"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Kardeş Sayısı"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>SGK Durumu"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Gelir Durumu"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
+                                                        />
+                                                    </div>
+                                                    <div className='form-group'>
+                                                        <label>Medeni Durumu"</label>
+                                                        <input className={"form-control"} placeholder=' Name' name='name'
                                                         />
                                                     </div>
                                                 </div>
@@ -106,9 +190,9 @@ export class Create extends Component {
                                         </div>
                                         <div className="col-3 d-flex" style={{ flexDirection: 'column' }}>
                                             <label>Hasta Fotoğrafı</label>
-                                            <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px' }} className="card-img-top" />
+                                            <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px' , marginLeft:'15px'}} className="card-img-top" />
                                             <div className='form-group'>
-                                                <input className={"form-control-file"} style={{ width: '230px' }} type="file"
+                                                <input className={"form-control-file"} style={{ width: '265px' }} type="file"
                                                 />
                                             </div>
                                             <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
