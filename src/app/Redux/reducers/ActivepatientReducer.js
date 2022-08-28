@@ -64,7 +64,17 @@ const INITIAL_STATE = {
         isAdded: false,
         stationstxt: "",
         stations: []
-      },
+    },
+    isOpenApplicant: false,
+    isOpenBodycontrolform: false,
+    isOpenDiagnosis: false,
+    isOpenDisabilitypermitform: false,
+    isOpenDisabledhealthboardreport: false,
+    isOpenFirstadmissionform: false,
+    isOpenFirstapproachreport: false,
+    isOpenOwnershiprecieve: false,
+    isOpenRecieveform: false,
+    isOpenSubmittingform: false,
     errmsg: "",
     isLoading: false,
     isSelected: false,
@@ -86,7 +96,6 @@ export const ActivepatientReducer = (state = INITIAL_STATE, { type, payload }) =
             return { ...state, selected_activepatient: payload, isLoading: false }
         case ACTION_TYPES.GET_SELECTEDACTIVEPATIENT_ERROR:
             return { ...state, errmsg: payload, isLoading: false }
-
         case ACTION_TYPES.GET_APPLICANTFORM_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_APPLICANTFORM_SUCCESS:
@@ -141,7 +150,6 @@ export const ActivepatientReducer = (state = INITIAL_STATE, { type, payload }) =
             return { ...state, submittingform: payload, isLoading: false }
         case ACTION_TYPES.GET_SUBMITTINGFORM_ERROR:
             return { ...state, errmsg: payload, isLoading: false }
-
         case ACTION_TYPES.UPDATE_APPLICANTFORM_INIT:
             return { ...state, isLoading: true }
         case ACTION_TYPES.UPDATE_APPLICANTFORM_SUCCESS:
@@ -202,7 +210,6 @@ export const ActivepatientReducer = (state = INITIAL_STATE, { type, payload }) =
             return { ...state, isLoading: false }
         case ACTION_TYPES.UPDATE_SUBMITTINGFORM_ERROR:
             return { ...state, errmsg: payload, isLoading: false }
-
         case ACTION_TYPES.REMOVE_SELECTEDACTIVEPATIENT:
             return {
                 ...state,

@@ -34,3 +34,12 @@ export const COLUMNTYPES = {
     TEXT: 2,
     DATE: 3
 }
+
+export const MARIALSTATUS = [
+    { label: "EVLİ", value: "EVLİ" },
+    { label: "BEKAR", value: "BEKAR" }
+]
+export const BIOLOGICALAFFINITY = [
+    { label: "ÖZ", value: "ÖZ" },
+    { label: "ÜVEY", value: "ÜVEY" }
+]

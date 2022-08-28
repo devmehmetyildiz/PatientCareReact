@@ -1,523 +1,579 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
-import { CreateActivestock, CreateActivestocks, OpenStockModal, CloseStockModal, UpdateDetails, UpdateDepartmentguid } from "../../Redux/actions/Activestock"
-import { GetAllDepartments } from "../../Redux/actions/DepartmentAction"
-import { GetAllStocks } from '../../Redux/actions/StockActions';
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
-import { OverlayTrigger, Button, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Button, Tooltip, Form } from 'react-bootstrap';
+import { MARIALSTATUS, BIOLOGICALAFFINITY } from '../../Utils/Constants';
 import Popup from '../../Utils/Popup';
+import { CreateFile } from "../../Redux/actions/FileActions"
+import Createapplicant from './FormsCreate/Createapplicant';
 
-export class Create extends Component {
+export const Create = (props) => {
+    const defaultImageSrc = '/img/user.png'
 
-    constructor(props) {
-        super(props)
-        const dataFetched = false
-        this.state = {};
+    const imageINIT = {
+        id: 0,
+        name: "",
+        filename: '',
+        filefolder: ' ',
+        filetype: ' ',
+        downloadedcount: 0,
+        lastdownloadeduser: ' ',
+        lastdownloadedip: ' ',
+        filepath: defaultImageSrc,
+        file: null,
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: false
     }
 
-    handlesubmit = (e) => {
-        e.preventDefault()
+    const [patient, setpatient] = useState({
+        id: 0,
+        firstname: '',
+        lastname: '',
+        fathername: '',
+        mothername: '',
+        motherbiologicalaffinity: '',
+        ismotheralive: false,
+        fatherbiologicalaffinity: '',
+        isfatheralive: false,
+        countryID: 0,
+        dateofbirth: null,
+        placeofbirth: '',
+        dateofdeath: null,
+        placeofdeath: '',
+        deathinfo: '',
+        gender: '',
+        marialstatus: '',
+        criminalrecord: '',
+        childnumber: 0,
+        disabledchildnumber: 0,
+        siblingstatus: '',
+        sgkstatus: '',
+        budgetstatus: '',
+        town: '',
+        city: '',
+        address1: '',
+        address2: '',
+        country: '',
+        contactnumber1: '',
+        contactnumber2: '',
+        contactname1: '',
+        contactname2: '',
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: false
+    })
+
+    const [patientApplicant, setpatientApplicant] = useState({
+        activepatientid: '',
+        firstname: '',
+        lastname: '',
+        proximitystatus: '',
+        countryid: '',
+        fathername: '',
+        mothername: '',
+        dateofbirth: null,
+        placeofbirth: '',
+        gender: '',
+        marialstatus: '',
+        jobstatus: '',
+        educationstatus: '',
+        montlyincome: '',
+        town: '',
+        city: '',
+        address1: '',
+        address2: '',
+        country: '',
+        contactnumber1: '',
+        contactnumber2: '',
+        contactname1: '',
+        contactname2: '',
+        appialdate: null,
+        appialreason: '',
+    })
+
+    const [patientBodycontrolform, setpatientBodycontrolform] = useState({
+        activepatientid: '',
+        info: '',
+        checkreason: '',
+        controllername: '',
+        cotrollername1: '',
+        controllername2: '',
+    })
+
+    const [patientDiagnosis, setpatientDiagnosis] = useState([{
+        reportid: '',
+        diagnosisname: '',
+        diagnosisstatus: '',
+        info: '',
+    }])
+
+    const [patientDisabilitypermitform, setpatientDisabilitypermitform] = useState({
+        activepatientid: ''
+    })
+
+    const [patientDisabledhealthboardreport, setpatientDisabledhealthboardreport] = useState({
+        activepatientid: '',
+        reportno: '',
+        reportname: '',
+        sendinginstitution: '',
+        appealdate: '',
+        disabilityname: '',
+        disabilityinfo: '',
+        disabilityrate: '',
+        disabilitystatus: '',
+        wontworkjobs: '',
+        ispermanent: '',
+        diagnosies: [],
+    })
+
+    const [patientFirstadmissionform, setpatientFirstadmissionform] = useState({
+        activepatientID: '',
+        patienttype: '',
+        locationknowledge: '',
+        ishaveitem: '',
+        itemstxt: '',
+        items: [],
+        reportstatus: '',
+        reportvaliddate: null,
+        reportdegree: '',
+        bodycontroldate: null,
+        disableorientation: '',
+        controllername: '',
+        managername: '',
+    })
+
+    const [patientFirstapproachreport, setpatientFirstapproachreport] = useState({
+        activepatientID: '',
+        acceptancedate: null,
+        interviewdate: null,
+        healthinitialassesmentdate: null,
+        reasonforhealtcare: '',
+        ratinginfo: '',
+        knowledgesource: '',
+        controllername: '',
+    })
+
+    const [patientOwnershiprecieve, setpatientOwnershiprecieve] = useState({
+        activepatientid: '',
+        itemstxt: '',
+        items: [],
+        recievername: '',
+        recievercountryno: '',
+        submittercountryno: '',
+        submittername: '',
+        witnessname: '',
+        witnesscountryid: '',
+    })
+
+    const [patientRecieveform, setpatientRecieveform] = useState({
+        activepatientid: '',
+        reportdate: null,
+        itemstxt: '',
+        items: [],
+        submittername: '',
+        submittercountryid: '',
+    })
+
+    const [patientSubmittingform, setpatientSubmittingform] = useState({
+        activepatientid: '',
+        stocks: [],
+        items: [],
+        itemstxt: '',
+        submitterpersonelname: '',
+        recievername: '',
+        recievercountryno: '',
+    })
+
+    const [activepatient, setactivepatient] = useState({
+        patientID: '',
+        patient: {},
+        applicant: {},
+        bodycontrolform: {},
+        diagnosis: {},
+        disabilitypermitform: {},
+        disabledhealthboardreport: {},
+        firstadmissionform: {},
+        firstapproachreport: {},
+        ownershiprecieve: {},
+        recieveform: {},
+        submittingform: {},
+        approvaldate: null,
+        registerdate: null,
+        ratientdiagnosis: '',
+        releasedate: null,
+        roomnumber: 0,
+        floornumber: 0,
+        bednumber: 0,
+        departmentname: '',
+        departmentid: '',
+        department: {},
+        processid: '',
+        iswaitingactivation: false,
+        process: {},
+        caseId: '',
+        case: {},
+    })
+
+    const [image, setimage] = useState(imageINIT)
+
+
+    const goBack = () => {
 
     }
 
-    componentDidMount() {
-
+    const showPreview = e => {
+        if (e.target.files && e.target.files[0]) {
+            let imageFile = e.target.files[0]
+            const reader = new FileReader()
+            reader.onload = x => {
+                setimage({
+                    ...image,
+                    file: imageFile,
+                    filepath: x.target.result
+                })
+            }
+            reader.readAsDataURL(imageFile)
+        } else {
+            setimage({
+                ...image,
+                file: null,
+                filepath: defaultImageSrc
+            })
+        }
     }
 
-    componentDidUpdate() {
-
+    const handleonchange = (e) => {
+        const data = patient
+        data[e.target.id] = e.target.value
+        setpatient(data)
     }
 
-    goBack = (e) => {
-        e.preventDefault()
-        this.props.history.push("/ActiveStocks")
+    const handleoncheckboxchange = (e) => {
+        console.log('e: ', e);
+        const data = patient
+        data[e.target.name] = e.target.value
+        setpatient(data)
+        console.log('data: ', data);
     }
 
-    handleonchange = (e) => {
+    const colourStyles = {
+        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+            console.log({ data, isDisabled, isFocused, isSelected });
+            return {
+                ...styles,
+                backgroundColor: isFocused ? "#8e8d8d" : null,
+            };
+        }
+    };
 
-    }
-
-    handleselectstock = (e) => {
-
-    }
-
-    render() {
-
-        return (
-            <>
-                <div className='Page'>
-                    <div className="col-12 grid-margin">
-                        <div className="card">
-                            <div className="card-body">
-                                <h4 className="card-title">Hasta Türleri > Yeni</h4>
-                                <form className="form-sample" >
-                                    <div className="row">
-                                        <div className="col-9">
-                                            <div className='row'>
-                                                <div className='col-4'>
-                                                    <div className='form-group'>
-                                                        <label>İsim</label>
-                                                        <input className={"form-control"} placeholder='İsim' name='name'
+    return (
+        <>
+            <Createapplicant data={patientApplicant} refreshdata={setpatientApplicant} />
+            <div className='Page'>
+                <div className="col-12 grid-margin">
+                    <div className="card">
+                        <div className="card-body">
+                            <h4 className="card-title">Hastalar > Yeni</h4>
+                            <form className="form-sample" >
+                                <div className="row">
+                                    <div className="col-9">
+                                        <div className='row'>
+                                            <div className='col-4'>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">İsim</label>
+                                                    <Form.Control
+                                                        id="firstname"
+                                                        value={patient.firstname}
+                                                        type="text"
+                                                        placeholder="İsim"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Soyisim</label>
+                                                    <Form.Control
+                                                        id="lastname"
+                                                        value={patient.lastname}
+                                                        type="text"
+                                                        placeholder="Soyisim"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Baba Adı</label>
+                                                    <Form.Control
+                                                        id="fathername"
+                                                        value={patient.fathername}
+                                                        type="text"
+                                                        placeholder="Baba Adı"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Anne Adı</label>
+                                                    <Form.Control
+                                                        id="mothername"
+                                                        value={patient.mothername}
+                                                        type="text"
+                                                        placeholder="Anne Adı"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Baba Yakınlık Durumu</label>
+                                                    <div style={{ marginRight: '-5px' }} className='col-12'>
+                                                        <Select
+                                                            // value={selecteddepartments}
+                                                            //  onChange={}
+                                                            options={BIOLOGICALAFFINITY}
+                                                            placeholder="Seçiniz..."
+                                                            styles={colourStyles}
                                                         />
                                                     </div>
-                                                    <div className='form-group'>
-                                                        <label>Soyisim</label>
-                                                        <input className={"form-control"} placeholder='Soyisim' name='name'
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Anne Yakınlık Durumu</label>
+                                                    <div style={{ marginRight: '-5px' }} className='col-12'>
+                                                        <Select
+                                                            // value={selecteddepartments}
+                                                            //  onChange={}
+                                                            options={BIOLOGICALAFFINITY}
+                                                            placeholder="Seçiniz..."
+                                                            styles={colourStyles}
                                                         />
                                                     </div>
-                                                    <div className='form-group'>
-                                                        <label>Baba Adı</label>
-                                                        <input className={"form-control"} placeholder='Baba Adı' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Baba Yakınlık Durumu</label>
-                                                        <input className={"form-control"} placeholder='Baba Adı' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Anne Adı</label>
-                                                        <input className={"form-control"} placeholder='Baba Adı' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Anne Yakınlık Durumu</label>
-                                                        <input className={"form-control"} placeholder='Anne Adı' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Anne Yakınlık Durumu</label>
-                                                        <input className={"form-control"} placeholder='Anne Adı' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className="form-check">
-                                                        <label className="form-check-label">
-                                                            <input type="checkbox" className="form-check-input" ref={checkbox => this.checkbox = checkbox} />
-                                                            <i className="input-helper"></i>
-                                                            Anne Yaşıyor mu?
-                                                        </label>
-                                                    </div>
-                                                    <div className="form-check">
-                                                        <label className="form-check-label">
-                                                            <input type="checkbox" className="form-check-input" ref={checkbox => this.checkbox = checkbox} />
-                                                            <i className="input-helper"></i>
-                                                            Baba Yaşıyor mu?
-                                                        </label>
-                                                    </div>
+                                                </Form.Group>
+                                                <div className="form-check ">
+                                                    <label className="form-check-label ml-10">
+                                                        <input
+                                                            onChange={(e) => {
+                                                                handleoncheckboxchange({
+                                                                    target: {
+                                                                        name: "ismotheralive",
+                                                                        value: e.target.checked,
+                                                                    },
+                                                                });
+                                                            }}
+                                                            type="checkbox" key="{item}" className="form-check-input" name="" value={patient.ismotheralive} />
+                                                        <i className="input-helper"></i>
+                                                        Anne Yaşıyor mu?
+                                                    </label>
                                                 </div>
-                                                <div className='col-4'>
-                                                    <div className='form-group'>
-                                                        <label>TC Kimlik No</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Doğum Tarihi </label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Doğum Yeri</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Ölüm Tarihi"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Ölüm Yeri"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Ölüm Nedeni"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Cinsiyet"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Medeni Durumu"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className='col-4'>
-                                                    <div className='form-group'>
-                                                        <label>Sabıka Kaydı"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Çocuk Sayısı"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Engelli Çocuk Sayısı"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Kardeş Sayısı"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>SGK Durumu"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Gelir Durumu"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
-                                                    <div className='form-group'>
-                                                        <label>Medeni Durumu"</label>
-                                                        <input className={"form-control"} placeholder=' Name' name='name'
-                                                        />
-                                                    </div>
+                                                <div className="form-check ">
+                                                    <label className="form-check-label ml-10">
+                                                        <input
+                                                            onChange={(e) => {
+                                                                handleoncheckboxchange({
+                                                                    target: {
+                                                                        name: "isfatheralive",
+                                                                        value: e.target.checked,
+                                                                    },
+                                                                });
+                                                            }}
+                                                            type="checkbox" key="{item}" className="form-check-input" name="" value={patient.isfatheralive} />
+                                                        <i className="input-helper"></i>
+                                                        Baba Yaşıyor mu?
+                                                    </label>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-3 d-flex" style={{ flexDirection: 'column' }}>
-                                            <label>Hasta Fotoğrafı</label>
-                                            <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px' , marginLeft:'15px'}} className="card-img-top" />
-                                            <div className='form-group'>
-                                                <input className={"form-control-file"} style={{ width: '265px' }} type="file"
-                                                />
+                                            <div className='col-4'>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">TC Kimlik No</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.countryID}
+                                                        type="number"
+                                                        placeholder="TC Kimlik No"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Doğum Tarihi</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.dateofbirth}
+                                                        type="date"
+                                                        placeholder="Doğum Tarihi"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Doğum Yeri</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.placeofbirth}
+                                                        type="text"
+                                                        placeholder="Doğum Yeri"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Ölüm Tarihi</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.dateofdeath}
+                                                        type="date"
+                                                        placeholder="Ölüm Tarihi"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Ölüm Yeri</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.placeofdeath}
+                                                        type="text"
+                                                        placeholder="Ölüm Yeri"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Ölüm Nedeni</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.deathinfo}
+                                                        type="text"
+                                                        placeholder="Ölüm Nedeni"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Cinsiyet</label>
+                                                    <div style={{ marginRight: '-5px' }} className='col-12'>
+                                                        <Select
+                                                            // value={selecteddepartments}
+                                                            //  onChange={}
+                                                            options={[]}
+                                                            placeholder="Seçiniz..."
+                                                            styles={colourStyles}
+                                                        />
+                                                    </div>
+                                                </Form.Group>
                                             </div>
-                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
-                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüş Ve Değerlendirme Formu</button>
-                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Teslim Alma Formu</button>
-                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Mülkiyet Teslim Alma Formu</button>
-                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Kabul Formu</button>
-                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Genel Vücut Kontrol Formu</button>
-                                            <button onClick={this.goBack} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli İzin Formu</button>
+                                            <div className='col-4'>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Medeni Durum</label>
+                                                    <div style={{ marginRight: '-5px' }} className='col-12'>
+                                                        <Select
+                                                            // value={selecteddepartments}
+                                                            //  onChange={}
+                                                            options={MARIALSTATUS}
+                                                            placeholder="Seçiniz..."
+                                                            styles={colourStyles}
+                                                        />
+                                                    </div>
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Sabıka Kaydı</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.criminalrecord}
+                                                        type="text"
+                                                        placeholder="Sabıka Kaydı"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Cocuk Sayısı</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.childnumber}
+                                                        type="number"
+                                                        placeholder="Cocuk Sayısı"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Engelli Çocuk Sayısı</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.disabledchildnumber}
+                                                        type="number"
+                                                        placeholder="Engelli Çocuk Sayısı"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Kardeş Sayısı</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.siblingstatus}
+                                                        type="number"
+                                                        placeholder="Kardeş Sayısı"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">SGK Durumu</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.sgkstatus}
+                                                        type="text"
+                                                        placeholder="SGK Durumu"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group className="row m-2" >
+                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Gelir Durumu</label>
+                                                    <Form.Control
+                                                        id="name"
+                                                        value={patient.budgetstatus}
+                                                        type="text"
+                                                        placeholder="Gelir Durumu"
+                                                        onChange={handleonchange}
+                                                    />
+                                                </Form.Group>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className='row d-flex pr-5 justify-content-end align-items-right'>
-                                        <button onClick={this.goBack} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
-                                        <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
+                                    <div className="col-3 d-flex" style={{ flexDirection: 'column' }}>
+                                        <label>Hasta Fotoğrafı</label>
+                                        <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px', marginLeft: '15px' }} src={image.filepath} className="card-img-top" />
+                                        <div className='form-group'>
+                                            <input className={"form-control-file"} style={{ width: '265px' }} accept='image/*' type="file"
+                                                onChange={showPreview}
+                                            />
+                                        </div>
+                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
+                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüş Ve Değerlendirme Formu</button>
+                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Teslim Alma Formu</button>
+                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Mülkiyet Teslim Alma Formu</button>
+                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Kabul Formu</button>
+                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Genel Vücut Kontrol Formu</button>
+                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli İzin Formu</button>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                                <div className='row d-flex mt-3 pr-5 justify-content-end align-items-right'>
+                                    <button onClick={goBack()} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
+                                    <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </>
-        )
-    }
+            </div>
+        </>
+    )
+
 }
 
 const mapStateToProps = (state) => ({
-    Activestocks: state.Activestocks,
-    Departments: state.Departments,
-    Stocks: state.Stocks
+
 })
 
-const mapDispatchToProps = { CreateActivestock, GetAllDepartments, GetAllStocks, OpenStockModal, CloseStockModal, UpdateDetails, CreateActivestocks, UpdateDepartmentguid }
+const mapDispatchToProps = { CreateFile }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))
-
-
-
-class Details extends Component {
-    constructor() {
-        super();
-        this.state = {
-            items: []
-        }
-        this.inputChange = this.inputChange.bind(this);
-    }
-
-    componentDidMount() {
-        this.setState({ items: this.props.details })
-    }
-
-    inputChange(event, index) {
-        const items = this.state.items;
-        const item = items[index]
-        item[event.target.id] = event.target.value;
-        this.props.dispatch(items)
-        this.setState(items);;
-    }
-
-    addItem = (e) => {
-        e.preventDefault()
-        const items = [...this.state.items];
-        items.push({ id: this.state.items[this.state.items.length - 1].id + 1, skt: '', barcodeno: '', amount: 1 });
-        this.props.dispatch(items)
-        this.setState({ items: items });
-    }
-
-    deleteItem(index) {
-        if (index === 0) {
-            Popup("Error", "Silme Hatası", "İlk Kayıt Silinemez")
-            return
-        }
-        const items = [...this.state.items];
-        items.splice(index, 1);
-        this.props.dispatch(items)
-        this.setState({ items: items });
-    }
-
-    copySkt = (e) => {
-        e.preventDefault()
-        const items = [...this.state.items];
-        const item = items[0]
-        if (items.length > 0 || item.skt !== "") {
-            items.forEach(element => element.skt = item.skt)
-            this.setState({ items: items });
-        }
-    }
-    copyAmount = (e) => {
-        e.preventDefault()
-        const items = [...this.state.items];
-        const item = items[0]
-        if (items.length > 0 || item.amount !== "") {
-            items.forEach(element => element.amount = item.amount)
-            this.setState({ items: items });
-        }
-    }
-
-    copyBarcode = (e) => {
-        e.preventDefault()
-        const items = [...this.state.items];
-        const item = items[0]
-        if (items.length > 0 || item.barcodeno !== "") {
-            items.forEach(element => element.barcodeno = item.barcodeno)
-            this.setState({ items: items });
-        }
-    }
-
-    copyInfo = (e) => {
-        e.preventDefault()
-        const items = [...this.state.items];
-        const item = items[0]
-        if (items.length > 0 || item.info !== "") {
-            items.forEach(element => element.info = item.info)
-            this.setState({ items: items });
-        }
-    }
-    copyPurchasedate = (e) => {
-        e.preventDefault()
-        const items = [...this.state.items];
-        const item = items[0]
-        if (items.length > 0 || item.purchasedate !== "") {
-            items.forEach(element => element.purchasedate = item.purchasedate)
-            this.setState({ items: items });
-        }
-    }
-    copyPurchaseprice = (e) => {
-        e.preventDefault()
-        const items = [...this.state.items];
-        const item = items[0]
-        if (items.length > 0 || item.purchaseprice !== "") {
-            items.forEach(element => element.purchaseprice = item.purchaseprice)
-            this.setState({ items: items });
-        }
-    }
-
-    render() {
-        return (
-
-            <div className='form' onSubmit={(e) => { e.preventDefault() }}>
-                <div className='row'>
-                    <div className='col'>
-                        {this.state.items.map((item, index) => {
-                            return (
-                                <div key={item.id} className="row mb-2">
-                                    <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' }}>
-                                        <div className='row'>
-                                            {(index === 0) ?
-                                                <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
-                                                    <label style={{ marginBottom: '2px' }} >SKT</label>
-                                                    <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">SKT'leri Eşle</Tooltip>}>
-                                                        <span className="d-inline-block">
-                                                            <button onClick={this.copySkt} variant="primary" className='btn btn-info btn-sm icon-btn ml-2 mb-2' >
-                                                                <i className="mdi mdi-content-copy"></i>
-                                                            </button>
-                                                        </span>
-                                                    </OverlayTrigger>
-                                                </div>
-                                                : null}
-                                            <input
-                                                id='skt'
-                                                type="date"
-                                                className="form-control"
-                                                placeholder="SKT"
-                                                value={item.skt}
-                                                onChange={(event) => this.inputChange(event, index)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' }}>
-                                        <div className='row'>
-                                            {(index === 0) ?
-                                                <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
-                                                    <label style={{ marginBottom: '2px' }} >Barkod No</label>
-                                                    <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Barkodlari Eşle</Tooltip>}>
-                                                        <span className="d-inline-block">
-                                                            <button onClick={this.copyBarcode} variant="primary" className='btn btn-info btn-sm icon-btn ml-2 mb-2' >
-                                                                <i className="mdi mdi-content-copy"></i>
-                                                            </button>
-                                                        </span>
-                                                    </OverlayTrigger>
-                                                </div>
-                                                : null}
-                                        </div>
-                                        <input
-                                            id='barcodeno'
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="BARKOD"
-                                            value={item.barcodeno}
-                                            onChange={(event) => this.inputChange(event, index)}
-                                        />
-                                    </div>
-                                    <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' }}>
-                                        <div className='row'>
-                                            {(index === 0) ?
-                                                <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
-                                                    <label style={{ marginBottom: '2px' }} >Adet</label>
-                                                    <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Adetleri Eşle</Tooltip>}>
-                                                        <span className="d-inline-block">
-                                                            <button onClick={this.copyAmount} variant="primary" className='btn btn-info btn-sm icon-btn ml-2 mb-2' >
-                                                                <i className="mdi mdi-content-copy"></i>
-                                                            </button>
-                                                        </span>
-                                                    </OverlayTrigger>
-                                                </div>
-                                                : null}
-                                        </div>
-                                        <input
-                                            id='amount'
-                                            type="number"
-                                            className="form-control"
-                                            placeholder="ADET"
-                                            value={item.amount}
-                                            onChange={(event) => this.inputChange(event, index)}
-                                        />
-                                    </div>
-                                    <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' }}>
-                                        <div className='row'>
-                                            {(index === 0) ?
-                                                <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
-                                                    <label style={{ marginBottom: '2px' }} >Tarih</label>
-                                                    <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Tarihleri Eşle</Tooltip>}>
-                                                        <span className="d-inline-block">
-                                                            <button onClick={this.copyPurchasedate} variant="primary" className='btn btn-info btn-sm icon-btn ml-2 mb-2' >
-                                                                <i className="mdi mdi-content-copy"></i>
-                                                            </button>
-                                                        </span>
-                                                    </OverlayTrigger>
-                                                </div>
-                                                : null}
-                                        </div>
-                                        <input
-                                            id='purchasedate'
-                                            type="date"
-                                            className="form-control"
-                                            placeholder="Alış Tarihi"
-                                            value={item.purchasedate}
-                                            onChange={(event) => this.inputChange(event, index)}
-                                        />
-                                    </div>
-                                    <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column', whiteSpace: 'nowrap' }}>
-                                        <div className='row'>
-                                            {(index === 0) ?
-                                                <div className='col' style={{ flexFlow: 'row' }}>
-                                                    <label style={{ marginBottom: '2px' }} >Ücret</label>
-                                                    <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Ücretleri Eşle</Tooltip>}>
-                                                        <span className="d-inline-block">
-                                                            <button onClick={this.copyPurchaseprice} variant="primary" className='btn btn-info btn-sm icon-btn ml-2 mb-2' >
-                                                                <i className="mdi mdi-content-copy"></i>
-                                                            </button>
-                                                        </span>
-                                                    </OverlayTrigger>
-                                                </div>
-                                                : null}
-                                        </div>
-                                        <input
-                                            id='purchaseprice'
-                                            type="number"
-                                            className="form-control"
-                                            placeholder="Fiyat"
-                                            value={item.purchaseprice}
-                                            onChange={(event) => this.inputChange(event, index)}
-                                        />
-                                    </div>
-                                    {(index > 0) ?
-                                        <div className="col mb-2 mr-sm-2 mb-sm-0" style={{ flexFlow: 'column' }}>
-                                            <div className='row'>
-                                                {(index === 0) ?
-                                                    <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
-                                                        <label style={{ marginBottom: '2px' }} >Açıklama</label>
-                                                        <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Açıklamaları Eşle</Tooltip>}>
-                                                            <span className="d-inline-block">
-                                                                <button onClick={this.copyInfo} variant="primary" className='btn btn-info btn-sm icon-btn ml-2 mb-2' >
-                                                                    <i className="mdi mdi-content-copy"></i>
-                                                                </button>
-                                                            </span>
-                                                        </OverlayTrigger>
-                                                    </div>
-                                                    : null}
-                                            </div>
-                                            <input
-                                                id='info'
-                                                type="text"
-                                                placeholder="Açıklama"
-                                                className="form-control"
-                                                value={item.info}
-                                                onChange={(event) => this.inputChange(event, index)}
-                                            />
-                                        </div>
-                                        :
-                                        <div className="col mb-2 mr-sm-2 mb-sm-0 firstrow" style={{ flexFlow: 'column' }}>
-                                            <div className='row'>
-                                                {(index === 0) ?
-                                                    <div className='col' style={{ flexFlow: 'row', whiteSpace: 'nowrap' }}>
-                                                        <label style={{ marginBottom: '2px' }} >Açıklama</label>
-                                                        <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Açıklamaları Eşle</Tooltip>}>
-                                                            <span className="d-inline-block">
-                                                                <button onClick={this.copyInfo} variant="primary" className='btn btn-info btn-sm icon-btn ml-2 mb-2' >
-                                                                    <i className="mdi mdi-content-copy"></i>
-                                                                </button>
-                                                            </span>
-                                                        </OverlayTrigger>
-                                                    </div>
-                                                    : null}
-                                            </div>
-                                            <input
-                                                id='info'
-                                                type="text"
-                                                placeholder="Açıklama"
-                                                className="form-control"
-                                                value={item.info}
-                                                onChange={(event) => this.inputChange(event, index)}
-                                            />
-                                        </div>
-                                    }
-                                    {(index > 0) ? <button className="btn btn-danger btn-sm icon-btn ml-2" onClick={() => this.deleteItem(index)}><i className="mdi mdi-delete"></i></button> : null}
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <div className='col' style={{ maxWidth: '30px', marginRight: '10px' }}>
-                        <button className="btn btn-info btn-sm icon-btn ml-2 mb-2" style={{ verticalAlign: 'top' }} onClick={this.addItem} ><i className="mdi mdi-plus"></i></button>
-                    </div>
-                </div >
-            </div>
-
-        )
-    }
-}

@@ -93,10 +93,30 @@ export const ACTION_TYPES = {
     UPDATE_SUBMITTINGFORM_ERROR: 'UPDATE_SUBMITTINGFORM_ERROR',
 
     REMOVE_SELECTEDACTIVEPATIENT: 'REMOVE_SELECTEDACTIVEPATIENT',
-    
+
     UPDATE_DEPARTMENTUUI_INIT: "UPDATE_DEPARTMENTUUI_INIT",
     UPDATE_DEPARTMENTUUI_SUCCESS: "UPDATE_DEPARTMENTUUI_SUCCESS",
-    UPDATE_DEPARTMENTUUI_ERROR: "UPDATE_DEPARTMENTUUI_ERROR"
+    UPDATE_DEPARTMENTUUI_ERROR: "UPDATE_DEPARTMENTUUI_ERROR",
+
+    OPEN_APPLICANT_MODAL: 'OPEN_APPLICANT_MODAL',
+    OPEN_BODYCONTROLFORM_MODAL: 'OPEN_BODYCONTROLFORM_MODAL',
+    OPEN_DIAGNOSIS_MODAL: 'OPEN_DIAGNOSIS_MODAL',
+    OPEN_DISABILITYFORM_MODAL: 'OPEN_DISABILITYFORM_MODAL',
+    OPEN_DISABLEDHEALTHBOARDREPORT_MODAL: 'OPEN_DISABLEDHEALTHBOARDREPORT_MODAL',
+    OPEN_FIRSTADMISSIONSFORM_MODAL: 'OPEN_FIRSTADMISSIONSFORM_MODAL',
+    OPEN_FIRSTAPPROACHREPORT_MODAL: 'OPEN_FIRSTAPPROACHREPORT_MODAL',
+    OPEN_OWNERSHIPRECIEVE_MODAL: 'OPEN_OWNERSHIPRECIEVE_MODAL',
+    OPEN_SUBMITTINGFORM_MODAL: 'OPEN_SUBMITTINGFORM_MODAL',
+
+    CLOSE_APPLICANT_MODAL: 'CLOSE_APPLICANT_MODAL',
+    CLOSE_BODYCONTROLFORM_MODAL: 'CLOSE_BODYCONTROLFORM_MODAL',
+    CLOSE_DIAGNOSIS_MODAL: 'CLOSE_DIAGNOSIS_MODAL',
+    CLOSE_DISABILITYFORM_MODAL: 'CLOSE_DISABILITYFORM_MODAL',
+    CLOSE_DISABLEDHEALTHBOARDREPORT_MODAL: 'CLOSE_DISABLEDHEALTHBOARDREPORT_MODAL',
+    CLOSE_FIRSTADMISSIONSFORM_MODAL: 'CLOSE_FIRSTADMISSIONSFORM_MODAL',
+    CLOSE_FIRSTAPPROACHREPORT_MODAL: 'CLOSE_FIRSTAPPROACHREPORT_MODAL',
+    CLOSE_OWNERSHIPRECIEVE_MODAL: 'CLOSE_OWNERSHIPRECIEVE_MODAL',
+    CLOSE_SUBMITTINGFORM_MODAL: 'CLOSE_SUBMITTINGFORM_MODAL',
 }
 
 export const GetAllActivepatients = () => async dispatch => {
@@ -509,3 +529,60 @@ export const UpdateDepartmentguid = (ItemId) => async dispatch => {
             AxiosErrorHandle(error, ROUTES.DEPARTMENT, "GetSelectedDepartmentbyguid")
         })
 }
+
+export const OpenApplicantmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.OPEN_APPLICANT_MODAL })
+}
+export const OpenBodycontrolformmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.OPEN_BODYCONTROLFORM_MODAL })
+}
+export const OpenDiagnosismodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.OPEN_DIAGNOSIS_MODAL })
+}
+export const OpenDisabilityformmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.OPEN_DISABILITYFORM_MODAL })
+}
+export const OpenDisabledhealthboardreportmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.OPEN_DISABLEDHEALTHBOARDREPORT_MODAL })
+}
+export const OpenFirstadmissionsformmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.OPEN_FIRSTADMISSIONSFORM_MODAL })
+}
+export const OpenFirstapproachreportmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.OPEN_FIRSTAPPROACHREPORT_MODAL })
+}
+export const OpenOwnershiprecievemodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.OPEN_OWNERSHIPRECIEVE_MODAL })
+}
+export const OpenSubmittingmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.OPEN_SUBMITTINGFORM_MODAL })
+}
+
+export const CloseApplicantmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.CLOSE_APPLICANT_MODAL })
+}
+export const CloseBodycontrolformmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.CLOSE_BODYCONTROLFORM_MODAL })
+}
+export const CloseDiagnosismodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.CLOSE_DIAGNOSIS_MODAL })
+}
+export const CloseDisabilityformmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.CLOSE_DISABILITYFORM_MODAL })
+}
+export const CloseDisabledhealthboardreportmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.CLOSE_DISABLEDHEALTHBOARDREPORT_MODAL })
+}
+export const CloseFirstadmissionsformmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.CLOSE_FIRSTADMISSIONSFORM_MODAL })
+}
+export const CloseFirstapproachreportmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.CLOSE_FIRSTAPPROACHREPORT_MODAL })
+}
+export const CloseOwnershiprecievemodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.CLOSE_OWNERSHIPRECIEVE_MODAL })
+}
+export const CloseSubmittingformmodal = () => async dispatch => {
+    dispatch({ type: ACTION_TYPES.CLOSE_SUBMITTINGFORM_MODAL })
+}
+
