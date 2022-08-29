@@ -5,8 +5,13 @@ import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
 import { OverlayTrigger, Button, Tooltip, Form } from 'react-bootstrap';
 import { MARIALSTATUS, BIOLOGICALAFFINITY } from '../../Utils/Constants';
-import Popup from '../../Utils/Popup';
 import { CreateFile } from "../../Redux/actions/FileActions"
+import {
+    OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal, OpenDisabledhealthboardreportmodal,
+    OpenFirstadmissionsformmodal, OpenFirstapproachreportmodal, OpenOwnershiprecievemodal, OpenSubmittingmodal, CloseApplicantmodal,
+    CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseOwnershiprecievemodal,
+    CloseFirstadmissionsformmodal, CloseFirstapproachreportmodal, CloseSubmittingformmodal
+} from '../../Redux/actions/ActivepatientActions';
 import Createapplicant from './FormsCreate/Createapplicant';
 
 export const Create = (props) => {
@@ -256,9 +261,11 @@ export const Create = (props) => {
     }
 
     const handleonchange = (e) => {
+        const { id, value } = e.target
         const data = patient
         data[e.target.id] = e.target.value
-        setpatient(data)
+        setpatient((patient) => ({ ...patient, [id]: value }));
+
     }
 
     const handleoncheckboxchange = (e) => {
@@ -281,7 +288,14 @@ export const Create = (props) => {
 
     return (
         <>
-            <Createapplicant data={patientApplicant} refreshdata={setpatientApplicant} />
+            <Createapplicant
+                show={props.Activepatients.isOpenApplicant}
+                onHide={() => props.CloseApplicantmodal()}
+                data={patientApplicant}
+               refreshdata={setpatientApplicant}
+               selectstyle={colourStyles}
+            />
+
             <div className='Page'>
                 <div className="col-12 grid-margin">
                     <div className="card">
@@ -547,6 +561,10 @@ export const Create = (props) => {
                                                 onChange={showPreview}
                                             />
                                         </div>
+                                        <button onClick={(e) => {
+                                            e.preventDefault()
+                                            props.OpenApplicantmodal()
+                                        }} style={{ width: '250px' }} className="btn btn-primary m-2">Hasta Yakını Bilgileri</button>
                                         <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
                                         <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüş Ve Değerlendirme Formu</button>
                                         <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Teslim Alma Formu</button>
@@ -571,9 +589,14 @@ export const Create = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-
+    Activepatients: state.Activepatients
 })
 
-const mapDispatchToProps = { CreateFile }
+const mapDispatchToProps = {
+    CreateFile, OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal,
+    OpenDisabledhealthboardreportmodal, OpenFirstadmissionsformmodal, OpenFirstapproachreportmodal, OpenOwnershiprecievemodal, OpenSubmittingmodal,
+    CloseApplicantmodal, CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseFirstadmissionsformmodal,
+    CloseFirstapproachreportmodal, CloseOwnershiprecievemodal, CloseSubmittingformmodal
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))
