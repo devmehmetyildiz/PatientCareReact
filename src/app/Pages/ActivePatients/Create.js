@@ -13,6 +13,9 @@ import {
     CloseFirstadmissionsformmodal, CloseFirstapproachreportmodal, CloseSubmittingformmodal
 } from '../../Redux/actions/ActivepatientActions';
 import Createapplicant from './FormsCreate/Createapplicant';
+import Createdisabledhealthboardreport from './FormsCreate/Createdisabledhealthboardreport';
+import Createfirstapproachreport from './FormsCreate/Createfirstapproachreport';
+import Createpatient from './FormsCreate/Createpatient';
 
 export const Create = (props) => {
     const defaultImageSrc = '/img/user.png'
@@ -78,10 +81,11 @@ export const Create = (props) => {
         createTime: null,
         updateTime: null,
         deleteTime: null,
-        isActive: false
+        isActive: true
     })
 
     const [patientApplicant, setpatientApplicant] = useState({
+        id: 0,
         activepatientid: '',
         firstname: '',
         lastname: '',
@@ -107,29 +111,73 @@ export const Create = (props) => {
         contactname2: '',
         appialdate: null,
         appialreason: '',
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true
     })
 
     const [patientBodycontrolform, setpatientBodycontrolform] = useState({
+        id: 0,
         activepatientid: '',
         info: '',
         checkreason: '',
         controllername: '',
         cotrollername1: '',
         controllername2: '',
+        documentcode: '',
+        releasedate: null,
+        revisiondate: null,
+        actualdate: null,
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true
     })
 
     const [patientDiagnosis, setpatientDiagnosis] = useState([{
+        id: 0,
         reportid: '',
         diagnosisname: '',
         diagnosisstatus: '',
         info: '',
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true
     }])
 
     const [patientDisabilitypermitform, setpatientDisabilitypermitform] = useState({
-        activepatientid: ''
+        id: 0,
+        activepatientid: '',
+        documentcode: '',
+        releasedate: null,
+        revisiondate: null,
+        actualdate: null,
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true
     })
 
     const [patientDisabledhealthboardreport, setpatientDisabledhealthboardreport] = useState({
+        id: 0,
         activepatientid: '',
         reportno: '',
         reportname: '',
@@ -142,9 +190,18 @@ export const Create = (props) => {
         wontworkjobs: '',
         ispermanent: '',
         diagnosies: [],
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true
     })
 
     const [patientFirstadmissionform, setpatientFirstadmissionform] = useState({
+        id: 0,
         activepatientID: '',
         patienttype: '',
         locationknowledge: '',
@@ -158,9 +215,22 @@ export const Create = (props) => {
         disableorientation: '',
         controllername: '',
         managername: '',
+        documentcode: '',
+        releasedate: null,
+        revisiondate: null,
+        actualdate: null,
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true
     })
 
     const [patientFirstapproachreport, setpatientFirstapproachreport] = useState({
+        id: 0,
         activepatientID: '',
         acceptancedate: null,
         interviewdate: null,
@@ -169,9 +239,22 @@ export const Create = (props) => {
         ratinginfo: '',
         knowledgesource: '',
         controllername: '',
+        documentcode: '',
+        releasedate: null,
+        revisiondate: null,
+        actualdate: null,
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true
     })
 
     const [patientOwnershiprecieve, setpatientOwnershiprecieve] = useState({
+        id: 0,
         activepatientid: '',
         itemstxt: '',
         items: [],
@@ -181,18 +264,44 @@ export const Create = (props) => {
         submittername: '',
         witnessname: '',
         witnesscountryid: '',
+        documentcode: '',
+        releasedate: null,
+        revisiondate: null,
+        actualdate: null,
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true
     })
 
     const [patientRecieveform, setpatientRecieveform] = useState({
+        id: 0,
         activepatientid: '',
         reportdate: null,
         itemstxt: '',
         items: [],
         submittername: '',
         submittercountryid: '',
+        documentcode: '',
+        releasedate: null,
+        revisiondate: null,
+        actualdate: null,
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true
     })
 
     const [patientSubmittingform, setpatientSubmittingform] = useState({
+        id: 0,
         activepatientid: '',
         stocks: [],
         items: [],
@@ -200,6 +309,18 @@ export const Create = (props) => {
         submitterpersonelname: '',
         recievername: '',
         recievercountryno: '',
+        documentcode: '',
+        releasedate: null,
+        revisiondate: null,
+        actualdate: null,
+        concurrencyStamp: '',
+        createdUser: '',
+        updatedUser: '',
+        deleteUser: '',
+        createTime: null,
+        updateTime: null,
+        deleteTime: null,
+        isActive: true
     })
 
     const [activepatient, setactivepatient] = useState({
@@ -268,14 +389,6 @@ export const Create = (props) => {
 
     }
 
-    const handleoncheckboxchange = (e) => {
-        console.log('e: ', e);
-        const data = patient
-        data[e.target.name] = e.target.value
-        setpatient(data)
-        console.log('data: ', data);
-    }
-
     const colourStyles = {
         option: (styles, { data, isDisabled, isFocused, isSelected }) => {
             console.log({ data, isDisabled, isFocused, isSelected });
@@ -292,10 +405,23 @@ export const Create = (props) => {
                 show={props.Activepatients.isOpenApplicant}
                 onHide={() => props.CloseApplicantmodal()}
                 data={patientApplicant}
-               refreshdata={setpatientApplicant}
-               selectstyle={colourStyles}
+                refreshdata={setpatientApplicant}
+                selectstyle={colourStyles}
             />
-
+            <Createdisabledhealthboardreport
+                show={props.Activepatients.isOpenDisabledhealthboardreport}
+                onHide={() => { props.CloseDisabledhealthboardreportmodal() }}
+                data={patientDisabledhealthboardreport}
+                refreshdata={setpatientDisabledhealthboardreport}
+                selectstyle={colourStyles}
+            />
+            <Createfirstapproachreport
+                show={props.Activepatients.isOpenFirstapproachreport}
+                onHide={() => props.CloseFirstapproachreportmodal()}
+                data={patientFirstapproachreport}
+                refreshdata={setpatientFirstapproachreport}
+                selectstyle={colourStyles}
+            />
             <div className='Page'>
                 <div className="col-12 grid-margin">
                     <div className="card">
@@ -304,254 +430,11 @@ export const Create = (props) => {
                             <form className="form-sample" >
                                 <div className="row">
                                     <div className="col-9">
-                                        <div className='row'>
-                                            <div className='col-4'>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">İsim</label>
-                                                    <Form.Control
-                                                        id="firstname"
-                                                        value={patient.firstname}
-                                                        type="text"
-                                                        placeholder="İsim"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Soyisim</label>
-                                                    <Form.Control
-                                                        id="lastname"
-                                                        value={patient.lastname}
-                                                        type="text"
-                                                        placeholder="Soyisim"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Baba Adı</label>
-                                                    <Form.Control
-                                                        id="fathername"
-                                                        value={patient.fathername}
-                                                        type="text"
-                                                        placeholder="Baba Adı"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Anne Adı</label>
-                                                    <Form.Control
-                                                        id="mothername"
-                                                        value={patient.mothername}
-                                                        type="text"
-                                                        placeholder="Anne Adı"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Baba Yakınlık Durumu</label>
-                                                    <div style={{ marginRight: '-5px' }} className='col-12'>
-                                                        <Select
-                                                            // value={selecteddepartments}
-                                                            //  onChange={}
-                                                            options={BIOLOGICALAFFINITY}
-                                                            placeholder="Seçiniz..."
-                                                            styles={colourStyles}
-                                                        />
-                                                    </div>
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Anne Yakınlık Durumu</label>
-                                                    <div style={{ marginRight: '-5px' }} className='col-12'>
-                                                        <Select
-                                                            // value={selecteddepartments}
-                                                            //  onChange={}
-                                                            options={BIOLOGICALAFFINITY}
-                                                            placeholder="Seçiniz..."
-                                                            styles={colourStyles}
-                                                        />
-                                                    </div>
-                                                </Form.Group>
-                                                <div className="form-check ">
-                                                    <label className="form-check-label ml-10">
-                                                        <input
-                                                            onChange={(e) => {
-                                                                handleoncheckboxchange({
-                                                                    target: {
-                                                                        name: "ismotheralive",
-                                                                        value: e.target.checked,
-                                                                    },
-                                                                });
-                                                            }}
-                                                            type="checkbox" key="{item}" className="form-check-input" name="" value={patient.ismotheralive} />
-                                                        <i className="input-helper"></i>
-                                                        Anne Yaşıyor mu?
-                                                    </label>
-                                                </div>
-                                                <div className="form-check ">
-                                                    <label className="form-check-label ml-10">
-                                                        <input
-                                                            onChange={(e) => {
-                                                                handleoncheckboxchange({
-                                                                    target: {
-                                                                        name: "isfatheralive",
-                                                                        value: e.target.checked,
-                                                                    },
-                                                                });
-                                                            }}
-                                                            type="checkbox" key="{item}" className="form-check-input" name="" value={patient.isfatheralive} />
-                                                        <i className="input-helper"></i>
-                                                        Baba Yaşıyor mu?
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div className='col-4'>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">TC Kimlik No</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.countryID}
-                                                        type="number"
-                                                        placeholder="TC Kimlik No"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Doğum Tarihi</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.dateofbirth}
-                                                        type="date"
-                                                        placeholder="Doğum Tarihi"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Doğum Yeri</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.placeofbirth}
-                                                        type="text"
-                                                        placeholder="Doğum Yeri"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Ölüm Tarihi</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.dateofdeath}
-                                                        type="date"
-                                                        placeholder="Ölüm Tarihi"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Ölüm Yeri</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.placeofdeath}
-                                                        type="text"
-                                                        placeholder="Ölüm Yeri"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Ölüm Nedeni</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.deathinfo}
-                                                        type="text"
-                                                        placeholder="Ölüm Nedeni"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Cinsiyet</label>
-                                                    <div style={{ marginRight: '-5px' }} className='col-12'>
-                                                        <Select
-                                                            // value={selecteddepartments}
-                                                            //  onChange={}
-                                                            options={[]}
-                                                            placeholder="Seçiniz..."
-                                                            styles={colourStyles}
-                                                        />
-                                                    </div>
-                                                </Form.Group>
-                                            </div>
-                                            <div className='col-4'>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Medeni Durum</label>
-                                                    <div style={{ marginRight: '-5px' }} className='col-12'>
-                                                        <Select
-                                                            // value={selecteddepartments}
-                                                            //  onChange={}
-                                                            options={MARIALSTATUS}
-                                                            placeholder="Seçiniz..."
-                                                            styles={colourStyles}
-                                                        />
-                                                    </div>
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Sabıka Kaydı</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.criminalrecord}
-                                                        type="text"
-                                                        placeholder="Sabıka Kaydı"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Cocuk Sayısı</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.childnumber}
-                                                        type="number"
-                                                        placeholder="Cocuk Sayısı"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Engelli Çocuk Sayısı</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.disabledchildnumber}
-                                                        type="number"
-                                                        placeholder="Engelli Çocuk Sayısı"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Kardeş Sayısı</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.siblingstatus}
-                                                        type="number"
-                                                        placeholder="Kardeş Sayısı"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">SGK Durumu</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.sgkstatus}
-                                                        type="text"
-                                                        placeholder="SGK Durumu"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                                <Form.Group className="row m-2" >
-                                                    <label style={{ fontSize: "12px" }} className="col-form-label">Gelir Durumu</label>
-                                                    <Form.Control
-                                                        id="name"
-                                                        value={patient.budgetstatus}
-                                                        type="text"
-                                                        placeholder="Gelir Durumu"
-                                                        onChange={handleonchange}
-                                                    />
-                                                </Form.Group>
-                                            </div>
-                                        </div>
+                                        <Createpatient
+                                            data={patient}
+                                            refreshdata={setpatient}
+                                            selectstyle={colourStyles}
+                                        />
                                     </div>
                                     <div className="col-3 d-flex" style={{ flexDirection: 'column' }}>
                                         <label>Hasta Fotoğrafı</label>
@@ -565,13 +448,14 @@ export const Create = (props) => {
                                             e.preventDefault()
                                             props.OpenApplicantmodal()
                                         }} style={{ width: '250px' }} className="btn btn-primary m-2">Hasta Yakını Bilgileri</button>
-                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
-                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüş Ve Değerlendirme Formu</button>
-                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Teslim Alma Formu</button>
-                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Mülkiyet Teslim Alma Formu</button>
-                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Kabul Formu</button>
-                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Genel Vücut Kontrol Formu</button>
-                                        <button onClick={goBack()} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli İzin Formu</button>
+                                        <button onClick={(e) => {
+                                            e.preventDefault()
+                                            props.OpenDisabledhealthboardreportmodal()
+                                        }} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
+                                        <button onClick={(e) => {
+                                            e.preventDefault()
+                                            props.OpenFirstapproachreportmodal()
+                                        }} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüş Ve Değerlendirme Formu</button>
                                     </div>
                                 </div>
                                 <div className='row d-flex mt-3 pr-5 justify-content-end align-items-right'>

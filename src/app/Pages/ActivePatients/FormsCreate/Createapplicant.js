@@ -253,6 +253,36 @@ const Createapplicant = (props) => {
                           onChange={handleonchange}
                         />
                       </Form.Group>
+                      <Form.Group className="row m-2" >
+                        <label style={{ fontSize: "12px" }} className="col-form-label">İletişim Adı 2</label>
+                        <Form.Control
+                          id="contactname2"
+                          value={data.contactname2}
+                          type="text"
+                          placeholder="İletişim Adı 2"
+                          onChange={handleonchange}
+                        />
+                      </Form.Group>
+                      <Form.Group className="row m-2" >
+                        <label style={{ fontSize: "12px" }} className="col-form-label">Müracaat Tarihi</label>
+                        <Form.Control
+                          id="appialdate"
+                          value={data.appialdate}
+                          type="date"
+                          placeholder="Müracaat Tarihi"
+                          onChange={handleonchange}
+                        />
+                      </Form.Group>
+                      <Form.Group className="row m-2" >
+                        <label style={{ fontSize: "12px" }} className="col-form-label">Müracaat Nedeni</label>
+                        <Form.Control
+                          id="appialreason"
+                          value={data.appialreason}
+                          type="text"
+                          placeholder="Müracaat Nedeni"
+                          onChange={handleonchange}
+                        />
+                      </Form.Group>
                     </div>
 
                   </div>
