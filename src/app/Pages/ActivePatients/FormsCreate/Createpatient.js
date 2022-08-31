@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import Select from 'react-select';
-import { MARIALSTATUS, BIOLOGICALAFFINITY } from '../../../Utils/Constants';
+import { MARIALSTATUS, BIOLOGICALAFFINITY,GENDER } from '../../../Utils/Constants';
 
 const Createpatient = (props) => {
     const { data, refreshdata, selectstyle } = props
@@ -187,7 +187,7 @@ const Createpatient = (props) => {
                             <Select
                                 // value={selecteddepartments}
                                 //  onChange={}
-                                options={[]}
+                                options={GENDER}
                                 placeholder="Seçiniz..."
                                 styles={selectstyle}
                             />

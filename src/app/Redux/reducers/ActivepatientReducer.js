@@ -96,6 +96,12 @@ export const ActivepatientReducer = (state = INITIAL_STATE, { type, payload }) =
             return { ...state, selected_activepatient: payload, isLoading: false }
         case ACTION_TYPES.GET_SELECTEDACTIVEPATIENT_ERROR:
             return { ...state, errmsg: payload, isLoading: false }
+        case ACTION_TYPES.CREATE_ACTIVEPATIENT_INIT:
+            return { ...state, isLoading: true }
+        case ACTION_TYPES.CREATE_ACTIVEPATIENT_SUCCESS:
+            return { ...state, isLoading: false }
+        case ACTION_TYPES.CREATE_ACTIVEPATIENT_ERROR:
+            return { ...state, errmsg: payload, isLoading: false }
         case ACTION_TYPES.GET_APPLICANTFORM_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_APPLICANTFORM_SUCCESS:
@@ -233,42 +239,42 @@ export const ActivepatientReducer = (state = INITIAL_STATE, { type, payload }) =
         case ACTION_TYPES.UPDATE_DEPARTMENTUUI_ERROR:
             return { ...state, errmsg: payload }
         case ACTION_TYPES.OPEN_APPLICANT_MODAL:
-            return { ...state, isOpenApplicant:true }
+            return { ...state, isOpenApplicant: true }
         case ACTION_TYPES.OPEN_BODYCONTROLFORM_MODAL:
-            return { ...state, isOpenBodycontrolform:true }
+            return { ...state, isOpenBodycontrolform: true }
         case ACTION_TYPES.OPEN_DIAGNOSIS_MODAL:
-            return { ...state, isOpenDiagnosis:true }
+            return { ...state, isOpenDiagnosis: true }
         case ACTION_TYPES.OPEN_DISABILITYFORM_MODAL:
-            return { ...state, isOpenDisabilitypermitform:true }
+            return { ...state, isOpenDisabilitypermitform: true }
         case ACTION_TYPES.OPEN_DISABLEDHEALTHBOARDREPORT_MODAL:
-            return { ...state, isOpenDisabledhealthboardreport:true }
+            return { ...state, isOpenDisabledhealthboardreport: true }
         case ACTION_TYPES.OPEN_FIRSTADMISSIONSFORM_MODAL:
-            return { ...state, isOpenFirstadmissionform:true }
+            return { ...state, isOpenFirstadmissionform: true }
         case ACTION_TYPES.OPEN_FIRSTAPPROACHREPORT_MODAL:
-            return { ...state, isOpenFirstapproachreport:true }
+            return { ...state, isOpenFirstapproachreport: true }
         case ACTION_TYPES.OPEN_OWNERSHIPRECIEVE_MODAL:
-            return { ...state, isOpenOwnershiprecieve:true }
+            return { ...state, isOpenOwnershiprecieve: true }
         case ACTION_TYPES.OPEN_SUBMITTINGFORM_MODAL:
-            return { ...state, isOpenSubmittingform:true }
+            return { ...state, isOpenSubmittingform: true }
         case ACTION_TYPES.CLOSE_APPLICANT_MODAL:
-            return { ...state, isOpenApplicant:false }
+            return { ...state, isOpenApplicant: false }
         case ACTION_TYPES.CLOSE_BODYCONTROLFORM_MODAL:
-            return { ...state, isOpenBodycontrolform:false }
+            return { ...state, isOpenBodycontrolform: false }
         case ACTION_TYPES.CLOSE_DIAGNOSIS_MODAL:
-            return { ...state, isOpenDiagnosis:false }
+            return { ...state, isOpenDiagnosis: false }
         case ACTION_TYPES.CLOSE_DISABILITYFORM_MODAL:
-            return { ...state, isOpenDisabilitypermitform:false }
+            return { ...state, isOpenDisabilitypermitform: false }
         case ACTION_TYPES.CLOSE_DISABLEDHEALTHBOARDREPORT_MODAL:
-            return { ...state, isOpenDisabledhealthboardreport:false }
+            return { ...state, isOpenDisabledhealthboardreport: false }
         case ACTION_TYPES.CLOSE_FIRSTADMISSIONSFORM_MODAL:
-            return { ...state, isOpenFirstadmissionform:false }
+            return { ...state, isOpenFirstadmissionform: false }
         case ACTION_TYPES.CLOSE_FIRSTAPPROACHREPORT_MODAL:
-            return { ...state, isOpenFirstapproachreport:false }
+            return { ...state, isOpenFirstapproachreport: false }
         case ACTION_TYPES.CLOSE_OWNERSHIPRECIEVE_MODAL:
-            return { ...state, isOpenOwnershiprecieve:false }
+            return { ...state, isOpenOwnershiprecieve: false }
         case ACTION_TYPES.CLOSE_SUBMITTINGFORM_MODAL:
-            return { ...state, isOpenSubmittingform:false }
-    
+            return { ...state, isOpenSubmittingform: false }
+
         default:
             return state;
     }

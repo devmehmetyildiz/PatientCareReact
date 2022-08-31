@@ -43,3 +43,7 @@ export const BIOLOGICALAFFINITY = [
     { label: "ÖZ", value: "ÖZ" },
     { label: "ÜVEY", value: "ÜVEY" }
 ]
+export const GENDER = [
+    { label: 'ERKEK', value: 'ERKEK' },
+    { label: 'KADIN', value: 'KADIN' }
+]

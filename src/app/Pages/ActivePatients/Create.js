@@ -4,13 +4,12 @@ import { withRouter } from 'react-router-dom';
 import Spinner from '../../shared/Spinner'
 import Select from 'react-select';
 import { OverlayTrigger, Button, Tooltip, Form } from 'react-bootstrap';
-import { MARIALSTATUS, BIOLOGICALAFFINITY } from '../../Utils/Constants';
 import { CreateFile } from "../../Redux/actions/FileActions"
 import {
     OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal, OpenDisabledhealthboardreportmodal,
     OpenFirstadmissionsformmodal, OpenFirstapproachreportmodal, OpenOwnershiprecievemodal, OpenSubmittingmodal, CloseApplicantmodal,
     CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseOwnershiprecievemodal,
-    CloseFirstadmissionsformmodal, CloseFirstapproachreportmodal, CloseSubmittingformmodal
+    CloseFirstadmissionsformmodal, CloseFirstapproachreportmodal, CloseSubmittingformmodal, CreateActivepatient
 } from '../../Redux/actions/ActivepatientActions';
 import Createapplicant from './FormsCreate/Createapplicant';
 import Createdisabledhealthboardreport from './FormsCreate/Createdisabledhealthboardreport';
@@ -40,6 +39,25 @@ export const Create = (props) => {
         deleteTime: null,
         isActive: false
     }
+
+    const [activepatient, setactivepatient] = useState({
+        patientID: '',
+        approvaldate: null,
+        registerdate: null,
+        patientdiagnosis: '',
+        releasedate: null,
+        roomnumber: 0,
+        floornumber: 0,
+        bednumber: 0,
+        departmentname: '',
+        departmentid: '',
+        department: null,
+        processid: '',
+        iswaitingactivation: false,
+        process: null,
+        caseId: '',
+        case: null,
+    })
 
     const [patient, setpatient] = useState({
         id: 0,
@@ -323,38 +341,7 @@ export const Create = (props) => {
         isActive: true
     })
 
-    const [activepatient, setactivepatient] = useState({
-        patientID: '',
-        patient: {},
-        applicant: {},
-        bodycontrolform: {},
-        diagnosis: {},
-        disabilitypermitform: {},
-        disabledhealthboardreport: {},
-        firstadmissionform: {},
-        firstapproachreport: {},
-        ownershiprecieve: {},
-        recieveform: {},
-        submittingform: {},
-        approvaldate: null,
-        registerdate: null,
-        ratientdiagnosis: '',
-        releasedate: null,
-        roomnumber: 0,
-        floornumber: 0,
-        bednumber: 0,
-        departmentname: '',
-        departmentid: '',
-        department: {},
-        processid: '',
-        iswaitingactivation: false,
-        process: {},
-        caseId: '',
-        case: {},
-    })
-
     const [image, setimage] = useState(imageINIT)
-
 
     const goBack = () => {
 
@@ -381,14 +368,6 @@ export const Create = (props) => {
         }
     }
 
-    const handleonchange = (e) => {
-        const { id, value } = e.target
-        const data = patient
-        data[e.target.id] = e.target.value
-        setpatient((patient) => ({ ...patient, [id]: value }));
-
-    }
-
     const colourStyles = {
         option: (styles, { data, isDisabled, isFocused, isSelected }) => {
             console.log({ data, isDisabled, isFocused, isSelected });
@@ -398,6 +377,24 @@ export const Create = (props) => {
             };
         }
     };
+
+    const handlesubmit = (e) => {
+        e.preventDefault()
+        let data = {
+            patientID: activepatient.patientID,
+            patient: patient,
+            approvaldate: null,
+            registerdate: null,
+            ratientdiagnosis: '',
+            releasedate: null,
+            roomnumber: 0,
+            floornumber: 0,
+            bednumber: 0,
+            iswaitingactivation: activepatient.iswaitingactivation,
+        }
+        console.log('data: ', data);
+        props.CreateActivepatient(data, props.history)
+    }
 
     return (
         <>
@@ -460,7 +457,7 @@ export const Create = (props) => {
                                 </div>
                                 <div className='row d-flex mt-3 pr-5 justify-content-end align-items-right'>
                                     <button onClick={goBack()} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
-                                    <button type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
+                                    <button onClick={handlesubmit} type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
                                 </div>
                             </form>
                         </div>
@@ -480,7 +477,7 @@ const mapDispatchToProps = {
     CreateFile, OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal,
     OpenDisabledhealthboardreportmodal, OpenFirstadmissionsformmodal, OpenFirstapproachreportmodal, OpenOwnershiprecievemodal, OpenSubmittingmodal,
     CloseApplicantmodal, CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseFirstadmissionsformmodal,
-    CloseFirstapproachreportmodal, CloseOwnershiprecievemodal, CloseSubmittingformmodal
+    CloseFirstapproachreportmodal, CloseOwnershiprecievemodal, CloseSubmittingformmodal, CreateActivepatient
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))

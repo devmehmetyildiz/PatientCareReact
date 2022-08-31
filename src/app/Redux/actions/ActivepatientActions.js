@@ -12,6 +12,11 @@ export const ACTION_TYPES = {
     GET_SELECTEDACTIVEPATIENT_SUCCESS: 'GET_SELECTEDACTIVEPATIENT_SUCCESS',
     GET_SELECTEDACTIVEPATIENT_ERROR: 'GET_SELECTEDACTIVEPATIENT_ERROR',
 
+    CREATE_ACTIVEPATIENT_INIT: 'CREATE_ACTIVEPATIENT_INIT',
+    CREATE_ACTIVEPATIENT_SUCCESS: 'CREATE_ACTIVEPATIENT_SUCCESS',
+    CREATE_ACTIVEPATIENT_ERROR: 'CREATE_ACTIVEPATIENT_ERROR',
+
+
     GET_APPLICANTFORM_INIT: 'GET_APPLICANTFORM_INIT',
     GET_APPLICANTFORM_SUCCESS: 'GET_APPLICANTFORM_SUCCESS',
     GET_APPLICANTFORM_ERROR: 'GET_APPLICANTFORM_ERROR',
@@ -123,7 +128,7 @@ export const GetAllActivepatients = () => async dispatch => {
     dispatch({ type: ACTION_TYPES.GET_ALLACTIVEPATIENTS_INIT })
     await axios({
         method: 'get',
-        url: process.env.REACT_APP_BACKEND_URL + '/Activepatient/GetAll',
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ACTIVEPATIENT}/GetAll`,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => {
@@ -136,7 +141,7 @@ export const GetSelectedActivepatient = (ItemId) => async dispatch => {
     dispatch({ type: ACTION_TYPES.GET_SELECTEDACTIVEPATIENT_INIT })
     await axios({
         method: 'get',
-        url: `${process.env.REACT_APP_BACKEND_URL}/Activepatient/GetSelectedActivepatient?ID=${ItemId}`,
+        url: `${process.env.REACT_APP_BACKEND_URL}/${ROUTES.ACTIVEPATIENT}/GetSelectedActivepatient?ID=${ItemId}`,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => {
@@ -145,29 +150,31 @@ export const GetSelectedActivepatient = (ItemId) => async dispatch => {
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDACTIVEPATIENT_ERROR, payload: error }) })
 };
 
-export const CreateActivestock = (Item, historypusher) => async dispatch => {
-    dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_INIT })
+
+
+export const CreateActivepatient = (Item, historypusher) => async dispatch => {
+    dispatch({ type: ACTION_TYPES.CREATE_ACTIVEPATIENT_INIT })
     axios({
         method: 'post',
-        url: process.env.REACT_APP_BACKEND_URL + '/Activestock/Add',
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ACTIVEPATIENT}/Add`,
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })
         .then(() => {
-            dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_SUCCESS })
+            dispatch({ type: ACTION_TYPES.CREATE_ACTIVEPATIENT_SUCCESS })
             historypusher.push("/Activestocks")
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_ERROR, payload: error })
+            dispatch({ type: ACTION_TYPES.CREATE_ACTIVEPATIENT_ERROR, payload: error })
         })
 }
 
-export const CreateActivestocks = (Item, historypusher) => async dispatch => {
+export const CreateActivepatients = (Item, historypusher) => async dispatch => {
     console.log('Item: ', Item);
     dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_INIT })
     axios({
         method: 'post',
-        url: process.env.REACT_APP_BACKEND_URL + '/Activestock/AddRange',
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ACTIVEPATIENT}/AddRange`,
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })
@@ -181,11 +188,11 @@ export const CreateActivestocks = (Item, historypusher) => async dispatch => {
         })
 }
 
-export const UpdateActivestock = (Item, historypusher) => async dispatch => {
+export const UpdateActivepatient = (Item, historypusher) => async dispatch => {
     dispatch({ type: ACTION_TYPES.EDIT_ACTIVESTOCK_INIT })
     axios({
         method: 'post',
-        url: process.env.REACT_APP_BACKEND_URL + '/Activestock/Update',
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ACTIVEPATIENT}/Update`,
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })
@@ -199,11 +206,11 @@ export const UpdateActivestock = (Item, historypusher) => async dispatch => {
         })
 }
 
-export const DeleteActivestock = (Item) => async dispatch => {
+export const DeleteActivepatient = (Item) => async dispatch => {
     dispatch({ type: ACTION_TYPES.DELETE_ACTIVESTOCK_INIT })
     axios({
         method: 'delete',
-        url: process.env.REACT_APP_BACKEND_URL + '/Activestock/Delete',
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ACTIVEPATIENT}/Delete`,
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })
