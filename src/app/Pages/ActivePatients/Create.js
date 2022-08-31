@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import Spinner from '../../shared/Spinner'
-import Select from 'react-select';
-import { OverlayTrigger, Button, Tooltip, Form } from 'react-bootstrap';
 import { CreateFile } from "../../Redux/actions/FileActions"
 import {
     OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal, OpenDisabledhealthboardreportmodal,
@@ -11,6 +9,9 @@ import {
     CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseOwnershiprecievemodal,
     CloseFirstadmissionsformmodal, CloseFirstapproachreportmodal, CloseSubmittingformmodal, CreateActivepatient
 } from '../../Redux/actions/ActivepatientActions';
+import { GetAllDepartmentsSettings } from "../../Redux/actions/DepartmentAction"
+import { GetAllCostumertypes } from "../../Redux/actions/CostumertypeActions"
+import { GetAllPatienttype } from "../../Redux/actions/PatienttypeActions"
 import Createapplicant from './FormsCreate/Createapplicant';
 import Createdisabledhealthboardreport from './FormsCreate/Createdisabledhealthboardreport';
 import Createfirstapproachreport from './FormsCreate/Createfirstapproachreport';
@@ -69,7 +70,7 @@ export const Create = (props) => {
         ismotheralive: false,
         fatherbiologicalaffinity: '',
         isfatheralive: false,
-        countryID: 0,
+        countryID: '',
         dateofbirth: null,
         placeofbirth: '',
         dateofdeath: null,
@@ -92,6 +93,12 @@ export const Create = (props) => {
         contactnumber2: '',
         contactname1: '',
         contactname2: '',
+        costumertypeid: '',
+        patienttypeid: '',
+        costumertype: null,
+        patienttype: null,
+        patienttypetxt: '',
+        costumertypetxt: '',
         concurrencyStamp: '',
         createdUser: '',
         updatedUser: '',
@@ -200,7 +207,7 @@ export const Create = (props) => {
         reportno: '',
         reportname: '',
         sendinginstitution: '',
-        appealdate: '',
+        appealdate: null,
         disabilityname: '',
         disabilityinfo: '',
         disabilityrate: '',
@@ -343,6 +350,12 @@ export const Create = (props) => {
 
     const [image, setimage] = useState(imageINIT)
 
+    useEffect(() => {
+        props.GetAllCostumertypes()
+        props.GetAllDepartmentsSettings()
+        props.GetAllPatienttype()
+    }, [])
+
     const goBack = () => {
 
     }
@@ -381,16 +394,35 @@ export const Create = (props) => {
     const handlesubmit = (e) => {
         e.preventDefault()
         let data = {
+            id: activepatient.id,
             patientID: activepatient.patientID,
             patient: patient,
-            approvaldate: null,
-            registerdate: null,
-            ratientdiagnosis: '',
-            releasedate: null,
-            roomnumber: 0,
-            floornumber: 0,
-            bednumber: 0,
+            applicant: patientApplicant,
+            bodycontrolform: null,
+            diagnosis: null,
+            disabilitypermitform: null,
+            disabledhealthboardreport: patientDisabledhealthboardreport,
+            firstapproachreport: patientFirstapproachreport,
+            firstadmissionform: null,
+            ownershiprecieve: null,
+            recieveform: null,
+            submittingform: null,
+            approvaldate: activepatient.approvaldate,
+            registerdate: activepatient.registerdate,
+            patientdiagnosis: activepatient.patientdiagnosis,
+            releasedate: activepatient.releasedate,
+            roomnumber: activepatient.roomnumber,
+            floornumber: activepatient.floornumber,
+            bednumber: activepatient.bednumber,
             iswaitingactivation: activepatient.iswaitingactivation,
+            concurrencyStamp: activepatient.concurrencyStamp,
+            createdUser: activepatient.createdUser,
+            updatedUser: '',
+            deleteUser: '',
+            createTime: null,
+            updateTime: null,
+            deleteTime: null,
+            isActive: true
         }
         console.log('data: ', data);
         props.CreateActivepatient(data, props.history)
@@ -419,65 +451,73 @@ export const Create = (props) => {
                 refreshdata={setpatientFirstapproachreport}
                 selectstyle={colourStyles}
             />
-            <div className='Page'>
-                <div className="col-12 grid-margin">
-                    <div className="card">
-                        <div className="card-body">
-                            <h4 className="card-title">Hastalar > Yeni</h4>
-                            <form className="form-sample" >
-                                <div className="row">
-                                    <div className="col-9">
-                                        <Createpatient
-                                            data={patient}
-                                            refreshdata={setpatient}
-                                            selectstyle={colourStyles}
-                                        />
-                                    </div>
-                                    <div className="col-3 d-flex" style={{ flexDirection: 'column' }}>
-                                        <label>Hasta Fotoğrafı</label>
-                                        <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px', marginLeft: '15px' }} src={image.filepath} className="card-img-top" />
-                                        <div className='form-group'>
-                                            <input className={"form-control-file"} style={{ width: '265px' }} accept='image/*' type="file"
-                                                onChange={showPreview}
+            {props.Departments.isLoading && props.Costumertypes.isLoading && props.Patienttypes.isLoading ? <Spinner /> :
+                <div className='Page'>
+                    <div className="col-12 grid-margin">
+                        <div className="card">
+                            <div className="card-body">
+                                <h4 className="card-title">Hastalar > Yeni</h4>
+                                <form className="form-sample" >
+                                    <div className="row">
+                                        <div className="col-9">
+                                            <Createpatient
+                                                data={patient}
+                                                refreshdata={setpatient}
+                                                selectstyle={colourStyles}
+                                                costumertypes = {props.Costumertypes.list}
+                                                patienttypes = {props.Patienttypes.list}
                                             />
                                         </div>
-                                        <button onClick={(e) => {
-                                            e.preventDefault()
-                                            props.OpenApplicantmodal()
-                                        }} style={{ width: '250px' }} className="btn btn-primary m-2">Hasta Yakını Bilgileri</button>
-                                        <button onClick={(e) => {
-                                            e.preventDefault()
-                                            props.OpenDisabledhealthboardreportmodal()
-                                        }} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
-                                        <button onClick={(e) => {
-                                            e.preventDefault()
-                                            props.OpenFirstapproachreportmodal()
-                                        }} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüş Ve Değerlendirme Formu</button>
+                                        <div className="col-3 d-flex" style={{ flexDirection: 'column' }}>
+                                            <label>Hasta Fotoğrafı</label>
+                                            <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px', marginLeft: '15px' }} src={image.filepath} className="card-img-top" />
+                                            <div className='form-group'>
+                                                <input className={"form-control-file"} style={{ width: '265px' }} accept='image/*' type="file"
+                                                    onChange={showPreview}
+                                                />
+                                            </div>
+                                            <button onClick={(e) => {
+                                                e.preventDefault()
+                                                props.OpenApplicantmodal()
+                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">Hasta Yakını Bilgileri</button>
+                                            <button onClick={(e) => {
+                                                e.preventDefault()
+                                                props.OpenDisabledhealthboardreportmodal()
+                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
+                                            <button onClick={(e) => {
+                                                e.preventDefault()
+                                                props.OpenFirstapproachreportmodal()
+                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüş Ve Değerlendirme Formu</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className='row d-flex mt-3 pr-5 justify-content-end align-items-right'>
-                                    <button onClick={goBack()} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
-                                    <button onClick={handlesubmit} type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
-                                </div>
-                            </form>
+                                    <div className='row d-flex mt-3 pr-5 justify-content-end align-items-right'>
+                                        <button onClick={goBack()} style={{ minWidth: '150px' }} className="btn btn-dark mr-2">Geri Dön</button>
+                                        <button onClick={handlesubmit} type="submit" style={{ minWidth: '150px' }} className="btn btn-primary mr-2">Ekle</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         </>
     )
 
 }
 
 const mapStateToProps = (state) => ({
-    Activepatients: state.Activepatients
+    Activepatients: state.Activepatients,
+    Patienttypes: state.Patienttypes,
+    Costumertypes: state.Costumertypes,
+    Departments: state.Departments
 })
 
 const mapDispatchToProps = {
     CreateFile, OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal,
     OpenDisabledhealthboardreportmodal, OpenFirstadmissionsformmodal, OpenFirstapproachreportmodal, OpenOwnershiprecievemodal, OpenSubmittingmodal,
     CloseApplicantmodal, CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseFirstadmissionsformmodal,
-    CloseFirstapproachreportmodal, CloseOwnershiprecievemodal, CloseSubmittingformmodal, CreateActivepatient
+    CloseFirstapproachreportmodal, CloseOwnershiprecievemodal, CloseSubmittingformmodal, CreateActivepatient, GetAllDepartmentsSettings, GetAllPatienttype,
+    GetAllCostumertypes
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))

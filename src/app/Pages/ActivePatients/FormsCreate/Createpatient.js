@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import Select from 'react-select';
-import { MARIALSTATUS, BIOLOGICALAFFINITY,GENDER } from '../../../Utils/Constants';
+import { MARIALSTATUS, BIOLOGICALAFFINITY, GENDER } from '../../../Utils/Constants';
 
 const Createpatient = (props) => {
-    const { data, refreshdata, selectstyle } = props
+    const { data, refreshdata, selectstyle, patienttypes, costumertypes } = props
+
+    const [currentPatienttype,setcurrentPatienttype] = useState({})
 
     const handleonchange = (e) => {
         const { id, value } = e.target
@@ -18,6 +20,17 @@ const Createpatient = (props) => {
         item[e.target.name] = e.target.value
         refreshdata((data) => ({ ...data, item }));
     }
+
+    const handleselectPatienttype = (e) => {
+        console.log('e: ', e);
+        const item = data
+        item.patienttype = e.target.value
+        refreshdata((data) => ({ ...data, item }));
+    }
+
+    const patienttypedata = patienttypes.map(item => {
+        return { label: item.name, value: item.concurrencyStamp }
+    })
 
     return (
         <>
@@ -188,6 +201,18 @@ const Createpatient = (props) => {
                                 // value={selecteddepartments}
                                 //  onChange={}
                                 options={GENDER}
+                                placeholder="Seçiniz..."
+                                styles={selectstyle}
+                            />
+                        </div>
+                    </Form.Group>
+                    <Form.Group className="row m-2" >
+                        <label style={{ fontSize: "12px" }} className="col-form-label">Hasta Türü</label>
+                        <div style={{ marginRight: '-5px' }} className='col-12'>
+                            <Select
+                                value={currentPatienttype}
+                                onChange={handleselectPatienttype}
+                                options={patienttypedata}
                                 placeholder="Seçiniz..."
                                 styles={selectstyle}
                             />
