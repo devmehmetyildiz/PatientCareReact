@@ -86,13 +86,13 @@ const Createdisabledhealthboardreport = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Hasta Yakını Bilgi Girme Ekranı
+          Engelli Kurul Sağlık Raporu Ekranı
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="card">
           <div className="card-body">
-            <h4 className="card-title">Hastalar > Yeni</h4>
+            <h4 className="card-title">Engelli Kurul Sağlık Raporu > Yeni</h4>
             <form className="form-sample" >
               <div className="row">
                 <div className="col-12">

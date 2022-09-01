@@ -28,7 +28,7 @@ const Createapplicant = (props) => {
       <Modal.Body>
         <div className="card">
           <div className="card-body">
-            <h4 className="card-title">Hastalar > Yeni</h4>
+            <h4 className="card-title">Hasta Yakını Bilgi Girme > Yeni</h4>
             <form className="form-sample" >
               <div className="row">
                 <div className="col-12">

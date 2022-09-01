@@ -22,13 +22,13 @@ const Createfirstapproachreport = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Hasta Yakını Bilgi Girme Ekranı
+          İlk Görüşme ve Değerlendirme Formu
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="card">
           <div className="card-body">
-            <h4 className="card-title">Hastalar > Yeni</h4>
+            <h4 className="card-title">İlk Görüşme ve Değerlendirme Formu > Yeni</h4>
             <form className="form-sample" >
               <div className="row">
                 <div className="col-12">

@@ -126,15 +126,15 @@ export class Create extends Component {
                 let stations = [];
                 let roles = [];
                 let departments = [];
-                (this.state.selected_stations || []).map(element => {
+                (this.state.selected_stations || []).map(element => (
                     stations.push(this.props.Stations.list.find(station => station.concurrencyStamp === element.value))
-                });
-                (this.state.selected_roles || []).map(element => {
+                ));
+                (this.state.selected_roles || []).map(element => (
                     roles.push(this.props.Roles.list.find(roles => roles.concurrencyStamp === element.value))
-                });
-                (this.state.selected_departments || []).map(element => {
+                ));
+                (this.state.selected_departments || []).map(element => (
                     departments.push(this.props.Departments.list.find(department => department.concurrencyStamp === element.value))
-                });
+                ));
 
                 const newdata = { ...this.state.currentitem }
                 newdata.stations = stations

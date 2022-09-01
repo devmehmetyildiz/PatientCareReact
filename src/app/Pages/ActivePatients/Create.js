@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import Spinner from '../../shared/Spinner'
+import { Button, Form, Modal } from 'react-bootstrap'
 import { CreateFile } from "../../Redux/actions/FileActions"
 import {
     OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal, OpenDisabledhealthboardreportmodal,
@@ -360,6 +361,13 @@ export const Create = (props) => {
 
     }
 
+    const handleonchange = (e) => {
+        const { id, value } = e.target
+        const datatemp = activepatient
+        datatemp[e.target.id] = e.target.value
+        setactivepatient((activepatient) => ({ ...activepatient, [id]: value }));
+    }
+
     const showPreview = e => {
         if (e.target.files && e.target.files[0]) {
             let imageFile = e.target.files[0]
@@ -383,7 +391,6 @@ export const Create = (props) => {
 
     const colourStyles = {
         option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-            console.log({ data, isDisabled, isFocused, isSelected });
             return {
                 ...styles,
                 backgroundColor: isFocused ? "#8e8d8d" : null,
@@ -424,7 +431,6 @@ export const Create = (props) => {
             deleteTime: null,
             isActive: true
         }
-        console.log('data: ', data);
         props.CreateActivepatient(data, props.history)
     }
 
@@ -459,16 +465,16 @@ export const Create = (props) => {
                                 <h4 className="card-title">Hastalar > Yeni</h4>
                                 <form className="form-sample" >
                                     <div className="row">
-                                        <div className="col-9">
+                                        <div className="col-9 border border-primary m-20">
                                             <Createpatient
                                                 data={patient}
                                                 refreshdata={setpatient}
                                                 selectstyle={colourStyles}
-                                                costumertypes = {props.Costumertypes.list}
-                                                patienttypes = {props.Patienttypes.list}
+                                                costumertypes={props.Costumertypes.list}
+                                                patienttypes={props.Patienttypes.list}
                                             />
                                         </div>
-                                        <div className="col-3 d-flex" style={{ flexDirection: 'column' }}>
+                                        <div className="col-3 d-flex justify-content-center align-items-center" style={{ flexDirection: 'column' }}>
                                             <label>Hasta Fotoğrafı</label>
                                             <img style={{ objectFit: 'contain', margin: '10px', width: '200px', height: '200px', marginLeft: '15px' }} src={image.filepath} className="card-img-top" />
                                             <div className='form-group'>
@@ -487,7 +493,105 @@ export const Create = (props) => {
                                             <button onClick={(e) => {
                                                 e.preventDefault()
                                                 props.OpenFirstapproachreportmodal()
-                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüş Ve Değerlendirme Formu</button>
+                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüşme ve Değerlendirme Formu</button>
+                                            <button onClick={(e) => {
+                                             
+                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">Teslim Alma Formu</button>
+                                            <button onClick={(e) => {
+                                              
+                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">Teslim Eden Formu</button>
+                                            <button onClick={(e) => {
+                                              
+                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">Mülkiyet Teslim Alma Formu</button>
+                                            <button onClick={(e) => {
+                                              
+                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Kabul Formu</button>
+                                            <button onClick={(e) => {
+                                              
+                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">Genel Vücut Kontrol Formu</button>
+                                            <button onClick={(e) => {
+                                              
+                                            }} style={{ width: '250px' }} className="btn btn-primary m-2">İzin Formları</button>
+                                        </div>
+                                    </div>
+                                    <div className='row m-10 d-flex justify-content-center align-items-center'>
+                                        <div className='col-4'>
+                                            <Form.Group className="row m-2" >
+                                                <label style={{ fontSize: "12px" }} className="col-form-label">Onay Tarihi</label>
+                                                <Form.Control
+                                                    id="approvaldate"
+                                                    value={activepatient.approvaldate}
+                                                    type="date"
+                                                    placeholder="Onay Tarihi"
+                                                    onChange={handleonchange}
+                                                />
+                                            </Form.Group>
+                                            <Form.Group className="row m-2" >
+                                                <label style={{ fontSize: "12px" }} className="col-form-label">Kayıt Tarihi</label>
+                                                <Form.Control
+                                                    id="approvaldate"
+                                                    value={activepatient.approvaldate}
+                                                    type="date"
+                                                    placeholder="Kayıt Tarihi"
+                                                    onChange={handleonchange}
+                                                />
+                                            </Form.Group>
+                                        </div>
+                                        <div className='col-4'>
+                                            <Form.Group className="row m-2" >
+                                                <label style={{ fontSize: "12px" }} className="col-form-label">Hasta Teşhisi</label>
+                                                <Form.Control
+                                                    id="patientdiagnosis"
+                                                    value={activepatient.patientdiagnosis}
+                                                    type="text"
+                                                    placeholder="Hasta Teşhisi"
+                                                    onChange={handleonchange}
+                                                />
+                                            </Form.Group>
+                                            <Form.Group className="row m-2" >
+                                                <label style={{ fontSize: "12px" }} className="col-form-label">Çıkış Tarihi</label>
+                                                <Form.Control
+                                                    id="releasedate"
+                                                    value={activepatient.releasedate}
+                                                    type="date"
+                                                    placeholder="Çıkış Tarihi"
+                                                    onChange={handleonchange}
+                                                />
+                                            </Form.Group>
+                                        </div>
+                                        <div className='col-4'>
+                                            <Form.Group className="row m-2" >
+                                                <label style={{ fontSize: "12px" }} className="col-form-label">Oda Numarası</label>
+                                                <Form.Control
+                                                    id="roomnumber"
+                                                    value={activepatient.roomnumber}
+                                                    type="number"
+                                                    placeholder="Çıkış Tarihi"
+                                                    onChange={handleonchange}
+                                                />
+                                            </Form.Group>
+                                            <Form.Group className="row m-2" >
+                                                <label style={{ fontSize: "12px" }} className="col-form-label">Kat Numarası</label>
+                                                <Form.Control
+                                                    id="floornumber"
+                                                    value={activepatient.floornumber}
+                                                    type="number"
+                                                    placeholder="Çıkış Tarihi"
+                                                    onChange={handleonchange}
+                                                />
+                                            </Form.Group>
+                                        </div>
+                                        <div className='col-4'>
+                                            <Form.Group className="row m-2" >
+                                                <label style={{ fontSize: "12px" }} className="col-form-label">Yatak Numarası</label>
+                                                <Form.Control
+                                                    id="bednumber"
+                                                    value={activepatient.bednumber}
+                                                    type="number"
+                                                    placeholder="Yatak Numarası"
+                                                    onChange={handleonchange}
+                                                />
+                                            </Form.Group>
                                         </div>
                                     </div>
                                     <div className='row d-flex mt-3 pr-5 justify-content-end align-items-right'>

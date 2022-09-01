@@ -6,7 +6,12 @@ import { MARIALSTATUS, BIOLOGICALAFFINITY, GENDER } from '../../../Utils/Constan
 const Createpatient = (props) => {
     const { data, refreshdata, selectstyle, patienttypes, costumertypes } = props
 
-    const [currentPatienttype,setcurrentPatienttype] = useState({})
+    const [currentPatienttype, setcurrentPatienttype] = useState({})
+    const [currentCostumertype, setcurrentCostumertype] = useState({})
+    const [currentGender, setcurrentGender] = useState({})
+    const [currentMarialstatus, setcurrentMarialstatus] = useState({})
+    const [currentFatherbiologicalaffinity, setcurrentFatherbiologicalaffinity] = useState({})
+    const [currentMotherbiologicalaffinity, setcurrentMotherbiologicalaffinity] = useState({})
 
     const handleonchange = (e) => {
         const { id, value } = e.target
@@ -22,13 +27,51 @@ const Createpatient = (props) => {
     }
 
     const handleselectPatienttype = (e) => {
+        const item = data
+        item.patienttype = patienttypes.find(item => item.concurrencyStamp === e.value)
+        setcurrentPatienttype(e)
+        refreshdata((data) => ({ ...data, item }));
+    }
+
+    const handleselectCostumertype = (e) => {
+        const item = data
+        item.costumertype = costumertypes.find(item => item.concurrencyStamp === e.value)
+        setcurrentCostumertype(e)
+        refreshdata((data) => ({ ...data, item }));
+    }
+
+    const handleselectFatheraffinity = (e) => {
+        const item = data
+        item.fatherbiologicalaffinity = e.value
+        setcurrentFatherbiologicalaffinity(e)
+        refreshdata((data) => ({ ...data, item }));
+    }
+
+    const handleselectMotheraffinity = (e) => {
+        const item = data
+        item.motherbiologicalaffinity = e.value
+        setcurrentMotherbiologicalaffinity(e)
+        refreshdata((data) => ({ ...data, item }));
+    }
+    const handleselectGender = (e) => {
         console.log('e: ', e);
         const item = data
-        item.patienttype = e.target.value
+        item.gender = e.value
+        setcurrentGender(e)
+        refreshdata((data) => ({ ...data, item }));
+    }
+    const handleselectMarialStatus = (e) => {
+        console.log('e: ', e);
+        const item = data
+        item.marialstatus = e.value
+        setcurrentMarialstatus(e)
         refreshdata((data) => ({ ...data, item }));
     }
 
     const patienttypedata = patienttypes.map(item => {
+        return { label: item.name, value: item.concurrencyStamp }
+    })
+    const costumertypedata = costumertypes.map(item => {
         return { label: item.name, value: item.concurrencyStamp }
     })
 
@@ -80,8 +123,8 @@ const Createpatient = (props) => {
                         <label style={{ fontSize: "12px" }} className="col-form-label">Baba Yakınlık Durumu</label>
                         <div style={{ marginRight: '-5px' }} className='col-12'>
                             <Select
-                                // value={selecteddepartments}
-                                //  onChange={}
+                                value={currentFatherbiologicalaffinity}
+                                onChange={handleselectFatheraffinity}
                                 options={BIOLOGICALAFFINITY}
                                 placeholder="Seçiniz..."
                                 styles={selectstyle}
@@ -92,8 +135,8 @@ const Createpatient = (props) => {
                         <label style={{ fontSize: "12px" }} className="col-form-label">Anne Yakınlık Durumu</label>
                         <div style={{ marginRight: '-5px' }} className='col-12'>
                             <Select
-                                // value={selecteddepartments}
-                                //  onChange={}
+                                value={currentMotherbiologicalaffinity}
+                                onChange={handleselectMotheraffinity}
                                 options={BIOLOGICALAFFINITY}
                                 placeholder="Seçiniz..."
                                 styles={selectstyle}
@@ -139,7 +182,7 @@ const Createpatient = (props) => {
                         <Form.Control
                             id="name"
                             value={data.countryID}
-                            type="number"
+                            type="text"
                             placeholder="TC Kimlik No"
                             onChange={handleonchange}
                         />
@@ -198,8 +241,9 @@ const Createpatient = (props) => {
                         <label style={{ fontSize: "12px" }} className="col-form-label">Cinsiyet</label>
                         <div style={{ marginRight: '-5px' }} className='col-12'>
                             <Select
-                                // value={selecteddepartments}
-                                //  onChange={}
+                                id="gender"
+                                value={currentGender}
+                                onChange={handleselectGender}
                                 options={GENDER}
                                 placeholder="Seçiniz..."
                                 styles={selectstyle}
@@ -224,8 +268,8 @@ const Createpatient = (props) => {
                         <label style={{ fontSize: "12px" }} className="col-form-label">Medeni Durum</label>
                         <div style={{ marginRight: '-5px' }} className='col-12'>
                             <Select
-                                // value={selecteddepartments}
-                                //  onChange={}
+                               value={currentMarialstatus}
+                                onChange={handleselectMarialStatus}
                                 options={MARIALSTATUS}
                                 placeholder="Seçiniz..."
                                 styles={selectstyle}
@@ -291,6 +335,18 @@ const Createpatient = (props) => {
                             placeholder="Gelir Durumu"
                             onChange={handleonchange}
                         />
+                    </Form.Group>
+                    <Form.Group className="row m-2" >
+                        <label style={{ fontSize: "12px" }} className="col-form-label">Müşteri Türü</label>
+                        <div style={{ marginRight: '-5px' }} className='col-12'>
+                            <Select
+                                value={currentCostumertype}
+                                onChange={handleselectCostumertype}
+                                options={costumertypedata}
+                                placeholder="Seçiniz..."
+                                styles={selectstyle}
+                            />
+                        </div>
                     </Form.Group>
                 </div>
             </div>
