@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import Spinner from '../../shared/Spinner'
 import { Button, Form, Modal } from 'react-bootstrap'
+import Select from 'react-select';
 import { CreateFile } from "../../Redux/actions/FileActions"
 import {
     OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal, OpenDisabledhealthboardreportmodal,
@@ -13,6 +14,7 @@ import {
 import { GetAllDepartmentsSettings } from "../../Redux/actions/DepartmentAction"
 import { GetAllCostumertypes } from "../../Redux/actions/CostumertypeActions"
 import { GetAllPatienttype } from "../../Redux/actions/PatienttypeActions"
+import { GetAllCasesSettings } from "../../Redux/actions/CaseActions"
 import Createapplicant from './FormsCreate/Createapplicant';
 import Createdisabledhealthboardreport from './FormsCreate/Createdisabledhealthboardreport';
 import Createfirstapproachreport from './FormsCreate/Createfirstapproachreport';
@@ -350,11 +352,13 @@ export const Create = (props) => {
     })
 
     const [image, setimage] = useState(imageINIT)
+    const [currentCase, setcurrentCase] = useState({})
 
     useEffect(() => {
         props.GetAllCostumertypes()
         props.GetAllDepartmentsSettings()
         props.GetAllPatienttype()
+        props.GetAllCasesSettings()
     }, [])
 
     const goBack = () => {
@@ -434,6 +438,18 @@ export const Create = (props) => {
         props.CreateActivepatient(data, props.history)
     }
 
+    const handleselectCase = (e) => {
+        const item = activepatient
+        item.case = props.Cases.list.find(item => item.concurrencyStamp === e.value)
+        setcurrentCase(e)
+        setactivepatient((activepatient) => ({ ...activepatient, item }));
+    }
+
+    const casesdata = props.Cases.list.map(item => {
+        return { label: item.name, value: item.concurrencyStamp }
+    })
+
+    console.log('casesdata: ', casesdata);
     return (
         <>
             <Createapplicant
@@ -495,27 +511,27 @@ export const Create = (props) => {
                                                 props.OpenFirstapproachreportmodal()
                                             }} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Görüşme ve Değerlendirme Formu</button>
                                             <button onClick={(e) => {
-                                             
+                                                e.preventDefault()
                                             }} style={{ width: '250px' }} className="btn btn-primary m-2">Teslim Alma Formu</button>
                                             <button onClick={(e) => {
-                                              
+                                                e.preventDefault()
                                             }} style={{ width: '250px' }} className="btn btn-primary m-2">Teslim Eden Formu</button>
                                             <button onClick={(e) => {
-                                              
+                                                e.preventDefault()
                                             }} style={{ width: '250px' }} className="btn btn-primary m-2">Mülkiyet Teslim Alma Formu</button>
                                             <button onClick={(e) => {
-                                              
+                                                e.preventDefault()
                                             }} style={{ width: '250px' }} className="btn btn-primary m-2">İlk Kabul Formu</button>
                                             <button onClick={(e) => {
-                                              
+                                                e.preventDefault()
                                             }} style={{ width: '250px' }} className="btn btn-primary m-2">Genel Vücut Kontrol Formu</button>
                                             <button onClick={(e) => {
-                                              
+                                                e.preventDefault()
                                             }} style={{ width: '250px' }} className="btn btn-primary m-2">İzin Formları</button>
                                         </div>
                                     </div>
-                                    <div className='row m-10 d-flex justify-content-center align-items-center'>
-                                        <div className='col-4'>
+                                    <div className='row m-10 '>
+                                        <div className='col-3'>
                                             <Form.Group className="row m-2" >
                                                 <label style={{ fontSize: "12px" }} className="col-form-label">Onay Tarihi</label>
                                                 <Form.Control
@@ -529,15 +545,15 @@ export const Create = (props) => {
                                             <Form.Group className="row m-2" >
                                                 <label style={{ fontSize: "12px" }} className="col-form-label">Kayıt Tarihi</label>
                                                 <Form.Control
-                                                    id="approvaldate"
-                                                    value={activepatient.approvaldate}
+                                                    id="registerdate"
+                                                    value={activepatient.registerdate}
                                                     type="date"
                                                     placeholder="Kayıt Tarihi"
                                                     onChange={handleonchange}
                                                 />
                                             </Form.Group>
                                         </div>
-                                        <div className='col-4'>
+                                        <div className='col-3'>
                                             <Form.Group className="row m-2" >
                                                 <label style={{ fontSize: "12px" }} className="col-form-label">Hasta Teşhisi</label>
                                                 <Form.Control
@@ -559,7 +575,7 @@ export const Create = (props) => {
                                                 />
                                             </Form.Group>
                                         </div>
-                                        <div className='col-4'>
+                                        <div className='col-3'>
                                             <Form.Group className="row m-2" >
                                                 <label style={{ fontSize: "12px" }} className="col-form-label">Oda Numarası</label>
                                                 <Form.Control
@@ -581,7 +597,7 @@ export const Create = (props) => {
                                                 />
                                             </Form.Group>
                                         </div>
-                                        <div className='col-4'>
+                                        <div className='col-3'>
                                             <Form.Group className="row m-2" >
                                                 <label style={{ fontSize: "12px" }} className="col-form-label">Yatak Numarası</label>
                                                 <Form.Control
@@ -591,6 +607,18 @@ export const Create = (props) => {
                                                     placeholder="Yatak Numarası"
                                                     onChange={handleonchange}
                                                 />
+                                            </Form.Group>
+                                            <Form.Group className="row m-2" >
+                                                <label style={{ fontSize: "12px" }} className="col-form-label">Durum</label>
+                                                <div style={{ marginRight: '-5px' }} className='col-12'>
+                                                    <Select
+                                                        value={currentCase}
+                                                        onChange={handleselectCase}
+                                                        options={casesdata}
+                                                        placeholder="Seçiniz..."
+                                                        styles={colourStyles}
+                                                    />
+                                                </div>
                                             </Form.Group>
                                         </div>
                                     </div>
@@ -613,7 +641,8 @@ const mapStateToProps = (state) => ({
     Activepatients: state.Activepatients,
     Patienttypes: state.Patienttypes,
     Costumertypes: state.Costumertypes,
-    Departments: state.Departments
+    Departments: state.Departments,
+    Cases: state.Cases
 })
 
 const mapDispatchToProps = {
@@ -621,7 +650,7 @@ const mapDispatchToProps = {
     OpenDisabledhealthboardreportmodal, OpenFirstadmissionsformmodal, OpenFirstapproachreportmodal, OpenOwnershiprecievemodal, OpenSubmittingmodal,
     CloseApplicantmodal, CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseFirstadmissionsformmodal,
     CloseFirstapproachreportmodal, CloseOwnershiprecievemodal, CloseSubmittingformmodal, CreateActivepatient, GetAllDepartmentsSettings, GetAllPatienttype,
-    GetAllCostumertypes
+    GetAllCostumertypes, GetAllCasesSettings
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Create))

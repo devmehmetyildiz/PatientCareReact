@@ -7,6 +7,8 @@ import { OverlayTrigger, Tooltip, Button, ButtonToolbar, Popover } from 'react-b
 import { COLUMNTYPES } from './Constants';
 import "../../assets/styles/Pages/Datatable.scss"
 import { connect } from 'react-redux'
+import "../../assets/styles/Pages/File.scss"
+
 
 export const Datatable = (props) => {
     const { columns, data } = props
@@ -136,31 +138,35 @@ export const Datatable = (props) => {
             filtervalue = item.filtertext
         }
         return (
-            <div className='row'>
-                <div className='col-6 containerclasstext'>
-                    <div > {column.text} </div>
-                    <div style={{ display: 'none' }}>{filterElement}</div>
+            <div className='containerclassheader'>
+                <div className=' d-inline'>
+                    <div className=' containerclasstext'>
+                        <div className='text-nowrap'> {column.text} </div>
+                        <div style={{ display: 'none' }}>{filterElement}</div>
+                    </div>
                 </div>
-                <div className='col-6 containerclassicons'>
-                    <i style={{ cursor: 'pointer' }} className="ti-arrows-vertical"> </i>
-                    <i style={{ cursor: 'pointer' }} className="ti-pin2"></i>
-                    <OverlayTrigger
-                        trigger="click"
-                        placement="right"
-                        rootClose={true}
-                        overlay={
-                            <Popover id="popover-basic">
-                                <Popover.Title as="h3">Filtre</Popover.Title>
-                                <Popover.Content>
-                                    <input autoFocus onChange={(e) => { Addfilter(column.dataField, e.target.value, column.text) }} className="form-control" placeholder='İlgili Kelimeyi Arayınız' name='name'
-                                        value={filtervalue}
-                                    />
-                                </Popover.Content>
-                            </Popover>
-                        }
-                    >
-                        <i style={{ cursor: 'pointer' }} className="ti-pencil-alt"></i>
-                    </OverlayTrigger>
+                <div className=' d-inline'>
+                    <div className=' containerclassicons'>
+                        <i style={{ cursor: 'pointer' }} className="ti-arrows-vertical"> </i>
+                        <i style={{ cursor: 'pointer' }} className="ti-pin2"></i>
+                        <OverlayTrigger
+                            trigger="click"
+                            placement="right"
+                            rootClose={true}
+                            overlay={
+                                <Popover id="popover-basic">
+                                    <Popover.Title as="h3">Filtre</Popover.Title>
+                                    <Popover.Content>
+                                        <input autoFocus onChange={(e) => { Addfilter(column.dataField, e.target.value, column.text) }} className="form-control" placeholder='İlgili Kelimeyi Arayınız' name='name'
+                                            value={filtervalue}
+                                        />
+                                    </Popover.Content>
+                                </Popover>
+                            }
+                        >
+                            <i style={{ cursor: 'pointer' }} className="ti-pencil-alt"></i>
+                        </OverlayTrigger>
+                    </div>
                 </div>
             </div>
 

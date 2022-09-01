@@ -132,6 +132,12 @@ export const GetAllActivepatients = () => async dispatch => {
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => {
+           response.data.forEach(element => {
+            console.log('element: ', element);
+            element.patientname = element.patient.firstname + " " + element.patient.lastname
+            //element.casename = element.data.case.name
+           });
+            console.log("tamamladım")
             dispatch({ type: ACTION_TYPES.GET_ALLACTIVEPATIENTS_SUCCESS, payload: response.data })
         })
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_ALLACTIVEPATIENTS_ERROR, payload: error }) })

@@ -180,7 +180,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">TC Kimlik No</label>
                         <Form.Control
-                            id="name"
+                            id="countryID"
                             value={data.countryID}
                             type="text"
                             placeholder="TC Kimlik No"
@@ -190,7 +190,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Doğum Tarihi</label>
                         <Form.Control
-                            id="name"
+                            id="dateofbirth"
                             value={data.dateofbirth}
                             type="date"
                             placeholder="Doğum Tarihi"
@@ -200,7 +200,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Doğum Yeri</label>
                         <Form.Control
-                            id="name"
+                            id="placeofbirth"
                             value={data.placeofbirth}
                             type="text"
                             placeholder="Doğum Yeri"
@@ -210,7 +210,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Ölüm Tarihi</label>
                         <Form.Control
-                            id="name"
+                            id="dateofdeath"
                             value={data.dateofdeath}
                             type="date"
                             placeholder="Ölüm Tarihi"
@@ -220,7 +220,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Ölüm Yeri</label>
                         <Form.Control
-                            id="name"
+                            id="placeofdeath"
                             value={data.placeofdeath}
                             type="text"
                             placeholder="Ölüm Yeri"
@@ -230,7 +230,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Ölüm Nedeni</label>
                         <Form.Control
-                            id="name"
+                            id="deathinfo"
                             value={data.deathinfo}
                             type="text"
                             placeholder="Ölüm Nedeni"
@@ -279,7 +279,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Sabıka Kaydı</label>
                         <Form.Control
-                            id="name"
+                            id="criminalrecord"
                             value={data.criminalrecord}
                             type="text"
                             placeholder="Sabıka Kaydı"
@@ -289,7 +289,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Cocuk Sayısı</label>
                         <Form.Control
-                            id="name"
+                            id="childnumber"
                             value={data.childnumber}
                             type="number"
                             placeholder="Cocuk Sayısı"
@@ -299,7 +299,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Engelli Çocuk Sayısı</label>
                         <Form.Control
-                            id="name"
+                            id="disabledchildnumber"
                             value={data.disabledchildnumber}
                             type="number"
                             placeholder="Engelli Çocuk Sayısı"
@@ -309,7 +309,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Kardeş Sayısı</label>
                         <Form.Control
-                            id="name"
+                            id="siblingstatus"
                             value={data.siblingstatus}
                             type="number"
                             placeholder="Kardeş Sayısı"
@@ -319,7 +319,7 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">SGK Durumu</label>
                         <Form.Control
-                            id="name"
+                            id="sgkstatus"
                             value={data.sgkstatus}
                             type="text"
                             placeholder="SGK Durumu"
@@ -329,9 +329,9 @@ const Createpatient = (props) => {
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Gelir Durumu</label>
                         <Form.Control
-                            id="name"
+                            id="budgetstatus"
                             value={data.budgetstatus}
-                            type="text"
+                            type="number"
                             placeholder="Gelir Durumu"
                             onChange={handleonchange}
                         />

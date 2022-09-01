@@ -12,8 +12,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: row;
 }
 
 .react-bootstrap-table th.sortable {
     cursor: auto;
+}
+
+.containerclassheader{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction : row;
+    justify-content: center;
+    align-items: center;
+}
+
+.react-bootstrap-table table.table thead th {
+    padding: 0.9375rem;
 }
