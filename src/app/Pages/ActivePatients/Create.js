@@ -449,7 +449,6 @@ export const Create = (props) => {
         return { label: item.name, value: item.concurrencyStamp }
     })
 
-    console.log('casesdata: ', casesdata);
     return (
         <>
             <Createapplicant
