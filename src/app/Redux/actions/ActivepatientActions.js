@@ -12,10 +12,17 @@ export const ACTION_TYPES = {
     GET_SELECTEDACTIVEPATIENT_SUCCESS: 'GET_SELECTEDACTIVEPATIENT_SUCCESS',
     GET_SELECTEDACTIVEPATIENT_ERROR: 'GET_SELECTEDACTIVEPATIENT_ERROR',
 
+    UPDATE_ACTIVEPATIENT_INIT: 'UPDATE_ACTIVEPATIENT_INIT',
+    UPDATE_ACTIVEPATIENT_SUCCESS: 'UPDATE_ACTIVEPATIENT_SUCCESS',
+    UPDATE_ACTIVEPATIENT_ERROR: 'UPDATE_ACTIVEPATIENT_ERROR',
+
     CREATE_ACTIVEPATIENT_INIT: 'CREATE_ACTIVEPATIENT_INIT',
     CREATE_ACTIVEPATIENT_SUCCESS: 'CREATE_ACTIVEPATIENT_SUCCESS',
     CREATE_ACTIVEPATIENT_ERROR: 'CREATE_ACTIVEPATIENT_ERROR',
 
+    CREATE_PATIENTFILE_INIT: `CREATE_PATIENTFILE_INIT`,
+    CREATE_PATIENTFILE_SUCCESS: `CREATE_PATIENTFILE_SUCCESS`,
+    CREATE_PATIENTFILE_ERROR: `CREATE_PATIENTFILE_ERROR`,
 
     GET_APPLICANTFORM_INIT: 'GET_APPLICANTFORM_INIT',
     GET_APPLICANTFORM_SUCCESS: 'GET_APPLICANTFORM_SUCCESS',
@@ -132,11 +139,11 @@ export const GetAllActivepatients = () => async dispatch => {
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => {
-           response.data.forEach(element => {
-            console.log('element: ', element);
-            element.patientname = element.patient.firstname + " " + element.patient.lastname
-            //element.casename = element.data.case.name
-           });
+            response.data.forEach(element => {
+                console.log('element: ', element);
+                element.patientname = element.patient.firstname + " " + element.patient.lastname
+                //element.casename = element.data.case.name
+            });
             console.log("tamamladım")
             dispatch({ type: ACTION_TYPES.GET_ALLACTIVEPATIENTS_SUCCESS, payload: response.data })
         })
@@ -147,7 +154,7 @@ export const GetSelectedActivepatient = (ItemId) => async dispatch => {
     dispatch({ type: ACTION_TYPES.GET_SELECTEDACTIVEPATIENT_INIT })
     await axios({
         method: 'get',
-        url: `${process.env.REACT_APP_BACKEND_URL}/${ROUTES.ACTIVEPATIENT}/GetSelectedActivepatient?ID=${ItemId}`,
+        url: `${process.env.REACT_APP_BACKEND_URL}/${ROUTES.ACTIVEPATIENT}/GetSelectedActivepatient?Guid=${ItemId}`,
         headers: { Authorization: `Bearer ${GetToken()}` }
     })
         .then(response => {
@@ -156,9 +163,39 @@ export const GetSelectedActivepatient = (ItemId) => async dispatch => {
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDACTIVEPATIENT_ERROR, payload: error }) })
 };
 
+export const GetSelectedActivepatientimage = (ItemId) => async dispatch => {
+    dispatch({ type: ACTION_TYPES.GET_PATIENTIMAGE_INIT })
+    await axios({
+        method: 'get',
+        url: `${process.env.REACT_APP_BACKEND_URL}/${ROUTES.ACTIVEPATIENT}/GetSelectedFile?Guid=${ItemId}`,
+        headers: { Authorization: `Bearer ${GetToken()}` }
+    })
+        .then(response => {
+            dispatch({ type: ACTION_TYPES.GET_PATIENTIMAGE_SUCCESS, payload: response.data })
+        })
+        .catch(error => { dispatch({ type: ACTION_TYPES.GET_PATIENTIMAGE_ERROR, payload: error }) })
+};
 
+export const CreatePatientFile = (Item, historypusher, filename) => dispatch => {
+    dispatch({ type: ACTION_TYPES.CREATE_PATIENTFILE_INIT })
+    axios({
+        method: `post`,
+        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ACTIVEPATIENT}/AddImage`,
+        headers: { Authorization: `Bearer ${GetToken()}` },
+        data: Item
+    })
+        .then(() => {
+            dispatch({ type: ACTION_TYPES.CREATE_PATIENTFILE_SUCCESS })
+            Popup("Success", "Dosyalar", `Dosya Yüklendi : ${filename}`)
+            historypusher.push("/Activepatients")
+        })
+        .catch(error => {
+            dispatch({ type: ACTION_TYPES.CREATE_PATIENTFILE_ERROR, payload: error })
+            AxiosErrorHandle(error, ROUTES.ACTIVEPATIENT, "Add")
+        })
+}
 
-export const CreateActivepatient = (Item, historypusher) => async dispatch => {
+export const CreateActivepatient = (Item, historypusher, image, filename) => async dispatch => {
     dispatch({ type: ACTION_TYPES.CREATE_ACTIVEPATIENT_INIT })
     axios({
         method: 'post',
@@ -166,36 +203,50 @@ export const CreateActivepatient = (Item, historypusher) => async dispatch => {
         headers: { Authorization: `Bearer ${GetToken()}` },
         data: Item
     })
-        .then(() => {
-            dispatch({ type: ACTION_TYPES.CREATE_ACTIVEPATIENT_SUCCESS })
-            historypusher.push("/Activestocks")
+        .then((res) => {
+            const formData = new FormData();
+            formData.append('id', image.id);
+            formData.append('name', image.name);
+            formData.append('filefolder', image.filefolder);
+            formData.append('filetype', image.filetype);
+            formData.append('downloadedcount', image.downloadedcount);
+            formData.append('lastdownloadeduser', image.lastdownloadeduser);
+            formData.append('lastdownloadedip', image.lastdownloadedip);
+            formData.append('file', image.file);
+            formData.append('concurrencyStamp', res.data);
+            formData.append('createdUser', image.createdUser);
+            formData.append('updatedUser', image.updatedUser);
+            formData.append('deleteUser', image.deleteUser);
+            formData.append('isActive', image.isActive);
+            dispatch({ type: ACTION_TYPES.CREATE_PATIENTFILE_INIT })
+            axios({
+                method: `post`,
+                url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ACTIVEPATIENT}/AddImage`,
+                headers: { Authorization: `Bearer ${GetToken()}` },
+                data: formData
+            })
+                .then(() => {
+                    dispatch({ type: ACTION_TYPES.CREATE_PATIENTFILE_SUCCESS })
+                    Popup("Success", "Hastalar", `Hasta Sisteme Eklendi`)
+                    dispatch({ type: ACTION_TYPES.CREATE_ACTIVEPATIENT_SUCCESS })
+                    historypusher.push("/Activepatients")
+                })
+                .catch(error => {
+                    dispatch({ type: ACTION_TYPES.CREATE_PATIENTFILE_ERROR, payload: error })
+                    AxiosErrorHandle(error, ROUTES.ACTIVEPATIENT, "Add")
+                })
+
+
+
+
         })
         .catch(error => {
             dispatch({ type: ACTION_TYPES.CREATE_ACTIVEPATIENT_ERROR, payload: error })
         })
 }
 
-export const CreateActivepatients = (Item, historypusher) => async dispatch => {
-    console.log('Item: ', Item);
-    dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_INIT })
-    axios({
-        method: 'post',
-        url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ACTIVEPATIENT}/AddRange`,
-        headers: { Authorization: `Bearer ${GetToken()}` },
-        data: Item
-    })
-        .then(() => {
-            dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_SUCCESS })
-            historypusher.push("/Activestocks")
-        })
-        .catch(error => {
-            console.log('error: ', error);
-            dispatch({ type: ACTION_TYPES.CREATE_ACTIVESTOCK_ERROR, payload: error })
-        })
-}
-
 export const UpdateActivepatient = (Item, historypusher) => async dispatch => {
-    dispatch({ type: ACTION_TYPES.EDIT_ACTIVESTOCK_INIT })
+    dispatch({ type: ACTION_TYPES.UPDATE_ACTIVEPATIENT_INIT })
     axios({
         method: 'post',
         url: process.env.REACT_APP_BACKEND_URL + `/${ROUTES.ACTIVEPATIENT}/Update`,
@@ -203,12 +254,12 @@ export const UpdateActivepatient = (Item, historypusher) => async dispatch => {
         data: Item
     })
         .then(() => {
-            dispatch({ type: ACTION_TYPES.EDIT_ACTIVESTOCK_SUCCESS })
-            dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDACTIVESTOCK })
-            historypusher.push("/Activestocks")
+            dispatch({ type: ACTION_TYPES.UPDATE_ACTIVEPATIENT_SUCCESS })
+            dispatch({ type: ACTION_TYPES.REMOVE_SELECTEDACTIVEPATIENT })
+            historypusher.push("/Activepatients")
         })
         .catch(error => {
-            dispatch({ type: ACTION_TYPES.EDIT_ACTIVESTOCK_ERROR, payload: error })
+            dispatch({ type: ACTION_TYPES.UPDATE_ACTIVEPATIENT_ERROR, payload: error })
         })
 }
 

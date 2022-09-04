@@ -87,135 +87,144 @@ export const ActivepatientReducer = (state = INITIAL_STATE, { type, payload }) =
         case ACTION_TYPES.GET_ALLACTIVEPATIENTS_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_ALLACTIVEPATIENTS_SUCCESS:
-            return { ...state, list: payload, isLoading: false }
+            return { ...state, list: payload, isLoading: false };
         case ACTION_TYPES.GET_ALLACTIVEPATIENTS_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.GET_SELECTEDACTIVEPATIENT_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.GET_SELECTEDACTIVEPATIENT_SUCCESS:
-            return { ...state, selected_activepatient: payload, isLoading: false }
+            return { ...state, selected_activepatient: payload, isLoading: false };
         case ACTION_TYPES.GET_SELECTEDACTIVEPATIENT_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.CREATE_ACTIVEPATIENT_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.CREATE_ACTIVEPATIENT_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.CREATE_ACTIVEPATIENT_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
+        case ACTION_TYPES.UPDATE_ACTIVEPATIENT_INIT:
+            return { ...state, isLoading: true };
+        case ACTION_TYPES.UPDATE_ACTIVEPATIENT_SUCCESS:
+            return { ...state, isLoading: false };
+        case ACTION_TYPES.UPDATE_ACTIVEPATIENT_ERROR:
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.GET_APPLICANTFORM_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_APPLICANTFORM_SUCCESS:
-            return { ...state, applicant: payload, isLoading: false }
+            return { ...state, applicant: payload, isLoading: false };
         case ACTION_TYPES.GET_APPLICANTFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.GET_BODYCONTROLFORM_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_BODYCONTROLFORM_SUCCESS:
-            return { ...state, bodycontrolform: payload, isLoading: false }
+            return { ...state, bodycontrolform: payload, isLoading: false };
         case ACTION_TYPES.GET_BODYCONTROLFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.GET_DISABILITYPERMITFORM_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_DISABILITYPERMITFORM_SUCCESS:
-            return { ...state, disabilitypermitform: payload, isLoading: false }
+            return { ...state, disabilitypermitform: payload, isLoading: false };
         case ACTION_TYPES.GET_DISABILITYPERMITFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.GET_DISABLEDHEALTHBOARDREPORT_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_DISABLEDHEALTHBOARDREPORT_SUCCESS:
-            return { ...state, disabledhealthboardreport: payload, isLoading: false }
+            return { ...state, disabledhealthboardreport: payload, isLoading: false };
         case ACTION_TYPES.GET_DISABLEDHEALTHBOARDREPORT_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.GET_FIRSTADMISSIONFORM_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_FIRSTADMISSIONFORM_SUCCESS:
-            return { ...state, firstadmissionform: payload, isLoading: false }
+            return { ...state, firstadmissionform: payload, isLoading: false };
         case ACTION_TYPES.GET_FIRSTADMISSIONFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.GET_FIRSTAPPROACHREPORT_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_FIRSTAPPROACHREPORT_SUCCESS:
-            return { ...state, firstapproachreport: payload, isLoading: false }
+            return { ...state, firstapproachreport: payload, isLoading: false };
         case ACTION_TYPES.GET_FIRSTAPPROACHREPORT_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.GET_OWNERSHIPRECIEVEFORM_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_OWNERSHIPRECIEVEFORM_SUCCESS:
-            return { ...state, ownershiprecieve: payload, isLoading: false }
+            return { ...state, ownershiprecieve: payload, isLoading: false };
         case ACTION_TYPES.GET_OWNERSHIPRECIEVEFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.GET_RECIEVEFORM_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_RECIEVEFORM_SUCCESS:
-            return { ...state, recieveform: payload, isLoading: false }
+            return { ...state, recieveform: payload, isLoading: false };
         case ACTION_TYPES.GET_RECIEVEFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.GET_SUBMITTINGFORM_INIT:
             return { ...state, isLoading: true };
         case ACTION_TYPES.GET_SUBMITTINGFORM_SUCCESS:
-            return { ...state, submittingform: payload, isLoading: false }
+            return { ...state, submittingform: payload, isLoading: false };
         case ACTION_TYPES.GET_SUBMITTINGFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
+
+
         case ACTION_TYPES.UPDATE_APPLICANTFORM_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.UPDATE_APPLICANTFORM_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.UPDATE_APPLICANTFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.UPDATE_BODYCONTROLFORM_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.UPDATE_BODYCONTROLFORM_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.UPDATE_BODYCONTROLFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.UPDATE_DIAGNOSISFORM_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.UPDATE_DIAGNOSISFORM_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.UPDATE_DIAGNOSISFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.UPDATE_DISABILITYPERMITFORM_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.UPDATE_DISABILITYPERMITFORM_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.UPDATE_DISABILITYPERMITFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.UPDATE_DISABLEDHEALTHBOARDREPORT_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.UPDATE_DISABLEDHEALTHBOARDREPORT_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.UPDATE_DISABLEDHEALTHBOARDREPORT_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.UPDATE_FIRSTADMISSIONFORM_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.UPDATE_FIRSTADMISSIONFORM_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.UPDATE_FIRSTADMISSIONFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.UPDATE_FIRSTAPPROACHREPORT_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.UPDATE_FIRSTAPPROACHREPORT_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.UPDATE_FIRSTAPPROACHREPORT_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.UPDATE_OWNERSHIPRECIEVEFORM_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.UPDATE_OWNERSHIPRECIEVEFORM_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.UPDATE_OWNERSHIPRECIEVEFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.UPDATE_RECIEVEFORM_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.UPDATE_RECIEVEFORM_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.UPDATE_RECIEVEFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
         case ACTION_TYPES.UPDATE_SUBMITTINGFORM_INIT:
-            return { ...state, isLoading: true }
+            return { ...state, isLoading: true };
         case ACTION_TYPES.UPDATE_SUBMITTINGFORM_SUCCESS:
-            return { ...state, isLoading: false }
+            return { ...state, isLoading: false };
         case ACTION_TYPES.UPDATE_SUBMITTINGFORM_ERROR:
-            return { ...state, errmsg: payload, isLoading: false }
+            return { ...state, errmsg: payload, isLoading: false };
+
         case ACTION_TYPES.REMOVE_SELECTEDACTIVEPATIENT:
             return {
                 ...state,
@@ -231,49 +240,51 @@ export const ActivepatientReducer = (state = INITIAL_STATE, { type, payload }) =
                 submittingform: {},
                 selected_activepatient: INITIAL_STATE.selected_activepatient,
                 isSelected: false
-            }
+            };
+
         case ACTION_TYPES.UPDATE_DEPARTMENTUUI_INIT:
-            return { ...state }
+            return { ...state };
         case ACTION_TYPES.UPDATE_DEPARTMENTUUI_SUCCESS:
-            return { ...state, department: payload }
+            return { ...state, department: payload };
         case ACTION_TYPES.UPDATE_DEPARTMENTUUI_ERROR:
-            return { ...state, errmsg: payload }
+            return { ...state, errmsg: payload };
+
         case ACTION_TYPES.OPEN_APPLICANT_MODAL:
-            return { ...state, isOpenApplicant: true }
+            return { ...state, isOpenApplicant: true };
         case ACTION_TYPES.OPEN_BODYCONTROLFORM_MODAL:
-            return { ...state, isOpenBodycontrolform: true }
+            return { ...state, isOpenBodycontrolform: true };
         case ACTION_TYPES.OPEN_DIAGNOSIS_MODAL:
-            return { ...state, isOpenDiagnosis: true }
+            return { ...state, isOpenDiagnosis: true };
         case ACTION_TYPES.OPEN_DISABILITYFORM_MODAL:
-            return { ...state, isOpenDisabilitypermitform: true }
+            return { ...state, isOpenDisabilitypermitform: true };
         case ACTION_TYPES.OPEN_DISABLEDHEALTHBOARDREPORT_MODAL:
-            return { ...state, isOpenDisabledhealthboardreport: true }
+            return { ...state, isOpenDisabledhealthboardreport: true };
         case ACTION_TYPES.OPEN_FIRSTADMISSIONSFORM_MODAL:
-            return { ...state, isOpenFirstadmissionform: true }
+            return { ...state, isOpenFirstadmissionform: true };
         case ACTION_TYPES.OPEN_FIRSTAPPROACHREPORT_MODAL:
-            return { ...state, isOpenFirstapproachreport: true }
+            return { ...state, isOpenFirstapproachreport: true };
         case ACTION_TYPES.OPEN_OWNERSHIPRECIEVE_MODAL:
-            return { ...state, isOpenOwnershiprecieve: true }
+            return { ...state, isOpenOwnershiprecieve: true };
         case ACTION_TYPES.OPEN_SUBMITTINGFORM_MODAL:
-            return { ...state, isOpenSubmittingform: true }
+            return { ...state, isOpenSubmittingform: true };
         case ACTION_TYPES.CLOSE_APPLICANT_MODAL:
-            return { ...state, isOpenApplicant: false }
+            return { ...state, isOpenApplicant: false };
         case ACTION_TYPES.CLOSE_BODYCONTROLFORM_MODAL:
-            return { ...state, isOpenBodycontrolform: false }
+            return { ...state, isOpenBodycontrolform: false };
         case ACTION_TYPES.CLOSE_DIAGNOSIS_MODAL:
-            return { ...state, isOpenDiagnosis: false }
+            return { ...state, isOpenDiagnosis: false };
         case ACTION_TYPES.CLOSE_DISABILITYFORM_MODAL:
-            return { ...state, isOpenDisabilitypermitform: false }
+            return { ...state, isOpenDisabilitypermitform: false };
         case ACTION_TYPES.CLOSE_DISABLEDHEALTHBOARDREPORT_MODAL:
-            return { ...state, isOpenDisabledhealthboardreport: false }
+            return { ...state, isOpenDisabledhealthboardreport: false };
         case ACTION_TYPES.CLOSE_FIRSTADMISSIONSFORM_MODAL:
-            return { ...state, isOpenFirstadmissionform: false }
+            return { ...state, isOpenFirstadmissionform: false };
         case ACTION_TYPES.CLOSE_FIRSTAPPROACHREPORT_MODAL:
-            return { ...state, isOpenFirstapproachreport: false }
+            return { ...state, isOpenFirstapproachreport: false };
         case ACTION_TYPES.CLOSE_OWNERSHIPRECIEVE_MODAL:
-            return { ...state, isOpenOwnershiprecieve: false }
+            return { ...state, isOpenOwnershiprecieve: false };
         case ACTION_TYPES.CLOSE_SUBMITTINGFORM_MODAL:
-            return { ...state, isOpenSubmittingform: false }
+            return { ...state, isOpenSubmittingform: false };
 
         default:
             return state;

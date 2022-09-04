@@ -61,6 +61,7 @@ const Deactivestocks = lazy(() => import('./Pages/Deactivestocks'));
 
 const Activepatients = lazy(() => import('./Pages/ActivePatients'));
 const ActivepatientsCreate = lazy(() => import('./Pages/ActivePatients/Create'));
+const ActivepatientsEdit = lazy(() => import('./Pages/ActivePatients/Edit'));
 
 const Error404 = lazy(() => import('./error-pages/Error404'));
 const Error500 = lazy(() => import('./error-pages/Error500'));
@@ -135,6 +136,7 @@ class AppRoutes extends Component {
 
           <ProtectedRoute exact path="/Activepatients" component={ Activepatients } />
           <ProtectedRoute exact path="/Activepatients/Create/:DepartmentId" component={ ActivepatientsCreate } />
+          <ProtectedRoute exact path="/Activepatients/Edit/:ActivepatientId" component={ ActivepatientsEdit } />
 
           <Route exact path="/Login" component={ Login } />       
           <Route exact path="/User/Register" component={ Register } />

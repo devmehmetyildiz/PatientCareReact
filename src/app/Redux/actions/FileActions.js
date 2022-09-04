@@ -55,6 +55,17 @@ export const GetSelectedFile = (ItemId) => async dispatch => {
         .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDFILE_ERROR, payload: error }) })
 };
 
+export const GetSelectedFileByPatient = (ItemId) => async dispatch => {
+    dispatch({ type: ACTION_TYPES.GET_SELECTEDFILE_INIT })
+    await axios({
+        method: `get`,
+        url: `${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetSelectedFileByPatientGuid?Guid=${ItemId}`,
+        headers: { Authorization: `Bearer ${GetToken()}` }
+    })
+        .then(response => dispatch({ type: ACTION_TYPES.GET_SELECTEDFILE_SUCCESS, payload: response.data }))
+        .catch(error => { dispatch({ type: ACTION_TYPES.GET_SELECTEDFILE_ERROR, payload: error }) })
+};
+
 export const CreateFile = (Item, historypusher,filename) => dispatch => {
     dispatch({ type: ACTION_TYPES.CREATE_FILE_INIT })
     axios({
