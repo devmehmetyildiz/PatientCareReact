@@ -493,7 +493,7 @@ export const Create = (props) => {
                                         </div>
                                         <div className="col-3 d-flex justify-content-center align-items-center" style={{ flexDirection: 'column' }}>
                                             <label>Hasta Fotoğrafı</label>
-                                            <img style={{ objectFit: 'contain', margin: '10px', width: '100%', height: '30%', marginLeft: '15px' }} src={image.filepath} className="card-img-top" />
+                                            <img style={{ objectFit: 'contain', margin: '10px', width: '100%', height: '30%',maxWidth: '200px', maxHeight: '200px', marginLeft: '15px' }} src={image.filepath} className="card-img-top" />
                                             <div className='form-group'>
                                                 <input className={"form-control-file"} style={{ width: '100%',maxWidth:'265px' }} accept='image/*' type="file"
                                                     onChange={showPreview}

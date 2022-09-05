@@ -113,6 +113,7 @@ export const Datatable = (props) => {
                             props => (
                                 <div>
                                     <BootstrapTable
+                                        hover
                                         defaultSorted={defaultSorted}
                                         pagination={paginationFactory()}
                                         {...props.baseProps}

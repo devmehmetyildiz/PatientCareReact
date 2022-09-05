@@ -1,16 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import Select from 'react-select';
-import { MARIALSTATUS, BIOLOGICALAFFINITY } from '../../../Utils/Constants';
+import { MARIALSTATUS, GENDER } from '../../../Utils/Constants';
 
 const Createapplicant = (props) => {
   const { data, refreshdata, selectstyle } = props
-
+  
+  const [currentGender, setcurrentGender] = useState({})
+  const [currentMarialstatus, setcurrentMarialstatus] = useState({})
+  
   const handleonchange = (e) => {
     const { id, value } = e.target
     const datatemp = data
     datatemp[e.target.id] = e.target.value
     refreshdata((data) => ({ ...data, [id]: value }));
+    console.log('data: ', data);
+  }
+
+  const handleselectGender = (e) => {
+    const item = data
+    item.gender = e.value
+    setcurrentGender(e)
+    refreshdata(item);
+    console.log('data: ', data);
+}
+const handleselectMarialStatus = (e) => {
+    const item = data
+    item.marialstatus = e.value
+    setcurrentMarialstatus(e)
+    refreshdata(item);
+    console.log('data: ', data);
   }
 
   return (
@@ -108,11 +127,12 @@ const Createapplicant = (props) => {
                         <label style={{ fontSize: "12px" }} className="col-form-label">Cinsiyet</label>
                         <div style={{ marginRight: '-5px' }} className='col-12'>
                           <Select
-                            // value={selecteddepartments}
-                            //  onChange={}
-                            options={BIOLOGICALAFFINITY}
-                            placeholder="Seçiniz..."
-                            styles={selectstyle}
+                              id="gender"
+                              value={currentGender}
+                              onChange={handleselectGender}
+                              options={GENDER}
+                              placeholder="Seçiniz..."
+                              styles={selectstyle}
                           />
                         </div>
                       </Form.Group>
@@ -123,11 +143,11 @@ const Createapplicant = (props) => {
                         <label style={{ fontSize: "12px" }} className="col-form-label">Medeni Durumu</label>
                         <div style={{ marginRight: '-5px' }} className='col-12'>
                           <Select
-                            // value={selecteddepartments}
-                            //  onChange={}
-                            options={MARIALSTATUS}
-                            placeholder="Seçiniz..."
-                            styles={selectstyle}
+                             value={currentMarialstatus}
+                             onChange={handleselectMarialStatus}
+                             options={MARIALSTATUS}
+                             placeholder="Seçiniz..."
+                             styles={selectstyle}
                           />
                         </div>
                       </Form.Group>
@@ -176,7 +196,7 @@ const Createapplicant = (props) => {
                         <Form.Control
                           id="town"
                           value={data.town}
-                          type="date"
+                          type="text"
                           placeholder="İlçe"
                           onChange={handleonchange}
                         />

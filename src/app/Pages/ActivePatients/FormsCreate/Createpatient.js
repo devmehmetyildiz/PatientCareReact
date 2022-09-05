@@ -5,6 +5,7 @@ import { MARIALSTATUS, BIOLOGICALAFFINITY, GENDER } from '../../../Utils/Constan
 
 const Createpatient = (props) => {
     const { data, refreshdata, selectstyle, patienttypes, costumertypes } = props
+    
 
     const [currentPatienttype, setcurrentPatienttype] = useState({})
     const [currentCostumertype, setcurrentCostumertype] = useState({})
@@ -23,49 +24,47 @@ const Createpatient = (props) => {
     const handleoncheckboxchange = (e) => {
         const item = data
         item[e.target.name] = e.target.value
-        refreshdata((data) => ({ ...data, item }));
+        refreshdata(item);
     }
 
     const handleselectPatienttype = (e) => {
         const item = data
         item.patienttype = patienttypes.find(item => item.concurrencyStamp === e.value)
         setcurrentPatienttype(e)
-        refreshdata((data) => ({ ...data, item }));
+        refreshdata(item);
     }
 
     const handleselectCostumertype = (e) => {
         const item = data
         item.costumertype = costumertypes.find(item => item.concurrencyStamp === e.value)
         setcurrentCostumertype(e)
-        refreshdata((data) => ({ ...data, item }));
+        refreshdata(item);
     }
 
     const handleselectFatheraffinity = (e) => {
         const item = data
         item.fatherbiologicalaffinity = e.value
         setcurrentFatherbiologicalaffinity(e)
-        refreshdata((data) => ({ ...data, item }));
+        refreshdata(item);
     }
 
     const handleselectMotheraffinity = (e) => {
         const item = data
         item.motherbiologicalaffinity = e.value
         setcurrentMotherbiologicalaffinity(e)
-        refreshdata((data) => ({ ...data, item }));
+        refreshdata(item);
     }
     const handleselectGender = (e) => {
-        console.log('e: ', e);
         const item = data
         item.gender = e.value
         setcurrentGender(e)
-        refreshdata((data) => ({ ...data, item }));
+        refreshdata(item);
     }
     const handleselectMarialStatus = (e) => {
-        console.log('e: ', e);
         const item = data
         item.marialstatus = e.value
         setcurrentMarialstatus(e)
-        refreshdata((data) => ({ ...data, item }));
+        refreshdata(item);
     }
 
     const patienttypedata = patienttypes.map(item => {
