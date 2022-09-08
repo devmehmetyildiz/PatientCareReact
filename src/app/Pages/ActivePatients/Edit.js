@@ -62,6 +62,8 @@ export const Edit = (props) => {
         process: null,
         caseId: '',
         case: null,
+        files:[],
+        stocks:[]
     })
 
 

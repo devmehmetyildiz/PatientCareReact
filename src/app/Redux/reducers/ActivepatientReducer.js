@@ -65,6 +65,8 @@ const INITIAL_STATE = {
         stationstxt: "",
         stations: []
     },
+    files:[],
+    stocks:[],
     isOpenApplicant: false,
     isOpenBodycontrolform: false,
     isOpenDiagnosis: false,

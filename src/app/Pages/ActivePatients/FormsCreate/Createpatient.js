@@ -76,8 +76,11 @@ const Createpatient = (props) => {
 
     return (
         <>
+        <div className='row'>
+            <h4 className='m-2'>Hastalar</h4>
+        </div>
             <div className='row'>
-                <div className='col-4'>
+                <div className='col-lg-4 col-md-2'>
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">İsim</label>
                         <Form.Control
@@ -175,7 +178,7 @@ const Createpatient = (props) => {
                         </label>
                     </div>
                 </div>
-                <div className='col-4'>
+                <div className='col-lg-4 col-md-2'>
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">TC Kimlik No</label>
                         <Form.Control
@@ -262,7 +265,7 @@ const Createpatient = (props) => {
                         </div>
                     </Form.Group>
                 </div>
-                <div className='col-4'>
+                <div className='col-lg-4 col-md-2'>
                     <Form.Group className="row m-2" >
                         <label style={{ fontSize: "12px" }} className="col-form-label">Medeni Durum</label>
                         <div style={{ marginRight: '-5px' }} className='col-12'>

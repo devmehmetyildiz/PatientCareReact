@@ -61,6 +61,8 @@ export const Create = (props) => {
         process: null,
         caseId: '',
         case: null,
+        stocks:[],
+        files:[]
     })
 
     const [patient, setpatient] = useState({
