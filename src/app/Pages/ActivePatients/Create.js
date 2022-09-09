@@ -5,12 +5,7 @@ import Spinner from '../../shared/Spinner'
 import { Button, Form, Modal } from 'react-bootstrap'
 import Select from 'react-select';
 import { CreateFile } from "../../Redux/actions/FileActions"
-import {
-    OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal, OpenDisabledhealthboardreportmodal,
-    OpenFirstadmissionsformmodal, OpenFirstapproachreportmodal, OpenOwnershiprecievemodal, OpenSubmittingmodal, CloseApplicantmodal,
-    CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseOwnershiprecievemodal,
-    CloseFirstadmissionsformmodal, CloseFirstapproachreportmodal, CloseSubmittingformmodal, CreateActivepatient
-} from '../../Redux/actions/ActivepatientActions';
+import { CreateActivepatient } from '../../Redux/actions/ActivepatientActions';
 import { GetAllDepartmentsSettings } from "../../Redux/actions/DepartmentAction"
 import { GetAllCostumertypes } from "../../Redux/actions/CostumertypeActions"
 import { GetAllPatienttype } from "../../Redux/actions/PatienttypeActions"
@@ -19,9 +14,13 @@ import Createapplicant from './FormsCreate/Createapplicant';
 import Createdisabledhealthboardreport from './FormsCreate/Createdisabledhealthboardreport';
 import Createfirstapproachreport from './FormsCreate/Createfirstapproachreport';
 import Createpatient from './FormsCreate/Createpatient';
+import { colourStyles } from "../../Utils/Constants"
+import MultiStep from 'react-multistep';
 
 export const Create = (props) => {
     const defaultImageSrc = '/img/user.png'
+
+
 
     const imageINIT = {
         id: 0,
@@ -61,8 +60,8 @@ export const Create = (props) => {
         process: null,
         caseId: '',
         case: null,
-        stocks:[],
-        files:[]
+        stocks: [],
+        files: []
     })
 
     const [patient, setpatient] = useState({
@@ -356,6 +355,13 @@ export const Create = (props) => {
     const [image, setimage] = useState(imageINIT)
     const [currentCase, setcurrentCase] = useState({})
 
+    const WizardPages = [
+        { name: '. Hasta Bilgileri', component: <Createpatient data={patient} refreshdata={setpatient} costumertypes={props.Costumertypes.list} patienttypes={props.Patienttypes.list} /> },
+        { name: '. İlk Görüş Raporu', component: <Createfirstapproachreport data={patientFirstapproachreport} refreshdata={setpatientFirstapproachreport} /> },
+        { name: '. Sağlık Kurul Raporu', component: <Createdisabledhealthboardreport data={patientDisabledhealthboardreport} refreshdata={setpatientDisabledhealthboardreport} /> },
+        { name: '. Hasta Yakını Bilgileri', component: <Createapplicant data={patientApplicant} refreshdata={setpatientApplicant} /> }
+    ]
+
     useEffect(() => {
         props.GetAllCostumertypes()
         props.GetAllDepartmentsSettings()
@@ -396,15 +402,6 @@ export const Create = (props) => {
         }
     }
 
-    const colourStyles = {
-        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-            return {
-                ...styles,
-                backgroundColor: isFocused ? "#8e8d8d" : null,
-            };
-        }
-    };
-
     const handlesubmit = (e) => {
         e.preventDefault()
         let data = {
@@ -438,8 +435,8 @@ export const Create = (props) => {
             deleteTime: null,
             isActive: true
         }
-       
-        props.CreateActivepatient(data, props.history,image,image.name)
+
+        props.CreateActivepatient(data, props.history, image, image.name)
     }
 
     const handleselectCase = (e) => {
@@ -455,27 +452,7 @@ export const Create = (props) => {
 
     return (
         <>
-            <Createapplicant
-                show={props.Activepatients.isOpenApplicant}
-                onHide={() => props.CloseApplicantmodal()}
-                data={patientApplicant}
-                refreshdata={setpatientApplicant}
-                selectstyle={colourStyles}
-            />
-            <Createdisabledhealthboardreport
-                show={props.Activepatients.isOpenDisabledhealthboardreport}
-                onHide={() => { props.CloseDisabledhealthboardreportmodal() }}
-                data={patientDisabledhealthboardreport}
-                refreshdata={setpatientDisabledhealthboardreport}
-                selectstyle={colourStyles}
-            />
-            <Createfirstapproachreport
-                show={props.Activepatients.isOpenFirstapproachreport}
-                onHide={() => props.CloseFirstapproachreportmodal()}
-                data={patientFirstapproachreport}
-                refreshdata={setpatientFirstapproachreport}
-                selectstyle={colourStyles}
-            />
+
             {props.Departments.isLoading && props.Costumertypes.isLoading && props.Patienttypes.isLoading ? <Spinner /> :
                 <div className='Page'>
                     <div className="col-12 grid-margin">
@@ -485,52 +462,45 @@ export const Create = (props) => {
                                 <form className="form-sample" >
                                     <div className="row">
                                         <div className="col-9 border border-primary m-20">
-                                            <Createpatient
-                                                data={patient}
-                                                refreshdata={setpatient}
-                                                selectstyle={colourStyles}
-                                                costumertypes={props.Costumertypes.list}
-                                                patienttypes={props.Patienttypes.list}
-                                            />
+                                            <div className="form-wizard">
+                                                <MultiStep showNavigation={true} className="my-class" steps={WizardPages} />
+                                            </div>
                                         </div>
                                         <div className="col-3 d-flex justify-content-center align-items-center" style={{ flexDirection: 'column' }}>
                                             <label>Hasta Fotoğrafı</label>
-                                            <img style={{ objectFit: 'contain', margin: '10px', width: '100%', height: '30%',maxWidth: '200px', maxHeight: '200px', marginLeft: '15px' }} src={image.filepath} className="card-img-top" />
+                                            <img style={{ objectFit: 'contain', margin: '10px', width: '100%', height: '30%', maxWidth: '200px', maxHeight: '200px', marginLeft: '15px' }} src={image.filepath} className="card-img-top" />
                                             <div className='form-group'>
-                                                <input className={"form-control-file"} style={{ width: '100%',maxWidth:'265px' }} accept='image/*' type="file"
+                                                <input className={"form-control-file"} style={{ width: '100%', maxWidth: '265px' }} accept='image/*' type="file"
                                                     onChange={showPreview}
                                                 />
                                             </div>
                                             <button onClick={(e) => {
                                                 e.preventDefault()
-                                                props.OpenApplicantmodal()
-                                            }} style={{ width: '100%',maxWidth:'265px' }} className="btn btn-primary m-2">Hasta Yakını Bilgileri</button>
+                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Hasta Yakını Bilgileri</button>
                                             <button onClick={(e) => {
                                                 e.preventDefault()
-                                                props.OpenDisabledhealthboardreportmodal()
-                                            }} style={{ width: '100%',maxWidth:'265px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
+                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
                                             <button onClick={(e) => {
                                                 e.preventDefault()
-                                                props.OpenFirstapproachreportmodal()
-                                            }} style={{ width: '100%',maxWidth:'265px' }} className="btn btn-primary m-2">İlk Görüşme ve Değerlendirme Formu</button>
+                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">İlk Görüşme ve Değerlendirme Formu</button>
                                             <button onClick={(e) => {
                                                 e.preventDefault()
-                                            }} style={{ width: '100%',maxWidth:'265px' }} className="btn btn-primary m-2">Teslim Alma Formu</button>
+                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Teslim Alma Formu</button>
                                             <button onClick={(e) => {
                                                 e.preventDefault()
-                                            }} style={{ width: '100%',maxWidth:'265px' }} className="btn btn-primary m-2">Teslim Eden Formu</button>
+                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Teslim Eden Formu</button>
                                             <button onClick={(e) => {
                                                 e.preventDefault()
-                                            }} style={{ width: '100%',maxWidth:'265px' }} className="btn btn-primary m-2">Mülkiyet Teslim Alma Formu</button>
+                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Mülkiyet Teslim Alma Formu</button>
                                             <button onClick={(e) => {
                                                 e.preventDefault()
-                                            }} style={{ width: '100%',maxWidth:'265px' }} className="btn btn-primary m-2">İlk Kabul Formu</button>
+                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">İlk Kabul Formu</button>
                                             <button onClick={(e) => {
                                                 e.preventDefault()
-                                            }} style={{ width: '100%',maxWidth:'265px' }} className="btn btn-primary m-2">Genel Vücut Kontrol Formu</button>
+                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Genel Vücut Kontrol Formu</button>
                                             <button onClick={(e) => {
                                                 e.preventDefault()
-                                            }} style={{ width: '100%',maxWidth:'265px' }} className="btn btn-primary m-2">İzin Formları</button>
+                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">İzin Formları</button>
                                         </div>
                                     </div>
                                     <div className='row m-10 '>
@@ -649,10 +619,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-    CreateFile, OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal,
-    OpenDisabledhealthboardreportmodal, OpenFirstadmissionsformmodal, OpenFirstapproachreportmodal, OpenOwnershiprecievemodal, OpenSubmittingmodal,
-    CloseApplicantmodal, CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseFirstadmissionsformmodal,
-    CloseFirstapproachreportmodal, CloseOwnershiprecievemodal, CloseSubmittingformmodal, CreateActivepatient, GetAllDepartmentsSettings, GetAllPatienttype,
+    CreateFile, CreateActivepatient, GetAllDepartmentsSettings, GetAllPatienttype,
     GetAllCostumertypes, GetAllCasesSettings
 }
 

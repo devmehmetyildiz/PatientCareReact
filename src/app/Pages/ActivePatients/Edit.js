@@ -5,12 +5,7 @@ import Spinner from '../../shared/Spinner'
 import { Button, Form, Modal } from 'react-bootstrap'
 import Select from 'react-select';
 import { UpdateFile, GetSelectedFileByPatient, ClearSelectedFile } from "../../Redux/actions/FileActions"
-import {
-    OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal, OpenDisabledhealthboardreportmodal,
-    OpenFirstadmissionsformmodal, OpenFirstapproachreportmodal, OpenOwnershiprecievemodal, OpenSubmittingmodal, CloseApplicantmodal,
-    CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseOwnershiprecievemodal,
-    CloseFirstadmissionsformmodal, CloseFirstapproachreportmodal, CloseSubmittingformmodal, UpdateActivepatient, GetSelectedActivepatient
-} from '../../Redux/actions/ActivepatientActions';
+import { UpdateActivepatient, GetSelectedActivepatient } from '../../Redux/actions/ActivepatientActions';
 import { GetAllDepartmentsSettings } from "../../Redux/actions/DepartmentAction"
 import { GetAllCostumertypes } from "../../Redux/actions/CostumertypeActions"
 import { GetAllPatienttype } from "../../Redux/actions/PatienttypeActions"
@@ -18,6 +13,7 @@ import { GetAllCasesSettings } from "../../Redux/actions/CaseActions"
 import Editpatient from './FormsEdit/Editpatient';
 import { ROUTES } from '../../Utils/Constants';
 import axios from 'axios';
+import { colourStyles } from "../../Utils/Constants"
 import Popup from '../../Utils/Popup';
 
 export const Edit = (props) => {
@@ -62,8 +58,8 @@ export const Edit = (props) => {
         process: null,
         caseId: '',
         case: null,
-        files:[],
-        stocks:[]
+        files: [],
+        stocks: []
     })
 
 
@@ -391,15 +387,6 @@ export const Edit = (props) => {
         }
     }
 
-    const colourStyles = {
-        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-            return {
-                ...styles,
-                backgroundColor: isFocused ? "#8e8d8d" : null,
-            };
-        }
-    };
-
     const handlesubmit = (e) => {
         e.preventDefault()
         console.log('patient: ', patient);
@@ -626,10 +613,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-    OpenApplicantmodal, OpenBodycontrolformmodal, OpenDiagnosismodal, OpenDisabilityformmodal, OpenDisabledhealthboardreportmodal,
-    OpenFirstadmissionsformmodal, OpenFirstapproachreportmodal, OpenOwnershiprecievemodal, OpenSubmittingmodal, CloseApplicantmodal,
-    CloseBodycontrolformmodal, CloseDiagnosismodal, CloseDisabilityformmodal, CloseDisabledhealthboardreportmodal, CloseOwnershiprecievemodal,
-    CloseFirstadmissionsformmodal, CloseFirstapproachreportmodal, CloseSubmittingformmodal, UpdateActivepatient, GetSelectedActivepatient, GetAllDepartmentsSettings,
+    UpdateActivepatient, GetSelectedActivepatient, GetAllDepartmentsSettings,
     GetAllCostumertypes, GetAllPatienttype, GetAllCasesSettings, UpdateFile, GetSelectedFileByPatient, ClearSelectedFile
 }
 

@@ -47,3 +47,12 @@ export const GENDER = [
     { label: 'ERKEK', value: 'ERKEK' },
     { label: 'KADIN', value: 'KADIN' }
 ]
+
+export const colourStyles = {
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+        return {
+            ...styles,
+            backgroundColor: isFocused ? "#8e8d8d" : null,
+        };
+    }
+};
