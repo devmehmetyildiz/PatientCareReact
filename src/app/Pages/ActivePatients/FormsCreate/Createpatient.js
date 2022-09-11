@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap'
 import Select from 'react-select';
-import { MARIALSTATUS, BIOLOGICALAFFINITY, GENDER } from '../../../Utils/Constants';
+import { MARIALSTATUS, BIOLOGICALAFFINITY, GENDER, colourStyles } from '../../../Utils/Constants';
 
 const Createpatient = (props) => {
-    const { data, refreshdata, selectstyle, patienttypes, costumertypes } = props
-    
+    const { data, refreshdata, patienttypes, costumertypes } = props
+
 
     const [currentPatienttype, setcurrentPatienttype] = useState({})
     const [currentCostumertype, setcurrentCostumertype] = useState({})
@@ -76,9 +76,9 @@ const Createpatient = (props) => {
 
     return (
         <>
-        <div className='row'>
-            <h4 className='m-2'>Hastalar</h4>
-        </div>
+            <div className='row'>
+                <h4 className='m-2'>Hastalar</h4>
+            </div>
             <div className='row'>
                 <div className='col-lg-4 col-md-2'>
                     <Form.Group className="row m-2" >
@@ -129,7 +129,7 @@ const Createpatient = (props) => {
                                 onChange={handleselectFatheraffinity}
                                 options={BIOLOGICALAFFINITY}
                                 placeholder="Seçiniz..."
-                                styles={selectstyle}
+                                styles={colourStyles}
                             />
                         </div>
                     </Form.Group>
@@ -141,7 +141,7 @@ const Createpatient = (props) => {
                                 onChange={handleselectMotheraffinity}
                                 options={BIOLOGICALAFFINITY}
                                 placeholder="Seçiniz..."
-                                styles={selectstyle}
+                                styles={colourStyles}
                             />
                         </div>
                     </Form.Group>
@@ -248,7 +248,7 @@ const Createpatient = (props) => {
                                 onChange={handleselectGender}
                                 options={GENDER}
                                 placeholder="Seçiniz..."
-                                styles={selectstyle}
+                                styles={colourStyles}
                             />
                         </div>
                     </Form.Group>
@@ -260,7 +260,7 @@ const Createpatient = (props) => {
                                 onChange={handleselectPatienttype}
                                 options={patienttypedata}
                                 placeholder="Seçiniz..."
-                                styles={selectstyle}
+                                styles={colourStyles}
                             />
                         </div>
                     </Form.Group>
@@ -270,11 +270,11 @@ const Createpatient = (props) => {
                         <label style={{ fontSize: "12px" }} className="col-form-label">Medeni Durum</label>
                         <div style={{ marginRight: '-5px' }} className='col-12'>
                             <Select
-                               value={currentMarialstatus}
+                                value={currentMarialstatus}
                                 onChange={handleselectMarialStatus}
                                 options={MARIALSTATUS}
                                 placeholder="Seçiniz..."
-                                styles={selectstyle}
+                                styles={colourStyles}
                             />
                         </div>
                     </Form.Group>
@@ -346,7 +346,7 @@ const Createpatient = (props) => {
                                 onChange={handleselectCostumertype}
                                 options={costumertypedata}
                                 placeholder="Seçiniz..."
-                                styles={selectstyle}
+                                styles={colourStyles}
                             />
                         </div>
                     </Form.Group>

@@ -35,6 +35,8 @@ export const Index = (props) => {
       formatter: (cellContent, row) => {
         return <div className='containerclassheader'>
           <div className='d-inline'>
+            {
+            }
             <img src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.ACTIVEPATIENT}/GetUserImage?Guid=${row.concurrencyStamp}`} />
           </div>
           <div className='ml-2 d-inline text-nowrap'>
@@ -96,7 +98,7 @@ export const Index = (props) => {
       Columntype: COLUMNTYPES.TEXT,
       Formatheader: true,
     },
-     {
+    {
       dataField: 'update',
       text: 'Güncelle',
       headerStyle: { maxWidht: '10px' },
@@ -118,11 +120,8 @@ export const Index = (props) => {
     }
   ];
 
-
-
-  const isloading = props.Activepatients.isloading || props.Departments.isloading
+  const isloading = props.Activepatients.isloading || props.Departments.isloading 
   const list = props.Activepatients.list
-  console.log('list: ', list);
   return (
     <>
       {isloading ? <Spinner /> :

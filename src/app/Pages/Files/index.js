@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { OverlayTrigger, Tooltip, Button, ButtonToolbar, Popover } from 'react-bootstrap';
-import { COLUMNTYPES } from '../../Utils/Constants';
+import { OverlayTrigger, Tooltip, Button, ButtonToolbar, Popover, Image } from 'react-bootstrap';
+import { COLUMNTYPES, ROUTES } from '../../Utils/Constants';
 import { GetAllFiles, GetSelectedFile, OpenDeleteModal, CloseDeleteModal } from '../../Redux/actions/FileActions'
 import { withRouter } from 'react-router-dom';
 import Spinner from "../../shared/Spinner"
 import DeleteModal from "./Delete"
 import "../../../assets/styles/Pages/File.scss"
 import Datatable from '../../Utils/Datatable';
+import axios from 'axios';
+import { GetToken } from '../../Utils/TokenValidChecker';
 export class Files extends Component {
 
   constructor(props) {
@@ -21,13 +23,23 @@ export class Files extends Component {
         text: 'id',
         type: 'number',
         Columntype: COLUMNTYPES.NUMBER,
-        Formatheader: true,
+        Formatheader: true
 
       }, {
         dataField: 'name',
         text: 'İsim',
         Columntype: COLUMNTYPES.TEXT,
         Formatheader: true,
+        formatter: (cellContent, row) => {
+          return <div className='containerclassheader'>
+            <div className='d-inline'>
+              <img src={`${process.env.REACT_APP_BACKEND_URL}/${ROUTES.FILE}/GetImage?Guid=${row.concurrencyStamp}`} />
+            </div>
+            <div className='ml-2 d-inline text-nowrap'>
+              {cellContent}
+            </div>
+          </div>
+        }
       },
       {
         dataField: 'filename',
@@ -112,7 +124,21 @@ export class Files extends Component {
     this.props.OpenDeleteModal()
   }
 
+  getimg = async (concurrencyStamp) => {
+    let data = ""
+    await axios
+      .get(process.env.REACT_APP_BACKEND_URL + `/${ROUTES.FILE}/GetImage?Guid=${concurrencyStamp}`, {
+        headers: { Authorization: `Bearer ${GetToken()}` },
+        responseType: "arraybuffer",
+      })
+      .then((response) => {
+        data = `data:${response.headers["content-type"]
+          };base64,${new Buffer(response.data, "binary").toString("base64")}`
+        console.log('data: ', data);
 
+      })
+    return data
+  }
 
   handleonaddnew = (e) => {
     this.props.history.push("/Files/Create")

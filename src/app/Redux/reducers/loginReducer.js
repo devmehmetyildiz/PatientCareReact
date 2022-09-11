@@ -2,8 +2,10 @@ import { ACTION_TYPES } from "../actions/loginActions"
 const INITIAL_STATE = {
     user: "",
     message: "",
+    isLogged: false,
     isloading: false,
-    redirect: false
+    redirect: false,
+    userauths: []
 };
 
 export const loginReducer = (state = INITIAL_STATE, { type, payload }) => {
@@ -23,7 +25,7 @@ export const loginReducer = (state = INITIAL_STATE, { type, payload }) => {
         case ACTION_TYPES.LOGOUT_INIT:
             return { ...state, user: payload, isloading: true };
         case ACTION_TYPES.LOGOUT_SUCCESS:
-            return { ...state, state:INITIAL_STATE , isloading : false };
+            return { ...state, state: INITIAL_STATE, isloading: false };
         case ACTION_TYPES.LOGOUT_ERROR:
             return { ...state, isloading: false };
         default: return state;

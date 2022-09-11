@@ -14,13 +14,11 @@ import Createapplicant from './FormsCreate/Createapplicant';
 import Createdisabledhealthboardreport from './FormsCreate/Createdisabledhealthboardreport';
 import Createfirstapproachreport from './FormsCreate/Createfirstapproachreport';
 import Createpatient from './FormsCreate/Createpatient';
+import Createrecieveform from './FormsCreate/Createrecieveform';
 import { colourStyles } from "../../Utils/Constants"
-import MultiStep from 'react-multistep';
 
 export const Create = (props) => {
     const defaultImageSrc = '/img/user.png'
-
-
 
     const imageINIT = {
         id: 0,
@@ -355,11 +353,15 @@ export const Create = (props) => {
     const [image, setimage] = useState(imageINIT)
     const [currentCase, setcurrentCase] = useState({})
 
-    const WizardPages = [
-        { name: '. Hasta Bilgileri', component: <Createpatient data={patient} refreshdata={setpatient} costumertypes={props.Costumertypes.list} patienttypes={props.Patienttypes.list} /> },
-        { name: '. İlk Görüş Raporu', component: <Createfirstapproachreport data={patientFirstapproachreport} refreshdata={setpatientFirstapproachreport} /> },
-        { name: '. Sağlık Kurul Raporu', component: <Createdisabledhealthboardreport data={patientDisabledhealthboardreport} refreshdata={setpatientDisabledhealthboardreport} /> },
-        { name: '. Hasta Yakını Bilgileri', component: <Createapplicant data={patientApplicant} refreshdata={setpatientApplicant} /> }
+    const [Pagenumber, setPagenumber] = useState(0)
+
+    const Pages = [
+        { number: 0, name: 'Hasta Bilgileri', component: <Createpatient data={patient} refreshdata={setpatient} costumertypes={props.Costumertypes.list} patienttypes={props.Patienttypes.list} /> },
+        { number: 1, name: 'İlk Görüş Raporu', component: <Createfirstapproachreport data={patientFirstapproachreport} refreshdata={setpatientFirstapproachreport} /> },
+        { number: 2, name: 'Sağlık Kurul Raporu', component: <Createdisabledhealthboardreport data={patientDisabledhealthboardreport} refreshdata={setpatientDisabledhealthboardreport} /> },
+        { number: 3, name: 'Hasta Yakını Bilgileri', component: <Createapplicant data={patientApplicant} refreshdata={setpatientApplicant} /> },
+        { number: 4, name: 'Teslim Alma Formu', component: <Createrecieveform data={patientRecieveform} refreshdata={setpatientRecieveform} /> }
+
     ]
 
     useEffect(() => {
@@ -462,11 +464,9 @@ export const Create = (props) => {
                                 <form className="form-sample" >
                                     <div className="row">
                                         <div className="col-9 border border-primary m-20">
-                                            <div className="form-wizard">
-                                                <MultiStep showNavigation={true} className="my-class" steps={WizardPages} />
-                                            </div>
+                                            {Pages[Pagenumber].component}
                                         </div>
-                                        <div className="col-3 d-flex justify-content-center align-items-center" style={{ flexDirection: 'column' }}>
+                                        <div className="col-3 d-flex justify-content-start align-items-center" style={{ flexDirection: 'column' }}>
                                             <label>Hasta Fotoğrafı</label>
                                             <img style={{ objectFit: 'contain', margin: '10px', width: '100%', height: '30%', maxWidth: '200px', maxHeight: '200px', marginLeft: '15px' }} src={image.filepath} className="card-img-top" />
                                             <div className='form-group'>
@@ -474,33 +474,13 @@ export const Create = (props) => {
                                                     onChange={showPreview}
                                                 />
                                             </div>
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Hasta Yakını Bilgileri</button>
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Engelli Sağlık Kurul Raporu</button>
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">İlk Görüşme ve Değerlendirme Formu</button>
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Teslim Alma Formu</button>
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Teslim Eden Formu</button>
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Mülkiyet Teslim Alma Formu</button>
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">İlk Kabul Formu</button>
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">Genel Vücut Kontrol Formu</button>
-                                            <button onClick={(e) => {
-                                                e.preventDefault()
-                                            }} style={{ width: '100%', maxWidth: '265px' }} className="btn btn-primary m-2">İzin Formları</button>
+                                            {Pages.map(item => {
+                                                let btnclass = item.number == Pagenumber ? "btn btn-secondary m-2" : "btn btn-primary m-2"
+                                                return <button onClick={(e) => {
+                                                    e.preventDefault()
+                                                    setPagenumber(item.number)
+                                                }} style={{ width: '100%', maxWidth: '265px' }} className={btnclass}>{item.name}</button>
+                                            })}
                                         </div>
                                     </div>
                                     <div className='row m-10 '>
@@ -603,7 +583,7 @@ export const Create = (props) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div >
             }
         </>
     )

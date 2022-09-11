@@ -119,7 +119,6 @@ export class Edit extends Component {
             responseType: "arraybuffer",
           })
           .then((response) => {
-            console.log('response: ', response);
             let data = `data:${response.headers["content-type"]
               };base64,${new Buffer(response.data, "binary").toString("base64")}`;
             const newdata = this.state.values

@@ -45,7 +45,6 @@ export const SetLogin = (logindata, historypusher) => dispatch => {
             const cookies = new Cookies();
             cookies.set('X-Access-Token', response.data.token, { path: '/' });
             cookies.set('X-Username', response.data.user, { path: '/' });
-            Popup("Success","Patient Care","Giriş Başarılı")
             historypusher.push("/Dashboard")
         })
         .catch(error => {
@@ -66,8 +65,6 @@ export const SetLogout = (historypusher) => dispatch => {
     } catch (error) {
         dispatch({ type: ACTION_TYPES.LOGOUT_ERROR })
     }
-
-
 }
 
 

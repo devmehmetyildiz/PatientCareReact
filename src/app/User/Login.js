@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom';
 import InputItem from "../Components/Common/Forminput"
-import Spinner from "../shared/Spinner"
+import Loader from "../Pages/Common/Loader"
 import { SetLogin } from '../Redux/actions/loginActions';
 import {  Form } from 'react-bootstrap';
 export class Login extends Component {
@@ -36,11 +36,11 @@ export class Login extends Component {
     }
 
     render() {
-        const isLoading = this.props.user.isloading;
+        const isLoading = this.props.user.isloading|| true;
         return (
             <>
                 {
-                    isLoading ? <Spinner /> :
+                    isLoading ? <Loader /> :
                         <div>
                             <div className="d-flex align-items-center auth px-0">
                                 <div className="row w-100 mx-0">
